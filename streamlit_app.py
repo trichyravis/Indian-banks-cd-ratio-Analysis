@@ -523,14 +523,33 @@ elif page_index == 6:
     fig.update_layout(height=500, template="plotly_white", xaxis_tickangle=-45)
     st.plotly_chart(fig, use_container_width=True)
 
+
 elif page_index == 7:
-    render_section_header("📈 CD Ratio Drivers & Analysis")
+    render_section_header("📈 CD Ratio Drivers & Comprehensive Analysis")
     
     st.markdown("**What drives CD ratios and how to interpret changes**")
     
     render_divider()
     
-    render_subsection_header("🎯 Key Drivers of CD Ratio")
+    # ===== PART 1: KEY DRIVERS OVERVIEW =====
+    render_subsection_header("🎯 Key Drivers of CD Ratio - Complete Framework")
+    
+    st.markdown("""
+The CD ratio is driven by the **supply-demand dynamics** between loans (advances) and deposits. Understanding these drivers helps investors anticipate bank performance changes.
+
+**Core Principle:**
+```
+CD Ratio = (Total Advances / Total Deposits) × 100
+```
+
+When advances grow faster than deposits → CD rises (growth phase)
+When deposits grow faster than advances → CD falls (consolidation phase)
+""")
+    
+    render_divider()
+    
+    # ===== PART 2: FACTORS INCREASING CD RATIO =====
+    st.markdown("### 🟢 FACTORS THAT INCREASE CD RATIO")
     
     col1, col2 = st.columns(2)
     
@@ -545,6 +564,122 @@ elif page_index == 7:
         )
     
     with col2:
+        st.markdown("""
+#### **Why These Drive CD Higher:**
+- Banks deploy deposits into loans
+- Faster loan growth than deposit growth
+- Economic expansion attracts borrowing
+- Market competition forces pricing down
+- Higher lending volumes increase advances
+""")
+    
+    st.markdown("""
+#### **Detailed Factor Analysis:**
+
+**1️⃣ Strong Loan Demand** (Impact: 9/10)
+- **What:** Customers actively seeking loans
+- **Driven by:** Economic growth, low interest rates, business expansion
+- **Effect on CD:** Advances grow 15-20% → CD rises
+- **Example:** Post-COVID recovery (2020-2021) → CD rose from 78% to 84%
+- **Bank Perspective:** Growth story, profitability opportunity
+- **Investor Signal:** ✅ POSITIVE if deposits keep pace
+
+**2️⃣ Expanding Credit Business** (Impact: 8/10)
+- **What:** Bank actively growing loan portfolio
+- **Driven by:** Market share strategy, new product launches, geographic expansion
+- **Effect on CD:** Loan portfolio grows faster than deposits
+- **Example:** Bank targets MSME lending → loan book grows 22% YoY
+- **Bank Perspective:** Strategic growth initiative
+- **Investor Signal:** ✅ POSITIVE for long-term growth
+
+**3️⃣ Competitive Pricing** (Impact: 7/10)
+- **What:** Bank cutting loan rates to win market share
+- **Driven by:** Excess liquidity in system, RBI rate cuts, market wars
+- **Effect on CD:** Lower rates attract more borrowers
+- **Example:** Private banks competing for auto loans → prices fall 50 bps
+- **Bank Perspective:** Growth at cost of NIM
+- **Investor Signal:** ⚠️ CAUTION on profitability
+
+**4️⃣ Growing Customer Base** (Impact: 8/10)
+- **What:** Bank successfully acquiring new customers
+- **Driven by:** Digital banking, branch expansion, partnerships
+- **Effect on CD:** More customers = more loans + deposits, but loans grow faster
+- **Example:** Fintech partnership adds 500K customers → loan book +18%
+- **Bank Perspective:** Long-term franchise strength
+- **Investor Signal:** ✅ POSITIVE indicator
+
+**5️⃣ Retail & MSME Focus** (Impact: 8/10)
+- **What:** Shift toward high-growth lending segments
+- **Driven by:** Government incentives, profit margins, growth potential
+- **Effect on CD:** Retail/MSME loans grow 25%+ while corporate grows 5%
+- **Example:** Bank targets retail lending → CD rises from 75% to 80%
+- **Bank Perspective:** Profitable growth, diversification
+- **Investor Signal:** ✅ POSITIVE for sustainability
+
+**6️⃣ Economic Growth** (Impact: 9/10)
+- **What:** GDP expansion boosting credit demand
+- **Driven by:** Industrial production, government spending, employment
+- **Effect on CD:** Across-the-board increase in loan demand
+- **Example:** GDP growth 8%+ → banking CD rises 2-3%
+- **Bank Perspective:** Rising tide lifts all boats
+- **Investor Signal:** ✅ STRONGLY POSITIVE
+
+**7️⃣ Market Share Gains** (Impact: 7/10)
+- **What:** Bank gaining share vs competitors
+- **Driven by:** Service quality, pricing, customer experience
+- **Effect on CD:** Loan growth outpacing system average
+- **Example:** Bank's loan growth 18% vs industry 12% → CD rises
+- **Bank Perspective:** Competitive advantage
+- **Investor Signal:** ✅ POSITIVE
+""")
+    
+    # Interactive chart for increasing factors
+    st.markdown("#### 📊 Impact Strength of CD Increasing Factors")
+    
+    import plotly.graph_objects as go
+    
+    factors_inc = {
+        'Strong Loan Demand': 9,
+        'Economic Growth': 9,
+        'Expanding Credit': 8,
+        'Customer Growth': 8,
+        'Retail/MSME Focus': 8,
+        'Competitive Pricing': 7,
+        'Market Share Gains': 7
+    }
+    
+    fig_inc = go.Figure(data=[
+        go.Bar(
+            y=list(factors_inc.keys()),
+            x=list(factors_inc.values()),
+            orientation='h',
+            marker=dict(color='#27AE60', opacity=0.8),
+            text=list(factors_inc.values()),
+            textposition='outside',
+        )
+    ])
+    
+    fig_inc.update_layout(
+        title='Impact Strength on CD Ratio (Higher = Stronger Impact)',
+        xaxis_title='Impact Strength (1-10)',
+        yaxis_title='',
+        height=400,
+        showlegend=False,
+        margin=dict(l=150, r=50, t=50, b=50),
+        font=dict(size=11),
+        xaxis=dict(range=[0, 10])
+    )
+    
+    st.plotly_chart(fig_inc, use_container_width=True)
+    
+    render_divider()
+    
+    # ===== PART 3: FACTORS DECREASING CD RATIO =====
+    st.markdown("### 🔴 FACTORS THAT DECREASE CD RATIO")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
         render_warning_box(
             "**Factors Decreasing CD Ratio:**\n\n"
             "⚠️ High loan delinquencies\n"
@@ -553,6 +688,393 @@ elif page_index == 7:
             "⚠️ Liquidity management\n"
             "⚠️ Regulatory constraints"
         )
+    
+    with col2:
+        st.markdown("""
+#### **Why These Drive CD Lower:**
+- Banks reduce lending due to risks
+- Deposits grow faster than loans
+- Economic contraction kills demand
+- Interest rate hikes deter borrowing
+- Regulatory restrictions limit lending
+""")
+    
+    st.markdown("""
+#### **Detailed Factor Analysis:**
+
+**1️⃣ High Loan Delinquencies** (Impact: 9/10)
+- **What:** Many customers unable/unwilling to repay
+- **Driven by:** Economic slowdown, unemployment, sectoral stress
+- **Effect on CD:** Bank tightens lending → advances decline
+- **Example:** COVID-19 → auto loan defaults surge → banks pause new lending
+- **Bank Perspective:** Risk management priority
+- **Investor Signal:** 🔴 VERY NEGATIVE for growth
+
+**2️⃣ Weak Credit Demand** (Impact: 8/10)
+- **What:** Customers/businesses reluctant to borrow
+- **Driven by:** Recession, high rates, uncertainty, deleveraging
+- **Effect on CD:** Loan growth stalls while deposits accumulate
+- **Example:** Post-2008 crisis → credit demand fell 30%+ → CD collapsed
+- **Bank Perspective:** Lost opportunity to deploy funds
+- **Investor Signal:** 🔴 NEGATIVE - Growth headwind
+
+**3️⃣ Rising Interest Rates** (Impact: 6/10)
+- **What:** RBI/market rates increasing
+- **Driven by:** Inflation control, monetary tightening, global factors
+- **Effect on CD:** Higher borrowing costs reduce demand
+- **Example:** RBI rate hikes 225 bps in 2022-23 → credit growth slowed
+- **Bank Perspective:** Mixed (margins widen but volume falls)
+- **Investor Signal:** ⚠️ MIXED - Watch profitability
+
+**4️⃣ Liquidity Management** (Impact: 7/10)
+- **What:** Bank deliberately keeping high deposits
+- **Driven by:** Regulatory requirements (LCR), conservative stance, ALM
+- **Effect on CD:** Deposits grow while lending stays moderate
+- **Example:** Bank raises CASA deposits aggressively → CD falls 80% to 75%
+- **Bank Perspective:** Balance sheet strengthening
+- **Investor Signal:** ✅ POSITIVE if intentional
+
+**5️⃣ Regulatory Constraints** (Impact: 7/10)
+- **What:** RBI/regulators impose lending restrictions
+- **Driven by:** Sectoral caps, concentration limits, prudence norms
+- **Effect on CD:** Bank forced to reduce or redirect lending
+- **Example:** RBI caps real estate at 15% → bank reduces RE lending
+- **Bank Perspective:** Compliance necessity
+- **Investor Signal:** ⚠️ NEUTRAL to NEGATIVE
+
+**6️⃣ Recession/Economic Slowdown** (Impact: 8/10)
+- **What:** GDP contraction, business failure
+- **Driven by:** Macro shocks, demand collapse, layoffs
+- **Effect on CD:** Loan demand falls, delinquencies rise, CD tumbles
+- **Example:** 2008-09 crisis → credit demand fell 20%+ → CD fell significantly
+- **Bank Perspective:** Survival mode
+- **Investor Signal:** 🔴 VERY NEGATIVE
+
+**7️⃣ Deleveraging Cycle** (Impact: 6/10)
+- **What:** Households/corporates reducing debt levels
+- **Driven by:** Balance sheet cleanup, risk aversion, forced sales
+- **Effect on CD:** Prepayments rise, new lending falls, CD declines
+- **Example:** Post-bubble collapse → customers pay off loans faster
+- **Bank Perspective:** Lost growth opportunity
+- **Investor Signal:** 🟡 CAUTION - Monitor for stabilization
+""")
+    
+    # Interactive chart for decreasing factors
+    st.markdown("#### 📊 Impact Strength of CD Decreasing Factors")
+    
+    factors_dec = {
+        'High Delinquencies': 9,
+        'Recession': 8,
+        'Weak Demand': 8,
+        'Regulatory Limits': 7,
+        'Liquidity Mgmt': 7,
+        'Rising Rates': 6,
+        'Deleveraging': 6
+    }
+    
+    fig_dec = go.Figure(data=[
+        go.Bar(
+            y=list(factors_dec.keys()),
+            x=list(factors_dec.values()),
+            orientation='h',
+            marker=dict(color='#E74C3C', opacity=0.8),
+            text=list(factors_dec.values()),
+            textposition='outside',
+        )
+    ])
+    
+    fig_dec.update_layout(
+        title='Impact Strength on CD Ratio (Higher = Stronger Impact)',
+        xaxis_title='Impact Strength (1-10)',
+        yaxis_title='',
+        height=400,
+        showlegend=False,
+        margin=dict(l=150, r=50, t=50, b=50),
+        font=dict(size=11),
+        xaxis=dict(range=[0, 10])
+    )
+    
+    st.plotly_chart(fig_dec, use_container_width=True)
+    
+    render_divider()
+    
+    # ===== PART 4: DRIVERS COMPARISON =====
+    st.markdown("### ⚖️ Increasing vs Decreasing Drivers - Side-by-Side")
+    
+    comparison_data = {
+        'Driver': [
+            'Strong Loan Demand',
+            'Weak Credit Demand',
+            'Economic Growth',
+            'Recession',
+            'Expanding Credit',
+            'Delinquencies',
+            'Customer Growth',
+            'Deleveraging',
+            'Low Interest Rates',
+            'High Interest Rates'
+        ],
+        'Effect': [
+            'CD ↑↑',
+            'CD ↓↓',
+            'CD ↑',
+            'CD ↓',
+            'CD ↑',
+            'CD ↓↓',
+            'CD ↑',
+            'CD ↓',
+            'CD ↑',
+            'CD ↓'
+        ],
+        'Timeline': [
+            'Immediate (1-2 qtrs)',
+            'Delayed (2-3 qtrs)',
+            'Gradual (2-4 qtrs)',
+            'Rapid (1-2 qtrs)',
+            'Medium-term',
+            'Immediate',
+            'Gradual (6-12 m)',
+            'Delayed (6+ m)',
+            'Gradual (1-2 qtrs)',
+            'Immediate'
+        ],
+        'Investor Signal': [
+            '✅ BUY',
+            '🔴 SELL',
+            '✅ BUY',
+            '🔴 SELL',
+            '✅ BUY',
+            '🔴 SELL',
+            '✅ BUY',
+            '🟡 MONITOR',
+            '✅ BUY',
+            '⚠️ CAUTION'
+        ]
+    }
+    
+    import pandas as pd
+    comparison_df = pd.DataFrame(comparison_data)
+    st.dataframe(comparison_df, use_container_width=True, hide_index=True)
+    
+    render_divider()
+    
+    # ===== PART 5: CD DRIVER COMBINATIONS =====
+    st.markdown("### 🔄 CD Driver Combinations - Real-World Scenarios")
+    
+    st.markdown("""
+#### **Scenario 1: Growth Phase (Multiple Increasing Drivers)**
+```
+Drivers Active:
+✅ Strong Loan Demand (9/10) + Economic Growth (9/10)
+✅ Growing Customer Base (8/10) + Retail Focus (8/10)
+✅ Low Interest Rates (supports demand)
+
+Result: CD Rising 70% → 75% → 78% → 82%
+
+Timeline: 18-24 months
+Stock Performance: +25% to +45%
+Risk Level: Low-Medium (if deposits keep pace)
+Investor Action: BUY and HOLD
+
+Example: India 2015-2018, post-COVID recovery 2020-2021
+```
+
+#### **Scenario 2: Stress Phase (Multiple Decreasing Drivers)**
+```
+Drivers Active:
+🔴 High Delinquencies (9/10) + Weak Demand (8/10)
+🔴 Recession (8/10) + Rising Rates (6/10)
+🔴 Deleveraging (6/10)
+
+Result: CD Falling 80% → 75% → 65% → 60% (rapid)
+
+Timeline: 6-12 months
+Stock Performance: -30% to -60%
+Risk Level: Very High
+Investor Action: SELL/AVOID
+
+Example: 2008-09 financial crisis, COVID initial shock
+```
+
+#### **Scenario 3: Consolidation Phase (Mixed Drivers)**
+```
+Drivers Active:
+✅ Weak Demand (8/10) but Liquidity Mgmt (7/10)
+⚠️ Conservative policy + Regulatory compliance
+✅ Deposits growing faster than loans
+
+Result: CD Stable or Slightly Falling 78% → 76% → 75%
+
+Timeline: 12-18 months
+Stock Performance: -5% to +5% (sideways)
+Risk Level: Low
+Investor Action: HOLD/ACCUMULATE
+
+Example: Post-crisis normalization, deposit accumulation phase
+```
+
+#### **Scenario 4: Market Share Shift (Selective Drivers)**
+```
+Drivers Active:
+✅ Market Share Gains (7/10) + Customer Growth (8/10)
+✅ Competitive Pricing (7/10)
+⚠️ Deposits growing slowly
+
+Result: CD Rising 76% → 80% → 84%
+
+Timeline: 18-24 months
+Stock Performance: +15% to +30% (growth premium fading)
+Risk Level: Medium
+Investor Action: BUY but set stop loss at 85%
+
+Example: Specific bank outperforming peers
+```
+""")
+    
+    render_divider()
+    
+    # ===== PART 6: MACRO CYCLE & CD DRIVERS =====
+    st.markdown("### 🔄 Economic Cycle Impact on CD Drivers")
+    
+    st.markdown("""
+#### **Phase 1: RECOVERY** (Early cycle)
+**Active Drivers:** Strong Loan Demand ↑, Economic Growth ↑, Low Rates ↑
+**CD Movement:** Rising (65% → 75%)
+**Profile:** Credit demand awakening
+**Duration:** 12-18 months
+**CD Signal:** ✅ BUY - Growth story emerging
+
+#### **Phase 2: EXPANSION** (Mid cycle)
+**Active Drivers:** All increasing drivers peak
+**CD Movement:** Accelerating rise (75% → 82%)
+**Profile:** Maximum profitability
+**Duration:** 12-18 months
+**CD Signal:** ✅ STRONG BUY
+
+#### **Phase 3: PEAK** (Late cycle)
+**Active Drivers:** Demand peaks, Rates start rising
+**CD Movement:** Plateauing (80% → 82% → 80%)
+**Profile:** Delinquencies begin rising
+**Duration:** 6-12 months
+**CD Signal:** ⚠️ CAUTION - Start reducing
+
+#### **Phase 4: SLOWDOWN** (Early contraction)
+**Active Drivers:** Weak Demand ↑, Rising Rates ↑, Delinquencies ↑
+**CD Movement:** Falling (80% → 75%)
+**Profile:** Growth slowing, margins under pressure
+**Duration:** 12-18 months
+**CD Signal:** 🔴 SELL at first signs
+
+#### **Phase 5: CRISIS** (Deep contraction)
+**Active Drivers:** Recession ↑, High Delinquencies ↑, Deleveraging ↑
+**CD Movement:** Sharp fall (75% → 60%)
+**Profile:** Survival mode
+**Duration:** 6-12 months
+**CD Signal:** 🔴 AVOID - Asset quality crisis
+
+#### **Phase 6: BOTTOMING** (Late contraction)
+**Active Drivers:** Demand stabilizing, Rates holding
+**CD Movement:** Stabilizing (60% → 62%)
+**Profile:** Pain priced in, recovery next
+**Duration:** 6-12 months
+**CD Signal:** 🟡 MONITOR - Wait for recovery signs
+""")
+    
+    render_divider()
+    
+    # ===== PART 7: TIMING CHANGES IN DRIVERS =====
+    st.markdown("### ⏱️ How Quickly Do Drivers Change CD Ratio?")
+    
+    timing_data = {
+        'Driver': [
+            'Economic Growth/Recession',
+            'Interest Rate Changes',
+            'Loan Demand Shift',
+            'Delinquencies Rising',
+            'Regulatory Changes',
+            'Deposit Mobilization',
+            'Market Share Shifts',
+            'Credit Expansion'
+        ],
+        'Lag Time': [
+            '1-2 quarters',
+            '1-2 months (market reacts)',
+            '1-3 months',
+            '3-6 months (detection lag)',
+            '1 month (announcement)',
+            '3-6 months',
+            '6-12 months',
+            '2-4 quarters'
+        ],
+        'Typical CD Impact': [
+            '2-3% per quarter',
+            '0.5-1% per quarter',
+            '1-2% per quarter',
+            '1-2% per quarter',
+            '0.5-1.5% per quarter',
+            '1-2% per quarter',
+            '2-4% over 12 months',
+            '1-3% per quarter'
+        ],
+        'Reversibility': [
+            'Slow (6-12 m)',
+            'Medium (3-6 m)',
+            'Medium (3-6 m)',
+            'Slow (12-24 m)',
+            'Slow (6-12 m)',
+            'Medium (6-9 m)',
+            'Fast (3-6 m)',
+            'Medium (6-12 m)'
+        ]
+    }
+    
+    timing_df = pd.DataFrame(timing_data)
+    st.dataframe(timing_df, use_container_width=True, hide_index=True)
+    
+    render_divider()
+    
+    # ===== PART 8: KEY TAKEAWAYS =====
+    st.markdown("### 🎯 Key Takeaways on CD Drivers")
+    
+    render_success_box("""
+**Understanding CD Drivers Helps You:**
+
+1. **Predict CD Changes** - Know which driver is active
+2. **Assess Sustainability** - Multiple drivers = sustainable
+3. **Time Investments** - Know when drivers are shifting
+4. **Evaluate Management** - How well do they navigate drivers?
+5. **Risk Assessment** - Single driver = higher risk
+6. **Competitive Positioning** - Compare drivers across banks
+
+**Remember:**
+- Drivers are interconnected (macro + micro)
+- Multiple drivers create sustainable trends
+- Single driver changes are often temporary
+- Always ask "Which driver is active NOW?"
+- CD follows drivers with a 1-2 quarter lag
+- Best opportunities at driver transition points
+""")
+    
+    st.markdown("""
+---
+
+## 📊 Quick Reference: Which Driver = Which CD Movement?
+
+| Driver | Effect | Speed | Duration | Investment Action |
+|--------|--------|-------|----------|------------------|
+| Strong Growth | ↑ | Fast | 12-18m | BUY |
+| Loan Demand ↑ | ↑ | Fast | 6-12m | BUY |
+| Market Expansion | ↑ | Medium | 18-24m | BUY |
+| Rate Cuts | ↑ | Medium | 6-12m | ACCUMULATE |
+| Economic Boom | ↑↑ | Medium | 12-18m | STRONGLY BUY |
+| Delinquencies ↑ | ↓ | Fast | 6-12m | SELL |
+| Weak Demand | ↓ | Medium | 12-18m | SELL |
+| Rate Hikes | ↓ | Medium | 6-12m | MONITOR |
+| Recession | ↓↓ | Fast | 6-12m | AVOID |
+| Deleveraging | ↓ | Slow | 12-24m | HOLD |
+""")
+
+
 
 elif page_index == 8:
     render_section_header("💡 Investment Insights & Implications")
