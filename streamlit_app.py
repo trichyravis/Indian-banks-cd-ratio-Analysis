@@ -76,6 +76,7 @@ pages_list = [
     "📈 CD Ratio Drivers",
     "💡 Investment Insights",
     "📋 Data Explorer",
+    "🎓 Education",
 ]
 
 page = st.sidebar.radio(
@@ -622,7 +623,7 @@ elif page_index == 9:
     """, unsafe_allow_html=True)
     
     # Create tabs for different sections
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Bank Data", "📥 Download", "📚 Data Sources", "ℹ️ Data Dictionary", "🎓 Education"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 Bank Data", "📥 Download", "📚 Data Sources", "ℹ️ Data Dictionary"])
     
     with tab1:
         render_subsection_header("📊 Complete Bank Data")
@@ -812,14 +813,14 @@ elif page_index == 9:
         st.dataframe(dict_df, use_container_width=True, hide_index=True)
         
         st.markdown("**Note:** All monetary values (deposits and advances) are in Indian Rupees (Crores). 1 Crore = 10 Million")
+
+elif page_index == 10:
+    render_section_header("🎓 CD Ratio Education & RBI Guidelines")
     
-    with tab5:
-        render_subsection_header("🎓 CD Ratio Education & RBI Guidelines")
-        
-        # Create sub-tabs for education content
-        edu_tab1, edu_tab2, edu_tab3 = st.tabs(["📘 CD Ratio Basics", "🏛️ RBI Regulations", "❓ FAQ & Questions"])
-        
-        with edu_tab1:
+    # Create sub-tabs for education content
+    edu_tab1, edu_tab2, edu_tab3 = st.tabs(["📘 CD Ratio Basics", "🏛️ RBI Regulations", "❓ FAQ & Questions"])
+    
+    with edu_tab1:
             st.markdown("""
 ### What is Credit-to-Deposit (CD) Ratio?
 
@@ -955,8 +956,8 @@ According to **SBI Research**, the optimal Credit-to-Deposit (CD) ratio for Indi
 - 75 districts: >150% (prosperous regions)
 - Priority sector lending focus in <40% districts
 """)
-        
-        with edu_tab2:
+    
+    with edu_tab2:
             st.markdown("""
 ### RBI Guidelines on CD Ratio
 
@@ -1099,8 +1100,8 @@ RBI monitors:
 - LCR/NSFR breaches: Escalated supervisory action
 - Priority sector lending miss: Fines + RBI directed lending
 """)
-        
-        with edu_tab3:
+    
+    with edu_tab3:
             st.markdown("""
 ### 🎓 CD Ratio - Frequently Asked Questions (FAQ)
 
