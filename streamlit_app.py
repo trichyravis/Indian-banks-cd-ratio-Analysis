@@ -1,3 +1,4 @@
+
 """
 Indian Banks Credit-to-Deposit Ratio Analysis Dashboard
 Main Application File
@@ -571,31 +572,201 @@ elif page_index == 8:
 elif page_index == 9:
     render_section_header("📋 Data Explorer - All Bank Data")
     
-    st.markdown("**Interactive data explorer for all banks**")
+    st.markdown("**Interactive data explorer for all banks with complete source documentation**")
     
     render_divider()
     
-    render_subsection_header("📊 Complete Bank Data")
+    # Create tabs for different sections
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 Bank Data", "📥 Download", "📚 Data Sources", "ℹ️ Data Dictionary"])
     
-    # Display all bank data
-    st.dataframe(
-        data["banks"],
-        use_container_width=True,
-        hide_index=True
-    )
+    with tab1:
+        render_subsection_header("📊 Complete Bank Data")
+        
+        # Display all bank data
+        st.dataframe(
+            data["banks"],
+            use_container_width=True,
+            hide_index=True
+        )
     
-    render_divider()
+    with tab2:
+        render_subsection_header("📥 Download Data")
+        
+        # CSV download
+        csv = data["banks"].to_csv(index=False)
+        st.download_button(
+            label="📥 Download as CSV",
+            data=csv,
+            file_name="indian_banks_cd_ratio.csv",
+            mime="text/csv"
+        )
+        
+        st.markdown("**Format:** CSV (Comma-Separated Values)")
+        st.markdown("**Records:** " + str(len(data["banks"])) + " banks")
+        st.markdown("**Columns:** " + str(len(data["banks"].columns)) + " data fields")
     
-    render_subsection_header("📥 Download Data")
+    with tab3:
+        render_subsection_header("📚 Data Sources")
+        
+        st.markdown("""
+### Primary Data Sources
+
+**Reserve Bank of India (RBI)**
+- Fortnightly monetary policy statements
+- Balance sheet data from bank returns
+- Credit and deposit statistics
+- Regulatory reporting frameworks
+- Website: www.rbi.org.in
+
+**Stock Exchange Data**
+- NSE (National Stock Exchange): Real-time price data
+- BSE (Bombay Stock Exchange): Historical financial data
+- Quarterly financial disclosures
+- Corporate announcements
+- Website: www.nseindia.com, www.bseindia.com
+
+**Bank Investor Relations**
+- Quarterly financial statements (Q1-Q3 FY2024, Q1-Q3 FY2025)
+- Annual reports and investor presentations
+- Management guidance and conference calls
+- Regulatory filings and disclosures
+- Direct corporate sources
+
+### Secondary Data Sources
+
+**Credit Rating Agencies**
+- ICRA (Investment Information and Credit Rating Agency)
+  - Banking sector analysis reports
+  - Risk assessment and ratings
+  - Website: www.icra.in
+
+- CRISIL (Credit Rating Information Services of India Limited)
+  - Banking trends and outlooks
+  - Peer benchmarking analysis
+  - Website: www.crisil.com
+
+**Financial Media & Research**
+- Economic Times
+- Moneycontrol
+- LiveMint
+- Bloomberg
+- Reuters
+
+### Data Validation & Accuracy
+
+- Data sourced from official regulatory filings
+- Cross-verified with multiple sources
+- Calculations based on standard banking formulas
+- CD Ratio = (Advances / Deposits) × 100
+
+### Data Update Frequency
+
+- Latest Data: Q3 FY2025 (December 2024)
+- Historical Period: Q1 FY2024 to Q3 FY2025
+- Update Frequency: Quarterly
+- Last Updated: January 18, 2025
+
+### Data Methodology
+
+**CD Ratio Calculation:**
+- Advances: Include all loans and advances provided by banks
+- Deposits: Include all customer deposits and liabilities
+- Formula: CD Ratio = (Total Advances / Total Deposits) × 100
+
+**Bank Classification:**
+- PSB (Public Sector Banks): Government-owned banks
+- Private Banks: Privately held banking institutions
+- SFB (Small Finance Banks): Banks focused on underserved segments
+
+**Benchmarks Used:**
+- Healthy Range: 70-80%
+- Aggressive Range: 80-90%
+- High Risk Range: >90%
+""")
     
-    # CSV download
-    csv = data["banks"].to_csv(index=False)
-    st.download_button(
-        label="📥 Download as CSV",
-        data=csv,
-        file_name="indian_banks_cd_ratio.csv",
-        mime="text/csv"
-    )
+    with tab4:
+        render_subsection_header("ℹ️ Data Dictionary")
+        
+        # Create data dictionary table
+        dict_data = {
+            "Column Name": [
+                "bank_name",
+                "type",
+                "headquarters",
+                "nse_ticker",
+                "bse_ticker",
+                "q1_fy24_cd",
+                "q2_fy24_cd",
+                "q3_fy24_cd",
+                "q4_fy24_cd",
+                "q1_fy25_cd",
+                "q2_fy25_cd",
+                "q3_fy25_cd",
+                "latest_cd",
+                "avg_cd",
+                "deposits_cr",
+                "advances_cr"
+            ],
+            "Description": [
+                "Official name of the bank",
+                "Bank category (PSB/Private/SFB)",
+                "Bank headquarters location",
+                "National Stock Exchange ticker symbol",
+                "Bombay Stock Exchange ticker symbol",
+                "CD Ratio for Q1 FY2024 (Apr-Jun 2023)",
+                "CD Ratio for Q2 FY2024 (Jul-Sep 2023)",
+                "CD Ratio for Q3 FY2024 (Oct-Dec 2023)",
+                "CD Ratio for Q4 FY2024 (Jan-Mar 2024)",
+                "CD Ratio for Q1 FY2025 (Apr-Jun 2024)",
+                "CD Ratio for Q2 FY2025 (Jul-Sep 2024)",
+                "CD Ratio for Q3 FY2025 (Oct-Dec 2024)",
+                "Most recent CD Ratio (Q3 FY2025)",
+                "Average CD Ratio across all quarters",
+                "Total Deposits in Crores (Q3 FY2025)",
+                "Total Advances in Crores (Q3 FY2025)"
+            ],
+            "Data Type": [
+                "Text",
+                "Text",
+                "Text",
+                "Text",
+                "Text",
+                "Percentage",
+                "Percentage",
+                "Percentage",
+                "Percentage",
+                "Percentage",
+                "Percentage",
+                "Percentage",
+                "Percentage",
+                "Percentage",
+                "Numeric (Crores)",
+                "Numeric (Crores)"
+            ],
+            "Source": [
+                "RBI, Stock Exchange",
+                "RBI Classification",
+                "Bank Official Website",
+                "NSE",
+                "BSE",
+                "Bank Financial Statements",
+                "Bank Financial Statements",
+                "Bank Financial Statements",
+                "Bank Financial Statements",
+                "Bank Financial Statements",
+                "Bank Financial Statements",
+                "Bank Financial Statements",
+                "Calculated",
+                "Calculated",
+                "Bank Balance Sheet",
+                "Bank Balance Sheet"
+            ]
+        }
+        
+        dict_df = pd.DataFrame(dict_data)
+        st.dataframe(dict_df, use_container_width=True, hide_index=True)
+        
+        st.markdown("**Note:** All monetary values (deposits and advances) are in Indian Rupees (Crores). 1 Crore = 10 Million")
 
 # ═══════════════════════════════════════════════════════════════════════════
 # FOOTER
