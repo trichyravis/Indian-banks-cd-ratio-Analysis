@@ -1,18 +1,15 @@
 
 # Indian Banks CD Ratio Analysis Dashboard - Requirements
-# Optimized for Streamlit Cloud Deployment
-# Version: 1.0.1
+# CORRECTED VERSION - Works with Streamlit Cloud
+# Version: 1.0.2
 # Python: 3.10, 3.11, 3.12, 3.13
 # Last Updated: January 18, 2025
 
 # ═══════════════════════════════════════════════════════════════════════════
-# IMPORTANT: Upgrade pip/setuptools/wheel FIRST
+# IMPORTANT: NO --upgrade commands in requirements.txt!
+# Streamlit Cloud doesn't support --upgrade pip in requirements files
 # ═══════════════════════════════════════════════════════════════════════════
---upgrade pip
---upgrade setuptools
---upgrade wheel
 
-# ═══════════════════════════════════════════════════════════════════════════
 # CORE FRAMEWORK & VISUALIZATION (ESSENTIAL)
 # ═══════════════════════════════════════════════════════════════════════════
 
@@ -98,23 +95,3 @@ pydantic>=2.5.0
 
 # Caching
 cachetools>=5.3.2
-
-# ═══════════════════════════════════════════════════════════════════════════
-# NOTES FOR STREAMLIT CLOUD
-# ═══════════════════════════════════════════════════════════════════════════
-
-# This file uses flexible version numbers (>=) for maximum compatibility
-# with Streamlit Cloud's Python environment.
-#
-# Key changes from original requirements.txt:
-# 1. Changed == to >= for flexible versions
-# 2. Added --upgrade pip setuptools wheel at top
-# 3. Removed exact version pins that cause conflicts
-#
-# Streamlit Cloud will:
-# - Install latest compatible versions
-# - Resolve dependencies automatically
-# - Cache installations for faster deploys
-#
-# If you need exact versions, use a local environment instead of Cloud.
-# For production, use Python 3.12 with pinned versions.
