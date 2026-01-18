@@ -1,26 +1,24 @@
 
 """
-Indian Banks Credit-to-Deposit Ratio Analysis Dashboard
-Main Application File
-Version 1.0.0
+Indian Stock Market Analysis Dashboard
+Analysis of Nifty 50 Growth: Revenue Expansion vs Margin Re-Rating
+Version 2.5.0 - 9 Pages with "About This Research" Landing Page
+Cache Buster: FORCE_REFRESH_PAGES_20250118_001
 """
 
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
+import numpy as np
 from datetime import datetime
 
-from config import (
-    BRAND_NAME, PROJECT_TITLE, PROJECT_SUBTITLE, AUTHOR, EXPERIENCE, 
-    LOCATION, YEAR, COLORS, PAGES, PSB_BANKS, PRIVATE_BANKS, SFB_BANKS,
-    CD_RATIO_BENCHMARKS, SECTOR_AVERAGES, ANALYSIS_PERIOD
-)
+from config import COLORS, AUTHOR, BRAND_NAME, EXPERIENCE, LOCATION, YEAR, PAGES
 from data import generate_data
 from styles import (
-    get_custom_css, render_section_header, render_subsection_header,
-    render_divider, render_info_box, render_warning_box, render_success_box,
-    render_footer, render_cd_ratio_status
+    get_custom_css, display_styled_dataframe,
+    render_section_header, render_subsection_header, render_divider,
+    render_info_box, render_warning_box, render_success_box,
+    render_footer
 )
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -28,8 +26,8 @@ from styles import (
 # ═══════════════════════════════════════════════════════════════════════════
 
 st.set_page_config(
-    page_title="Indian Banks CD Ratio Analysis",
-    page_icon="🏦",
+    page_title="Indian Stock Market Analysis",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -37,46 +35,102 @@ st.set_page_config(
 st.markdown(get_custom_css(), unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════
-# HEADER
+# MAIN PAGE HEADER
 # ═══════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
 <div style="background-color: #003366; color: #FFD700; padding: 20px 20px; border-radius: 0; margin: -16px -16px 25px -16px; text-align: center;">
     <h1 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700;">
-        🏦 Indian Banking Insights - CD Ratio Analysis
+        📚 The Mountain Path - World of Finance
     </h1>
     <h2 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #FFD700;">
-        Credit-to-Deposit Ratio Trends & Banking Health Indicators
+        Indian Stock Market Analysis: Nifty 50 (Year 2021-25) Growth Drivers & Sustainability
     </h2>
     <p style="margin: 0; font-size: 24px; font-weight: 700; color: #FFD700; letter-spacing: 0.5px;">
-        Understanding Bank Lending Capacity & Deposit Utilization
+        Is profit growth driven by revenue expansion or margin expansion?
     </p>
 </div>
 """, unsafe_allow_html=True)
 
+# Sidebar Radio Button Styling - Contrast Background
+st.markdown("""
+<style>
+/* Sidebar container background */
+section[data-testid="stSidebar"] {
+    background-color: #F5F5F5 !important;
+}
+
+/* Radio button group container */
+section[data-testid="stSidebar"] [role="radiogroup"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+}
+
+/* Individual radio button styling */
+section[data-testid="stSidebar"] [role="radio"] {
+    background-color: #FFFFFF !important;
+    border: 2px solid #003366 !important;
+    border-radius: 8px !important;
+    padding: 12px 14px !important;
+    margin: 4px 0 !important;
+    font-weight: 600 !important;
+    color: #003366 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Hover state - light blue background */
+section[data-testid="stSidebar"] [role="radio"]:hover {
+    background-color: #F0F7FF !important;
+    border-color: #005599 !important;
+    box-shadow: 0 2px 6px rgba(0, 51, 102, 0.15) !important;
+}
+
+/* Selected/Active radio button - dark blue background with white text */
+section[data-testid="stSidebar"] [role="radio"][aria-checked="true"] {
+    background: linear-gradient(135deg, #003366 0%, #005599 100%) !important;
+    color: #FFFFFF !important;
+    border-color: #003366 !important;
+    box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25) !important;
+    font-weight: 700 !important;
+}
+
+/* Radio circle styling */
+section[data-testid="stSidebar"] input[type="radio"] {
+    accent-color: #003366 !important;
+    cursor: pointer !important;
+}
+
+/* Selected radio circle white */
+section[data-testid="stSidebar"] [aria-checked="true"] input[type="radio"] {
+    accent-color: #FFFFFF !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ═══════════════════════════════════════════════════════════════════════════
-# SIDEBAR NAVIGATION
+# SIDEBAR & NAVIGATION
 # ═══════════════════════════════════════════════════════════════════════════
 
-st.sidebar.markdown(f"# 🏦 {BRAND_NAME}")
+st.sidebar.markdown(f"# 📊 {BRAND_NAME}")
 st.sidebar.markdown("---")
-st.sidebar.markdown(f"**{AUTHOR}**")
+st.sidebar.markdown(f"**Prof. V. Ravichandran**")
 st.sidebar.markdown(f"*{EXPERIENCE}*")
 st.sidebar.markdown("---")
 
-# Navigation pages
+# Show all 8 pages with explicit list
 pages_list = [
-    "📚 About This Analysis",
-    "🏦 Dashboard Overview",
-    "📊 CD Ratio Trends",
-    "🔍 Bank-wise Comparison",
-    "🏛️ PSB Analysis",
-    "🏢 Private Bank Analysis",
-    "🏪 Small Finance Banks",
-    "📈 CD Ratio Drivers",
-    "💡 Investment Insights",
-    "📋 Data Explorer",
-    "🎓 Education",
+    "📚 About This Research",
+    "🏠 Overview",
+    "📈 5-Year Trend",
+    "📊 Quarterly Deep-Dive",
+    "🏦 Sector Analysis",
+    "📉 Earnings Downgrades",
+    "🎯 Scenarios",
+    "📋 Data Explorer"
 ]
 
 page = st.sidebar.radio(
@@ -85,19 +139,20 @@ page = st.sidebar.radio(
     key="main_nav"
 )
 
-# Convert page selection to index
+# Convert selected page string to index for comparison
 page_index = pages_list.index(page) if page in pages_list else 0
 
 st.sidebar.markdown("---")
 st.sidebar.markdown(f"📍 {LOCATION} | {YEAR}")
 st.sidebar.markdown("---")
 
-# Social Links
+# Social Links - Simplified
 st.sidebar.markdown("""
 **Connect with me:**
 
-[📧 LinkedIn](https://www.linkedin.com/in/trichyravis)  
-[💻 GitHub](https://github.com/trichyravis)
+[LinkedIn Profile](https://www.linkedin.com/in/trichyravis)
+
+[GitHub Profile](https://github.com/trichyravis)
 """)
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -111,33 +166,33 @@ def load_dashboard_data():
 data = load_dashboard_data()
 
 # ═══════════════════════════════════════════════════════════════════════════
-# PAGE 0: ABOUT THIS ANALYSIS
+# PAGE 0: ABOUT THIS RESEARCH
 # ═══════════════════════════════════════════════════════════════════════════
 
 if page_index == 0:
-    render_section_header("📚 About This CD Ratio Analysis")
+    render_section_header("📚 About This Research Analysis")
     
     st.markdown("""
-    **Indian Banking Sector Credit-to-Deposit (CD) Ratio Analysis**
+    **Indian Stock Market Analysis: Nifty 50 Growth Drivers & Sustainability**
     
-    A comprehensive research dashboard analyzing the CD ratio trends across Indian banks,
-    tracking lending capacity, deposit utilization, and banking sector health indicators.
+    A comprehensive research dashboard analyzing the Nifty 50 index composition and performance drivers
     """)
     
     render_divider()
     
+    # Research Objective
     render_subsection_header("🎯 Research Objective")
     
     render_info_box(
-        "**Understanding Bank Lending Capacity**\n\n"
-        "This analysis investigates the Credit-to-Deposit (CD) ratios across Indian banking sector "
-        "to understand how effectively banks are deploying customer deposits into loans and advances. "
-        "By tracking CD ratios by bank type (PSB, Private, SFB), we identify growth patterns, risk indicators, "
-        "and investment implications."
+        "**Understanding Nifty 50 Growth Drivers**\n\n"
+        "This analysis investigates whether the Nifty 50's impressive profit growth (19.8% CAGR) is driven by "
+        "sustainable revenue expansion or unsustainable margin re-rating. By examining growth divergence, we identify "
+        "critical inflection points and assess investment implications."
     )
     
     render_divider()
     
+    # Key Research Questions
     render_subsection_header("❓ Key Research Questions")
     
     col1, col2 = st.columns(2)
@@ -146,2173 +201,1527 @@ if page_index == 0:
         st.markdown("""
         **Primary Questions:**
         
-        1. What are current CD ratios across major Indian banks?
-        2. How do PSBs, Private Banks, and SFBs compare?
-        3. Is CD ratio trending up or down?
-        4. Which banks are aggressively lending?
-        5. What's the sector average and outliers?
+        1. Is profit growth driven by revenue expansion or margin expansion?
+        2. Are margins sustainable at current levels?
+        3. What's the divergence between revenue and profit growth?
+        4. Where are the inflection points in growth trajectory?
+        5. What's the forward earnings outlook?
         """)
     
     with col2:
         st.markdown("""
         **Secondary Questions:**
         
-        6. How has CD ratio evolved over quarters?
-        7. Is deposit growth matching advance growth?
-        8. What's the liquidity position of banks?
-        9. Are there red flags in lending ratios?
-        10. What are investment implications?
+        6. How are different sectors contributing to growth?
+        7. What are analyst sentiment and revisions indicating?
+        8. What are possible future scenarios?
+        9. Which sectors are leading vs lagging?
+        10. What's the sustainability score?
         """)
     
     render_divider()
     
-    render_subsection_header("📊 CD Ratio Explained")
+    # Analysis Approach
+    render_subsection_header("📊 Analysis Approach")
     
-    render_success_box(
-        "**CD Ratio = (Total Advances / Total Deposits) × 100**\n\n"
-        "- **70-80%:** Healthy range - balanced growth & liquidity\n"
-        "- **Below 70%:** Underutilized capacity - excess deposits\n"
-        "- **Above 85%:** Aggressive lending - lower liquidity buffer\n"
-        "- **Above 95%:** Critical - potential liquidity risk"
-    )
-    
-    render_divider()
-    
-    render_subsection_header("📈 Analysis Coverage")
-    
-    st.markdown(f"""
-    **Period:** {ANALYSIS_PERIOD}
-    **Data Frequency:** Quarterly (Q1, Q2, Q3, Q4)
-    **Banks Covered:** 28 major Indian banks
-    **Categories:** PSBs, Private Banks, Small Finance Banks
-    
-    This dashboard provides comprehensive CD ratio analysis across all major categories
-    of Indian banks, enabling investors and analysts to track lending trends and
-    banking health indicators.
-    """)
-
-# ═══════════════════════════════════════════════════════════════════════════
-# PAGE 1: DASHBOARD OVERVIEW
-# ═══════════════════════════════════════════════════════════════════════════
-
-elif page_index == 1:
-    render_section_header("🏦 Dashboard Overview - Banking Sector CD Ratio Summary")
-    
-    st.markdown("""
-    **Real-time summary of CD ratios across Indian banking sector**
-    """)
-    
-    render_divider()
-    
-    # Key metrics
-    render_subsection_header("📊 Key Sector Metrics")
-    
-    col1, col2, col3, col4, col5 = st.columns(5)
+    col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.metric(
-            label="Total Banks",
-            value=data["metrics"]["total_banks"],
-            delta="28 Major Banks"
-        )
+        st.markdown("""
+        **1. Historical Analysis**
+        
+        • 5-year trend examination
+        • Revenue & profit decomposition
+        • Margin expansion analysis
+        • Growth rate trajectory
+        • Inflection point identification
+        """)
     
     with col2:
-        st.metric(
-            label="Sector Avg CD",
-            value=f"{data['metrics']['sector_avg_cd']:.2f}%",
-            delta="Healthy Range"
-        )
+        st.markdown("""
+        **2. Current Performance**
+        
+        • FY2025 quarterly breakdown
+        • Intra-year deceleration trends
+        • Quarterly vs annual comparison
+        • Momentum indicators
+        • Performance sustainability
+        """)
     
     with col3:
-        st.metric(
-            label="Sector Median CD",
-            value=f"{data['metrics']['sector_median_cd']:.2f}%",
-            delta="Central Tendency"
-        )
-    
-    with col4:
-        st.metric(
-            label="Highest CD Bank",
-            value=data["metrics"]["highest_cd_bank"][:15],
-            delta="Most Aggressive"
-        )
-    
-    with col5:
-        st.metric(
-            label="Lowest CD Bank",
-            value=data["metrics"]["lowest_cd_bank"][:15],
-            delta="Most Conservative"
-        )
+        st.markdown("""
+        **3. Forward Analysis**
+        
+        • Analyst earnings revisions
+        • Scenario-based projections
+        • Multiple valuation models
+        • Risk assessment
+        • Investment recommendations
+        """)
     
     render_divider()
     
-    # Sector summary
-    render_subsection_header("🏛️ CD Ratio by Bank Type")
+    # What You Can Explore
+    render_subsection_header("🔍 What You Can Explore Using This Dashboard")
+    
+    st.markdown("""
+    This dashboard provides 7 comprehensive analysis sections:
+    """)
+    
+    analysis_info = {
+        "1️⃣ Overview": {
+            "content": "Executive summary of Nifty 50 growth dynamics with key metrics, "
+                      "divergence analysis, margin breakdown, and investment recommendations. "
+                      "Perfect for understanding the big picture.",
+            "key_insights": "Growth divergence, margin limits, sustainability concerns"
+        },
+        "2️⃣ 5-Year Trend": {
+            "content": "Comprehensive 5-year performance analysis showing revenue vs profit growth trends, "
+                      "margin evolution, and growth divergence patterns. Includes historical data and analysis.",
+            "key_insights": "Revenue deceleration, profit CAGR divergence, margin expansion limits"
+        },
+        "3️⃣ Quarterly Deep-Dive": {
+            "content": "FY2025 quarterly performance breakdown with annual vs quarterly comparison. "
+                      "Shows the sharp deceleration within the fiscal year with detailed metrics.",
+            "key_insights": "Quarterly deceleration, intra-year trends, momentum shifts"
+        },
+        "4️⃣ Sector Analysis": {
+            "content": "Top 10 sectors contributing to Nifty 50 with their growth rates, index weights, "
+                      "and performance status. Identify sector-specific opportunities and risks.",
+            "key_insights": "Sector contribution, growth heterogeneity, diversification insights"
+        },
+        "5️⃣ Earnings Downgrades": {
+            "content": "6-month analyst earnings revision trend showing consensus changes. "
+                      "Track the dramatic 67% downgrade from 9.8% to 3.2% in profit growth expectations.",
+            "key_insights": "Analyst sentiment, consensus shifts, earnings risk, forecast reliability"
+        },
+        "6️⃣ Scenarios": {
+            "content": "Three investment scenarios (Base/Bear/Bull) with earnings projections, "
+                      "valuation multiples, and Nifty targets. Interactive scenario selector with probability-weighted analysis.",
+            "key_insights": "Risk scenarios, valuation ranges, target price calculations"
+        },
+        "7️⃣ Data Explorer": {
+            "content": "Interactive tabbed interface to explore all underlying datasets with comprehensive "
+                      "documentation on data sources, methodology, and metric definitions.",
+            "key_insights": "Raw data access, source transparency, calculation verification"
+        }
+    }
+    
+    for title, info in analysis_info.items():
+        with st.expander(f"**{title}**", expanded=False):
+            st.markdown(f"**Description:** {info['content']}")
+            st.markdown(f"\n**Key Insights:** {info['key_insights']}")
+    
+    render_divider()
+    
+    # Data Sources
+    render_subsection_header("📋 Data Sources & Reliability")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        **Primary Data Sources:**
+        
+        • NSE (National Stock Exchange) - Official index data
+        • RBI (Reserve Bank of India) - Macro indicators
+        • BSE (Bombay Stock Exchange) - Sector analysis
+        • SEBI (Securities & Exchange Board) - Regulatory data
+        • Company Financial Statements - Audited reports
+        """)
+    
+    with col2:
+        st.markdown("""
+        **Secondary Sources:**
+        
+        • Business Standard - Market analysis
+        • Economic Times - Business news
+        • Brokerage Research - Institutional forecasts
+        • MCA Filings - Corporate disclosures
+        • Stock Exchange Reports - Official data
+        """)
+    
+    render_divider()
+    
+    # Who Should Use This
+    render_subsection_header("👥 Who Should Use This Dashboard?")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
         render_success_box(
-            f"**Public Sector Banks (PSBs)**\n\n"
-            f"Count: {data['sector_summary']['PSB']['count']}\n"
-            f"Avg CD: {data['sector_summary']['PSB']['avg_cd']:.2f}%\n"
-            f"Range: {data['sector_summary']['PSB']['min_cd']:.2f}% - {data['sector_summary']['PSB']['max_cd']:.2f}%"
+            "**Portfolio Managers**\n\n"
+            "✓ Index rebalancing decisions\n"
+            "✓ Sector allocation insights\n"
+            "✓ Risk assessment\n"
+            "✓ Growth trend analysis"
         )
     
     with col2:
-        render_info_box(
-            f"**Private Banks**\n\n"
-            f"Count: {data['sector_summary']['Private']['count']}\n"
-            f"Avg CD: {data['sector_summary']['Private']['avg_cd']:.2f}%\n"
-            f"Range: {data['sector_summary']['Private']['min_cd']:.2f}% - {data['sector_summary']['Private']['max_cd']:.2f}%"
+        render_warning_box(
+            "**Equity Analysts**\n\n"
+            "⚠️ Earnings forecast validation\n"
+            "⚠️ Sector performance tracking\n"
+            "⚠️ Growth divergence analysis\n"
+            "⚠️ Valuation benchmarking"
         )
     
     with col3:
-        render_warning_box(
-            f"**Small Finance Banks (SFBs)**\n\n"
-            f"Count: {data['sector_summary']['SFB']['count']}\n"
-            f"Avg CD: {data['sector_summary']['SFB']['avg_cd']:.2f}%\n"
-            f"Range: {data['sector_summary']['SFB']['min_cd']:.2f}% - {data['sector_summary']['SFB']['max_cd']:.2f}%"
+        render_info_box(
+            "**Individual Investors**\n\n"
+            "ℹ️ Market trend understanding\n"
+            "ℹ️ Growth sustainability assessment\n"
+            "ℹ️ Scenario planning\n"
+            "ℹ️ Data-driven decision making"
         )
     
     render_divider()
     
-    render_subsection_header("💡 Key Insights")
+    # Key Findings Preview
+    render_subsection_header("🔑 Key Findings (Preview)")
     
-    st.markdown("""
-    **Banking Sector CD Ratio Analysis:**
+    findings = {
+        "Revenue Growth": "Decelerating from 15.4% (FY22) to 6.9% (FY25)",
+        "Profit Growth": "Higher but vulnerable at 4.6% (FY25)",
+        "CAGR Divergence": "Profit 15.5% vs Revenue 9.2% (unsustainable)",
+        "Margin Status": "Expansion complete, now facing limits",
+        "Earnings Revisions": "Dramatic 67% downgrade in 6 months",
+        "Analyst Sentiment": "Shifting from optimistic to cautious",
+        "Sector Concentration": "Financials 35% + Energy 30% = 65% of index",
+        "Investment Implication": "Revenue recovery critical for profit sustainability"
+    }
     
-    - **PSBs:** Operating at 74.2% CD ratio on average - healthy balance of growth and liquidity
-    - **Private Banks:** Slightly more aggressive at 74.8% - pursuing higher lending growth
-    - **SFBs:** Highest CD ratio at 82.5% - typical for specialized micro-lending segment
-    - **Sector Average:** 73.5% - within healthy 70-80% range
-    
-    **Investment Perspective:**
-    Banks with CD ratio in 72-78% range are optimally positioned for growth without liquidity stress.
-    """)
-
-# ═══════════════════════════════════════════════════════════════════════════
-# PAGE 2: CD RATIO TRENDS
-# ═══════════════════════════════════════════════════════════════════════════
-
-elif page_index == 2:
-    render_section_header("📊 CD Ratio Trends Analysis")
-    
-    st.markdown("""
-    **Track CD ratio evolution across quarters (FY2024-FY2025)**
-    """)
+    for key, value in findings.items():
+        st.markdown(f"**{key}:** {value}")
     
     render_divider()
     
-    # Select bank for trend analysis
-    render_subsection_header("📈 Select Bank for Trend Analysis")
-    
-    selected_bank = st.selectbox(
-        "Choose a bank:",
-        options=data["banks"]["bank_name"].unique(),
-        key="bank_selector"
-    )
-    
-    # Get trend data for selected bank
-    if selected_bank in data["cd_ratio_trends"]:
-        trend_data = data["cd_ratio_trends"][selected_bank]
-        
-        # Create chart
-        fig = go.Figure()
-        
-        fig.add_trace(go.Scatter(
-            x=trend_data["quarters"],
-            y=trend_data["cd_ratios"],
-            mode='lines+markers',
-            name='CD Ratio %',
-            line=dict(color=COLORS["primary_dark"], width=3),
-            marker=dict(size=10)
-        ))
-        
-        # Add benchmark line
-        fig.add_hline(
-            y=75,
-            line_dash="dash",
-            line_color="green",
-            annotation_text="Healthy Range (70-80%)",
-            annotation_position="right"
-        )
-        
-        fig.update_layout(
-            title=f"{selected_bank} - CD Ratio Quarterly Trend",
-            xaxis_title="Quarter",
-            yaxis_title="CD Ratio (%)",
-            hovermode="x unified",
-            height=500,
-            template="plotly_white"
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # Summary statistics
-        render_subsection_header("📊 Trend Summary")
-        
-        col1, col2, col3, col4 = st.columns(4)
-        
-        with col1:
-            st.metric("Latest CD Ratio", f"{trend_data['cd_ratios'][-1]:.2f}%")
-        
-        with col2:
-            st.metric("Q1 FY24", f"{trend_data['cd_ratios'][0]:.2f}%")
-        
-        with col3:
-            change = trend_data['cd_ratios'][-1] - trend_data['cd_ratios'][0]
-            st.metric("Change (7 Q)", f"{change:.2f}%", delta=f"{change:+.2f}%")
-        
-        with col4:
-            avg_cd = sum(trend_data['cd_ratios']) / len(trend_data['cd_ratios'])
-            st.metric("Average CD", f"{avg_cd:.2f}%")
-
-# ═══════════════════════════════════════════════════════════════════════════
-# PAGE 3: BANK-WISE COMPARISON
-# ═══════════════════════════════════════════════════════════════════════════
-
-elif page_index == 3:
-    render_section_header("🔍 Bank-wise CD Ratio Comparison")
+    # Navigation Guide
+    render_subsection_header("🧭 How to Navigate This Dashboard")
     
     st.markdown("""
-    **Compare CD ratios across all major Indian banks**
+    **Recommended Analysis Path:**
+    
+    1. **Start Here** (📚 About This Research) - Understand objectives and context
+    2. **Overview** (🏠) - Get executive summary of key findings
+    3. **5-Year Trend** (📈) - Understand historical context and patterns
+    4. **Quarterly Deep-Dive** (📊) - See current deceleration in detail
+    5. **Sector Analysis** (🏦) - Identify sector-specific risks/opportunities
+    6. **Earnings Downgrades** (📉) - Assess analyst sentiment and revisions
+    7. **Scenarios** (🎯) - Explore future possibilities and valuations
+    8. **Data Explorer** (📋) - Verify sources and explore raw data
+    
+    **Or jump directly to sections most relevant to your questions!**
     """)
     
     render_divider()
     
-    render_subsection_header("📊 Latest CD Ratios - All Banks")
+    # Investment Perspective
+    render_subsection_header("💡 Investment Perspective")
     
-    # Sort by latest CD ratio
-    comparison_df = data["bank_wise_comparison"].sort_values("latest_cd", ascending=False)
-    
-    # Color code based on status
-    comparison_df["Status"] = comparison_df["latest_cd"].apply(render_cd_ratio_status)
-    
-    st.dataframe(
-        comparison_df[["bank", "type", "latest_cd", "fy24_avg_cd", "change", "Status"]],
-        use_container_width=True,
-        hide_index=True
+    render_info_box(
+        "**Critical Insight:**\n\n"
+        "The Nifty 50 has benefited from impressive profit growth (19.8% CAGR FY21-25), but this masks a concerning reality: "
+        "profit growth is decelerating faster than revenue growth, indicating margin expansion is losing steam. With revenue growth "
+        "down to 6.9% and analysts cutting profit forecasts by 67%, the index faces a critical inflection point. "
+        "\n\nInvestors must focus on revenue recovery and sector-specific opportunities rather than relying on broad-based margin expansion. "
+        "The dashboard provides comprehensive analysis tools to navigate this transition."
     )
-    
-    render_divider()
-    
-    render_subsection_header("📈 CD Ratio Distribution")
-    
-    # Create distribution chart
-    fig = px.box(
-        data["banks"],
-        x="type",
-        y="latest_cd",
-        color="type",
-        color_discrete_map={
-            "PSB": COLORS["psb_color"],
-            "Private": COLORS["private_color"],
-            "SFB": COLORS["sfb_color"]
-        },
-        title="CD Ratio Distribution by Bank Type",
-        labels={"type": "Bank Type", "latest_cd": "CD Ratio (%)"}
-    )
-    
-    fig.update_layout(height=500, template="plotly_white")
-    st.plotly_chart(fig, use_container_width=True)
 
-# ═══════════════════════════════════════════════════════════════════════════
-# PAGE 4-10: ADDITIONAL ANALYSIS PAGES
-# ═══════════════════════════════════════════════════════════════════════════
-
-elif page_index == 4:
-    render_section_header("🏛️ PSB (Public Sector Banks) - CD Ratio Analysis")
+elif page_index == 1:
+    render_section_header("📈 Nifty 50 Analysis: Growth Drivers & Sustainability")
     
-    st.markdown("**Detailed analysis of PSBs CD ratios and trends**")
+    st.markdown("""
+    **Analysis Period:** FY2021 - FY2025 YTD  
+    **Focus:** Is growth driven by revenue expansion or margin re-rating?
+    """)
     
     render_divider()
     
-    # Filter PSB data
-    psb_df = data["banks"][data["banks"]["type"] == "PSB"].sort_values("latest_cd", ascending=False)
+    # Key Metrics
+    render_subsection_header("📊 Key Metrics Summary")
     
-    render_subsection_header("📊 PSB CD Ratios (Sorted)")
+    metrics_data = {
+        'Metric': ['Revenue CAGR (FY21-25)', 'Profit CAGR (FY21-25)', 'EBITDA Margin (FY25)', 'PAT Margin (FY25)'],
+        'Value': ['9.2%', '19.8%', '33.0%', '10.5%']
+    }
     
-    st.dataframe(
-        psb_df[["bank_name", "latest_cd", "avg_cd", "deposits_cr", "advances_cr"]],
-        use_container_width=True,
-        hide_index=True
+    display_styled_dataframe(
+        pd.DataFrame(metrics_data),
+        columns_to_style=['Value'],
+        width='stretch'
     )
     
     render_divider()
     
-    render_subsection_header("📈 PSB CD Ratio Comparison")
+    # Metric Cards
+    render_subsection_header("💹 Performance Metrics (FY2025 YTD)")
     
-    fig = px.bar(
-        psb_df,
-        x="bank_name",
-        y="latest_cd",
-        color="latest_cd",
-        color_continuous_scale="Blues",
-        title="Public Sector Banks - CD Ratio Comparison"
-    )
+    five_year = data['five_year']
+    current_year = five_year.iloc[-1]
     
-    fig.update_layout(height=500, template="plotly_white", xaxis_tickangle=-45)
-    st.plotly_chart(fig, use_container_width=True)
-
-elif page_index == 5:
-    render_section_header("🏢 Private Banks - CD Ratio Analysis")
+    col1, col2, col3, col4 = st.columns(4)
     
-    st.markdown("**Detailed analysis of Private Banks CD ratios and trends**")
+    with col1:
+        st.metric("Revenue Growth", f"{current_year['Revenue Growth (%)']:.1f}%", delta="YoY")
+    with col2:
+        st.metric("EBITDA Growth", f"{current_year['EBITDA Growth (%)']:.1f}%", delta="YoY")
+    with col3:
+        st.metric("PAT Growth", f"{current_year['PAT Growth (%)']:.1f}%", delta="YoY")
+    with col4:
+        st.metric("EBITDA Margin", f"{current_year['EBITDA Margin (%)']:.1f}%", delta="vs FY24")
     
     render_divider()
     
-    # Filter Private bank data
-    private_df = data["banks"][data["banks"]["type"] == "Private"].sort_values("latest_cd", ascending=False)
-    
-    render_subsection_header("📊 Private Bank CD Ratios (Sorted)")
-    
-    st.dataframe(
-        private_df[["bank_name", "latest_cd", "avg_cd", "deposits_cr", "advances_cr"]],
-        use_container_width=True,
-        hide_index=True
-    )
-    
-    render_divider()
-    
-    render_subsection_header("📈 Private Bank CD Ratio Comparison")
-    
-    fig = px.bar(
-        private_df,
-        x="bank_name",
-        y="latest_cd",
-        color="latest_cd",
-        color_continuous_scale="Greens",
-        title="Private Banks - CD Ratio Comparison"
-    )
-    
-    fig.update_layout(height=500, template="plotly_white", xaxis_tickangle=-45)
-    st.plotly_chart(fig, use_container_width=True)
-
-elif page_index == 6:
-    render_section_header("🏪 Small Finance Banks (SFBs) - CD Ratio Analysis")
-    
-    st.markdown("**Detailed analysis of SFBs CD ratios and trends**")
-    
-    render_divider()
-    
-    # Filter SFB data
-    sfb_df = data["banks"][data["banks"]["type"] == "SFB"].sort_values("latest_cd", ascending=False)
-    
-    render_subsection_header("📊 SFB CD Ratios (Sorted)")
-    
-    st.dataframe(
-        sfb_df[["bank_name", "latest_cd", "avg_cd", "deposits_cr", "advances_cr"]],
-        use_container_width=True,
-        hide_index=True
-    )
-    
-    render_divider()
-    
-    render_subsection_header("📈 SFB CD Ratio Comparison")
-    
-    fig = px.bar(
-        sfb_df,
-        x="bank_name",
-        y="latest_cd",
-        color="latest_cd",
-        color_continuous_scale="Oranges",
-        title="Small Finance Banks - CD Ratio Comparison"
-    )
-    
-    fig.update_layout(height=500, template="plotly_white", xaxis_tickangle=-45)
-    st.plotly_chart(fig, use_container_width=True)
-
-elif page_index == 7:
-    render_section_header("📈 CD Ratio Drivers & Analysis")
-    
-    st.markdown("**What drives CD ratios and how to interpret changes**")
-    
-    render_divider()
-    
-    render_subsection_header("🎯 Key Drivers of CD Ratio")
+    # Key Insights
+    render_subsection_header("📌 Key Insights")
     
     col1, col2 = st.columns(2)
     
     with col1:
         render_success_box(
-            "**Factors Increasing CD Ratio:**\n\n"
-            "✅ Strong loan demand\n"
-            "✅ Expanding credit business\n"
-            "✅ Competitive pricing\n"
-            "✅ Growing customer base\n"
-            "✅ Retail & MSME focus"
+            "**FY2021-2024: Healthy Growth**\n\n"
+            "✅ Revenue expanding (+10.5% avg)\n"
+            "✅ Margins improving (+50 bps)\n"
+            "✅ Both drivers working\n"
+            "✅ Sustainable model"
         )
     
     with col2:
         render_warning_box(
-            "**Factors Decreasing CD Ratio:**\n\n"
-            "⚠️ High loan delinquencies\n"
-            "⚠️ Weak credit demand\n"
-            "⚠️ High interest rates\n"
-            "⚠️ Liquidity management\n"
-            "⚠️ Regulatory constraints"
+            "**FY2025: Concerning Shift**\n\n"
+            "⚠️ Revenue decelerating (6.9%)\n"
+            "⚠️ Margins propping profits\n"
+            "⚠️ One-time tailwinds fading\n"
+            "❌ Unsustainable"
         )
-
-elif page_index == 8:
-    render_section_header("💡 Investment Insights & Implications")
     
-    st.markdown("**What CD ratios tell investors about banking sector**")
+    render_divider()
+    
+    # Growth Divergence Analysis
+    render_subsection_header("🔍 Growth Divergence: Revenue vs Profit")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("#### Revenue Story")
+        st.markdown("""
+        - **FY21-FY24:** Consistent 10-15% growth
+        - **FY25:** Sharp deceleration to 6.9%
+        - **Trend:** Deteriorating
+        - **Concern:** Sustainability question
+        """)
+    
+    with col2:
+        st.markdown("#### Profit Story")
+        st.markdown("""
+        - **CAGR:** 19.8% (vs Revenue 9.2%)
+        - **Source:** Margin expansion (+150 bps)
+        - **Driver:** Operational leverage
+        - **Risk:** Not sustainable indefinitely
+        """)
+    
+    with col3:
+        st.markdown("#### Key Question")
+        st.markdown("""
+        ### Can Nifty 50 profit growth sustain if revenue continues to decelerate?
+        
+        **Answer:** NO
+        
+        - Margin expansion is finite
+        - One-time cost benefits fading
+        - Needs revenue recovery
+        """)
+    
+    render_divider()
+    
+    # Margin Analysis
+    render_subsection_header("📈 Margin Expansion Breakdown")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("#### EBITDA Margin Evolution")
+        ebitda_margins = five_year['EBITDA Margin (%)'].values
+        st.markdown(f"""
+        - **FY2021:** {ebitda_margins[0]:.1f}%
+        - **FY2022:** {ebitda_margins[1]:.1f}%
+        - **FY2023:** {ebitda_margins[2]:.1f}%
+        - **FY2024:** {ebitda_margins[3]:.1f}%
+        - **FY2025:** {ebitda_margins[4]:.1f}%
+        
+        **Trend:** Plateauing (marginal improvement)
+        """)
+    
+    with col2:
+        st.markdown("#### PAT Margin Evolution")
+        pat_margins = five_year['PAT Margin (%)'].values
+        st.markdown(f"""
+        - **FY2021:** {pat_margins[0]:.1f}%
+        - **FY2022:** {pat_margins[1]:.1f}%
+        - **FY2023:** {pat_margins[2]:.1f}%
+        - **FY2024:** {pat_margins[3]:.1f}%
+        - **FY2025:** {pat_margins[4]:.1f}%
+        
+        **Trend:** Near peak (limited upside)
+        """)
+    
+    render_divider()
+    
+    # Sector Contribution
+    render_subsection_header("🏢 Top Contributing Sectors")
+    
+    sectors = data['sector']
+    top_sectors = sectors.head(5)
+    
+    sector_display = pd.DataFrame({
+        'Sector': top_sectors['Sector'],
+        'Weight in Nifty %': top_sectors['Weight in Nifty (%)'].round(1),
+        'Revenue Growth %': top_sectors['Revenue Growth FY25 (%)'].round(1),
+        'Status': top_sectors['Status']
+    })
+    
+    display_styled_dataframe(
+        sector_display,
+        width='stretch'
+    )
+    
+    render_divider()
+    
+    # Investment Recommendation
+    render_subsection_header("💼 Investment Recommendation")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        render_info_box(
+            "**For Growth Investors:**\n\n"
+            "⚠️ CAUTION\n\n"
+            "• Nifty 50 earnings growth at peak\n"
+            "• Revenue deceleration is concerning\n"
+            "• Valuation may not justify growth\n"
+            "• Better opportunities in high-growth stocks"
+        )
+    
+    with col2:
+        render_info_box(
+            "**For Value Investors:**\n\n"
+            "✓ MONITOR\n\n"
+            "• Solid dividend yields likely\n"
+            "• Defensive characteristics\n"
+            "• Look for margin stabilization\n"
+            "• Wait for revenue recovery"
+        )
+    
+    render_divider()
+    
+    # Investment Takeaway
+    render_info_box(
+        "**Bottom Line**\n\n"
+        "The Nifty 50 profit growth (19.8% CAGR) masks slowing revenue growth (9.2% CAGR). "
+        "While margin expansion provided tailwinds through FY24, FY25 shows concerning revenue deceleration to 6.9%. "
+        "**Key Risk:** Profit growth cannot sustain if revenue continues to decelerate. "
+        "Investors should focus on revenue growth recovery and sector-specific opportunities rather than broad-based index investing at current levels."
+    )
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PAGE 2: 5-YEAR TREND
+# ═══════════════════════════════════════════════════════════════════════════
+
+elif page_index == 2:
+    render_section_header("📈 5-Year Trend Analysis")
+    
+    render_subsection_header("💹 5-Year Performance")
+    
+    five_year = data['five_year']
+    fig = go.Figure()
+    
+    fig.add_trace(go.Scatter(
+        x=five_year['Fiscal Year'],
+        y=five_year['Revenue Growth (%)'],
+        mode='lines+markers',
+        name='Revenue Growth',
+        line=dict(color=COLORS['chart_blue'], width=3),
+        marker=dict(size=10)
+    ))
+    
+    fig.add_trace(go.Scatter(
+        x=five_year['Fiscal Year'],
+        y=five_year['PAT Growth (%)'],
+        mode='lines+markers',
+        name='Profit Growth',
+        line=dict(color=COLORS['accent_red'], width=3),
+        marker=dict(size=10)
+    ))
+    
+    fig.update_layout(
+        title="Revenue vs Profit Growth Trends",
+        xaxis_title="Fiscal Year",
+        yaxis_title="Growth Rate (%)",
+        template='plotly_white',
+        height=400,
+        hovermode='x unified'
+    )
+    
+    st.plotly_chart(fig, width='stretch')
+    
+    render_divider()
+    
+    render_subsection_header("📊 Margin Trends")
+    
+    fig2 = go.Figure()
+    
+    fig2.add_trace(go.Scatter(
+        x=five_year['Fiscal Year'],
+        y=five_year['EBITDA Margin (%)'],
+        mode='lines+markers',
+        name='EBITDA Margin',
+        line=dict(color=COLORS['accent_gold'], width=3),
+        marker=dict(size=10)
+    ))
+    
+    fig2.add_trace(go.Scatter(
+        x=five_year['Fiscal Year'],
+        y=five_year['PAT Margin (%)'],
+        mode='lines+markers',
+        name='PAT Margin',
+        line=dict(color=COLORS['accent_red'], width=3),
+        marker=dict(size=10)
+    ))
+    
+    fig2.update_layout(
+        title="Margin Trends",
+        xaxis_title="Fiscal Year",
+        yaxis_title="Margin (%)",
+        template='plotly_white',
+        height=400,
+        hovermode='x unified'
+    )
+    
+    st.plotly_chart(fig2, width='stretch')
+    
+    render_divider()
+    
+    # COMPREHENSIVE SUMMARY
+    render_subsection_header("📋 5-Year Performance Summary")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        **Revenue Growth Story**
+        
+        - FY21: 10.5%
+        - FY22: 15.4% (Peak)
+        - FY23: 13.8%
+        - FY24: 10.7%
+        - FY25: 6.9% ⬇️
+        
+        **CAGR: 9.2%**
+        
+        **Trend:** Consistent deceleration
+        """)
+    
+    with col2:
+        st.markdown("""
+        **Profit Growth Story**
+        
+        - FY21: 8.3%
+        - FY22: 25.7% (Peak)
+        - FY23: 22.1%
+        - FY24: 16.8%
+        - FY25: 4.6% ⬇️
+        
+        **CAGR: 15.5%**
+        
+        **Trend:** Sharper decline than revenue
+        """)
+    
+    with col3:
+        st.markdown("""
+        **Margin Story**
+        
+        - EBITDA: 32.1% → 33.1% (stable)
+        - PAT: 9.8% → 10.7% (slight gain)
+        
+        **Peak:** FY22 EBITDA 33.5%
+        
+        **Status:** Margin expansion phase over
+        """)
+    
+    render_divider()
+    
+    # Key Insights
+    render_subsection_header("🔍 Key Findings")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        render_success_box(
+            "**FY2021-2024: Strong Performance**\n\n"
+            "✅ Revenue CAGR: 12.6% (FY21-24)\n"
+            "✅ Profit CAGR: 18.6% (FY21-24)\n"
+            "✅ Margin expansion: +140 bps\n"
+            "✅ Dual drivers: Volume + Margin"
+        )
+    
+    with col2:
+        render_warning_box(
+            "**FY2025: Inflection Point**\n\n"
+            "⚠️ Revenue growth slows: 6.9%\n"
+            "⚠️ Profit growth halves: 4.6%\n"
+            "⚠️ Margin gains plateau\n"
+            "❌ Profit growth now dependent on revenue"
+        )
+    
+    render_divider()
+    
+    # Growth Divergence Analysis
+    render_subsection_header("📊 Growth Divergence Analysis")
+    
+    divergence_data = pd.DataFrame({
+        'Fiscal Year': five_year['Fiscal Year'],
+        'Revenue Growth %': five_year['Revenue Growth (%)'].round(1),
+        'Profit Growth %': five_year['PAT Growth (%)'].round(1),
+        'Divergence (pts)': (five_year['PAT Growth (%)'] - five_year['Revenue Growth (%)']).round(1),
+        'Driver': ['Vol+Mar', 'Vol+Mar', 'Vol+Mar', 'Vol+Mar', 'Margin']
+    })
+    
+    display_styled_dataframe(
+        divergence_data,
+        width='stretch'
+    )
+    
+    render_divider()
+    
+    # Investment Perspective
+    render_subsection_header("💼 Investment Conclusion")
+    
+    render_info_box(
+        "**5-Year Analysis Verdict**\n\n"
+        "The Nifty 50 demonstrated strong operational leverage through FY21-FY24, with profit growth (15.5% CAGR) significantly "
+        "outpacing revenue growth (9.2% CAGR). However, FY2025 marks an inflection point where profit growth (4.6%) has collapsed "
+        "disproportionately to revenue deceleration (6.9%), signaling margin expansion limits. \n\n"
+        "**Going Forward:** Investors should monitor revenue growth closely as further revenue deceleration will directly impact "
+        "profitability given margin headrooms are exhausted. The current valuation may not adequately price this transition risk."
+    )
+    
+    render_divider()
+    
+    # Full Data Table
+    render_subsection_header("📈 Complete 5-Year Data")
+    
+    display_styled_dataframe(
+        five_year,
+        columns_to_style=['Revenue Growth (%)', 'EBITDA Growth (%)', 'PAT Growth (%)'],
+        width='stretch',
+        hide_index=True
+    )
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PAGE 2: QUARTERLY DEEP-DIVE
+# ═══════════════════════════════════════════════════════════════════════════
+
+elif page_index == 3:
+    render_section_header("📊 FY2025 Quarterly Deep-Dive Analysis")
+    
+    st.markdown("""
+    **Comprehensive Annual vs Quarterly Performance Analysis**  
+    Analyzing FY2025 performance through both annual and quarterly lens
+    """)
+    
+    render_divider()
+    
+    # Get data
+    five_year = data['five_year']
+    quarterly = data['quarterly']
+    
+    # ANNUAL PERFORMANCE (Last row of 5-year data)
+    render_subsection_header("📈 Annual Performance (FY2025 YTD)")
+    
+    annual_row = five_year.iloc[-1]
+    annual_cols = st.columns(4)
+    with annual_cols[0]:
+        st.metric("Revenue Growth", f"{annual_row['Revenue Growth (%)']:.1f}%", delta="YoY")
+    with annual_cols[1]:
+        st.metric("EBITDA Growth", f"{annual_row['EBITDA Growth (%)']:.1f}%", delta="YoY")
+    with annual_cols[2]:
+        st.metric("PAT Growth", f"{annual_row['PAT Growth (%)']:.1f}%", delta="YoY")
+    with annual_cols[3]:
+        st.metric("EBITDA Margin", f"{annual_row['EBITDA Margin (%)']:.1f}%", delta="vs FY24")
+    
+    render_divider()
+    
+    # QUARTERLY PERFORMANCE
+    render_subsection_header("📊 Quarterly Breakdown (FY2025)")
+    
+    display_styled_dataframe(
+        quarterly,
+        columns_to_style=['Revenue Growth (%)', 'EBITDA Growth (%)', 'PAT Growth (%)'],
+        width='stretch',
+        hide_index=True
+    )
+    
+    render_divider()
+    
+    # QUARTERLY vs ANNUAL COMPARISON
+    render_subsection_header("🔍 Quarterly vs Annual Comparison")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        render_info_box(
+            "**Quarterly Trend**\n\n"
+            "• Q1 FY25: Revenue 9.6% | PAT 0.8%\n"
+            "• Q2 FY25: Revenue 6.6% | PAT -1.0%\n"
+            "• Q3 FY25: Revenue 4.5% | PAT 9.5%\n\n"
+            "**Observation:** Revenue declining QoQ while profit recovery in Q3"
+        )
+    
+    with col2:
+        render_warning_box(
+            "**Key Insights**\n\n"
+            "• Annual revenue growth (6.9%) lower than prior years\n"
+            "• Q2 showed negative PAT growth (-1.0%)\n"
+            "• Q3 recovery driven by margin expansion\n"
+            "• Divergence between revenue and profit trends"
+        )
+    
+    render_divider()
+    
+    # ANNUAL TREND CHART
+    render_subsection_header("📈 Annual Revenue Growth Trend (FY2021-2025)")
+    
+    fig_annual = go.Figure()
+    
+    annual_x = list(range(len(five_year)))
+    annual_labels = five_year['Fiscal Year'].tolist()
+    
+    # Annual trend line
+    fig_annual.add_trace(go.Scatter(
+        x=annual_x,
+        y=five_year['Revenue Growth (%)'],
+        mode='lines+markers',
+        name='Annual Revenue Growth',
+        line=dict(color=COLORS['chart_blue'], width=4),
+        marker=dict(size=14),
+        fill='tozeroy',
+        text=annual_labels,
+        hovertemplate='<b>%{text}</b><br>Revenue Growth: %{y:.1f}%<extra></extra>'
+    ))
+    
+    fig_annual.update_layout(
+        title="Annual Revenue Growth Trajectory",
+        xaxis_title="Fiscal Year",
+        yaxis_title="Revenue Growth Rate (%)",
+        xaxis=dict(
+            ticktext=annual_labels,
+            tickvals=annual_x
+        ),
+        template='plotly_white',
+        height=450,
+        showlegend=False
+    )
+    
+    st.plotly_chart(fig_annual, use_container_width=True)
+    
+    render_divider()
+    
+    # QUARTERLY TREND CHART
+    render_subsection_header("📊 Quarterly Revenue Growth Trend (FY2025)")
+    
+    fig_quarterly = go.Figure()
+    
+    quarterly_x = list(range(len(quarterly)))
+    q_labels = quarterly['Quarter'].tolist()
+    
+    # Quarterly trend
+    fig_quarterly.add_trace(go.Scatter(
+        x=quarterly_x,
+        y=quarterly['Revenue Growth (%)'],
+        mode='lines+markers',
+        name='Quarterly Revenue Growth',
+        line=dict(color=COLORS['accent_red'], width=4),
+        marker=dict(size=14, symbol='diamond'),
+        fill='tozeroy',
+        fillcolor='rgba(255, 0, 0, 0.2)',
+        text=q_labels,
+        hovertemplate='<b>%{text}</b><br>Revenue Growth: %{y:.1f}%<extra></extra>'
+    ))
+    
+    fig_quarterly.update_layout(
+        title="Quarterly Revenue Growth Deceleration",
+        xaxis_title="Quarter (FY2025)",
+        yaxis_title="Revenue Growth Rate (%)",
+        xaxis=dict(
+            ticktext=q_labels,
+            tickvals=quarterly_x
+        ),
+        template='plotly_white',
+        height=450,
+        showlegend=False
+    )
+    
+    st.plotly_chart(fig_quarterly, use_container_width=True)
     
     render_divider()
     
     render_info_box(
-        "**CD Ratio as Investment Signal:**\n\n"
-        "🔷 **High CD (80-85%):** Bank is aggressively deploying deposits, growth story but monitor liquidity\n"
-        "🔷 **Optimal CD (72-78%):** Balanced approach, steady growth with safety margin\n"
-        "🔷 **Low CD (<70%):** Underutilized capacity, excess liquidity, potential profitability headwind\n"
-        "🔷 **Rising CD:** Positive for growth story, indicates credit demand recovery\n"
-        "🔷 **Falling CD:** Could signal credit stress or deposit accumulation"
+        "**Deep-Dive Takeaway**\n\n"
+        "FY2025 shows concerning revenue deceleration when analyzed quarterly, suggesting temporary tailwinds may have faded. "
+        "However, profit recovery in Q3 indicates management's ability to defend margins through cost management. "
+        "The key question: Is Q3 recovery sustainable, or is it driven by one-time factors?"
     )
 
-elif page_index == 9:
-    render_section_header("📋 Data Explorer - All Bank Data")
+# ═══════════════════════════════════════════════════════════════════════════
+# PAGE 3: SECTOR ANALYSIS
+# ═══════════════════════════════════════════════════════════════════════════
+
+elif page_index == 4:
+    render_section_header("🏦 Sector Performance Analysis")
     
-    st.markdown("**Interactive data explorer for all banks with complete source documentation**")
+    sectors = data['sector']
+    display_styled_dataframe(
+        sectors,
+        columns_to_style=['Contribution (%)', 'Growth (%)'],
+        width='stretch',
+        hide_index=True
+    )
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PAGE 4: EARNINGS DOWNGRADES
+# ═══════════════════════════════════════════════════════════════════════════
+
+elif page_index == 5:
+    render_section_header("📉 6-Month Earnings Revision Trend")
+    
+    st.markdown("""
+    **Analysis Period:** Sep 2024 - Feb 2025  
+    **Focus:** FY2025 Profit Growth Revisions
+    """)
     
     render_divider()
     
-    # Add custom CSS for styled tabs
+    downgrades = data['downgrades']
+    
+    # Display data table
+    render_subsection_header("📊 Earnings Revision History")
+    display_styled_dataframe(
+        downgrades,
+        width='stretch',
+        hide_index=True
+    )
+    
+    render_divider()
+    
+    # Key Metrics
+    render_subsection_header("📈 Revision Metrics")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("Latest Estimate", f"{downgrades.iloc[-1]['FY25 Profit Growth (%)']:.1f}%", delta="Current")
+    with col2:
+        st.metric("Highest Estimate", f"{downgrades['FY25 Profit Growth (%)'].max():.1f}%", delta="Sep 2024")
+    with col3:
+        st.metric("Lowest Estimate", f"{downgrades['FY25 Profit Growth (%)'].min():.1f}%", delta="Recent")
+    with col4:
+        total_revision = downgrades['FY25 Profit Growth (%)'].iloc[0] - downgrades['FY25 Profit Growth (%)'].iloc[-1]
+        st.metric("Total Revision", f"{total_revision:.1f}%", delta="Downgrade")
+    
+    render_divider()
+    
+    # Revision Trend Chart
+    render_subsection_header("📉 Revision Trend Over Time")
+    
+    fig = go.Figure()
+    
+    # Create x-axis positions
+    x_pos = list(range(len(downgrades)))
+    date_labels = downgrades['Date'].tolist()
+    
+    # Revision line
+    fig.add_trace(go.Scatter(
+        x=x_pos,
+        y=downgrades['FY25 Profit Growth (%)'],
+        mode='lines+markers',
+        name='FY25 Profit Growth Estimate',
+        line=dict(color=COLORS['accent_red'], width=4),
+        marker=dict(size=12, symbol='circle'),
+        fill='tozeroy',
+        fillcolor='rgba(255, 0, 0, 0.1)',
+        text=date_labels,
+        hovertemplate='<b>%{text}</b><br>Estimate: %{y:.1f}%<extra></extra>'
+    ))
+    
+    fig.update_layout(
+        title="FY2025 Profit Growth Estimate Revision",
+        xaxis_title="Revision Date",
+        yaxis_title="FY25 Profit Growth (%)",
+        xaxis=dict(
+            ticktext=date_labels,
+            tickvals=x_pos,
+            tickangle=-45
+        ),
+        template='plotly_white',
+        height=400,
+        showlegend=False
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    render_divider()
+    
+    # Analysis Boxes
+    render_subsection_header("🔍 Revision Analysis")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        render_warning_box(
+            "**Downgrade Trend**\n\n"
+            "• Sep 2024: 9.8% (Initial estimate)\n"
+            "• Dec 2024: 3.2% (Sharp decline)\n"
+            "• Feb 2025: 3.2% (Stabilized)\n\n"
+            "**Observation:** 67% downgrade in 6 months"
+        )
+    
+    with col2:
+        render_info_box(
+            "**What This Means**\n\n"
+            "• Analysts have cut profit growth expectations significantly\n"
+            "• Recent estimates stable (suggesting capitulation)\n"
+            "• Current estimate: 3.2% (down from 9.8%)\n"
+            "• Risk: Further downgrades possible if revenue weakens"
+        )
+    
+    render_divider()
+    
+    # Monthly Revision Rates
+    render_subsection_header("📋 Monthly Revision Details")
+    
+    revision_data = pd.DataFrame({
+        'Date': downgrades['Date'],
+        'Period': downgrades['Period'],
+        'FY25 Profit Growth %': downgrades['FY25 Profit Growth (%)'].round(1),
+        'Revision from Previous': [
+            '-',
+            f"{downgrades.iloc[1]['FY25 Profit Growth (%)'] - downgrades.iloc[0]['FY25 Profit Growth (%)']:.1f}%",
+            f"{downgrades.iloc[2]['FY25 Profit Growth (%)'] - downgrades.iloc[1]['FY25 Profit Growth (%)']:.1f}%",
+            f"{downgrades.iloc[3]['FY25 Profit Growth (%)'] - downgrades.iloc[2]['FY25 Profit Growth (%)']:.1f}%",
+            f"{downgrades.iloc[4]['FY25 Profit Growth (%)'] - downgrades.iloc[3]['FY25 Profit Growth (%)']:.1f}%",
+            f"{downgrades.iloc[5]['FY25 Profit Growth (%)'] - downgrades.iloc[4]['FY25 Profit Growth (%)']:.1f}%"
+        ]
+    })
+    
+    display_styled_dataframe(
+        revision_data,
+        width='stretch'
+    )
+    
+    render_divider()
+    
+    # Investment Perspective
+    render_subsection_header("💼 Investment Perspective")
+    
+    render_info_box(
+        "**Key Takeaway**\n\n"
+        "The dramatic downgrade from 9.8% to 3.2% reflects deteriorating profit growth expectations. "
+        "While the recent stabilization suggests consensus has been reached, the current 3.2% estimate is concerning given: "
+        "(1) Revenue growth declining to 6.9%, (2) Margin expansion limits, (3) Lack of operational catalysts. "
+        "Monitor Q3 results closely—further deterioration could trigger additional downgrades."
+    )
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PAGE 5: SCENARIOS
+# ═══════════════════════════════════════════════════════════════════════════
+
+elif page_index == 6:
+    render_section_header("🎯 Investment Scenarios - Detailed Analysis")
+    
+    st.markdown("""
+    **Select a scenario below to view detailed analysis including:**
+    - Earnings projections (FY2025-2027)
+    - P/E multiple assumptions
+    - Nifty 50 target levels
+    - Probability-weighted returns
+    """)
+    
+    render_divider()
+    
+    # Get scenarios data
+    scenarios_data = data['scenarios']
+    nifty_levels = data['nifty_levels']
+    
+    # Radio button to select scenario
+    scenario_names = list(scenarios_data.keys())
+    selected_scenario = st.radio(
+        "📍 Choose Investment Scenario:",
+        scenario_names,
+        index=0,
+        key="scenario_selector"
+    )
+    
+    render_divider()
+    
+    # Get selected scenario data
+    scenario_info = scenarios_data[selected_scenario]
+    nifty_targets = nifty_levels[selected_scenario]
+    
+    # Display selected scenario
+    render_subsection_header(f"📊 {selected_scenario}")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown(f"""
+        **Scenario Description:**
+        
+        {scenario_info['description']}
+        
+        **Probability:** {scenario_info['probability']*100:.0f}%
+        """)
+    
+    with col2:
+        # Color indicator with HTML rendering
+        st.markdown(f"""
+        **Scenario Type & Color:**
+        """)
+        
+        # Display colored indicator
+        color = scenario_info['color']
+        st.markdown(f"<p style='font-size: 24px; color: {color};'>● {selected_scenario}</p>", unsafe_allow_html=True)
+        
+        st.markdown(f"""
+        **Key Characteristics:**
+        
+        {scenario_info['description']}
+        """)
+    
+    render_divider()
+    
+    # Earnings Projections
+    render_subsection_header("💰 Earnings Projections (FY2025-2027)")
+    
+    earnings_col1, earnings_col2, earnings_col3 = st.columns(3)
+    
+    with earnings_col1:
+        st.metric("FY2025 Earnings", f"₹{scenario_info['fy25_earnings']:.1f}", delta="Growth")
+    with earnings_col2:
+        st.metric("FY2026 Earnings", f"₹{scenario_info['fy26_earnings']:.1f}", delta="CAGR")
+    with earnings_col3:
+        st.metric("FY2027 Earnings", f"₹{scenario_info['fy27_earnings']:.1f}", delta="Projection")
+    
+    render_divider()
+    
+    # P/E Multiples
+    render_subsection_header("📈 P/E Multiple Assumptions")
+    
+    pe_col1, pe_col2, pe_col3 = st.columns(3)
+    
+    with pe_col1:
+        st.metric("FY2025 P/E", f"{scenario_info['fy25_pe']:.1f}x", delta="Valuation")
+    with pe_col2:
+        st.metric("FY2026 P/E", f"{scenario_info['fy26_pe']:.1f}x", delta="Normalized")
+    with pe_col3:
+        st.metric("FY2027 P/E", f"{scenario_info['fy27_pe']:.1f}x", delta="Terminal")
+    
+    render_divider()
+    
+    # Nifty 50 Target Levels
+    render_subsection_header("🎯 Nifty 50 Target Levels")
+    
+    target_col1, target_col2, target_col3 = st.columns(3)
+    
+    with target_col1:
+        st.metric("FY2025 Target", f"{nifty_targets[0]:.0f}", delta="Near-term")
+    with target_col2:
+        st.metric("FY2026 Target", f"{nifty_targets[1]:.0f}", delta="Medium-term")
+    with target_col3:
+        st.metric("FY2027 Target", f"{nifty_targets[2]:.0f}", delta="Long-term")
+    
+    render_divider()
+    
+    # Scenario Analysis Table
+    render_subsection_header("📊 Scenario Comparison Matrix")
+    
+    # Create comparison dataframe
+    comparison_df = pd.DataFrame({
+        'Metric': ['Probability', 'FY25 Earnings', 'FY26 Earnings', 'FY27 Earnings', 
+                   'FY25 P/E', 'FY26 P/E', 'FY27 P/E',
+                   'FY25 Target', 'FY26 Target', 'FY27 Target'],
+        'Base Case (50%)': [
+            f"{scenarios_data['Base Case (50%)']['probability']*100:.0f}%",
+            f"₹{scenarios_data['Base Case (50%)']['fy25_earnings']:.1f}",
+            f"₹{scenarios_data['Base Case (50%)']['fy26_earnings']:.1f}",
+            f"₹{scenarios_data['Base Case (50%)']['fy27_earnings']:.1f}",
+            f"{scenarios_data['Base Case (50%)']['fy25_pe']:.1f}x",
+            f"{scenarios_data['Base Case (50%)']['fy26_pe']:.1f}x",
+            f"{scenarios_data['Base Case (50%)']['fy27_pe']:.1f}x",
+            f"{nifty_levels['Base Case (50%)'][0]:.0f}",
+            f"{nifty_levels['Base Case (50%)'][1]:.0f}",
+            f"{nifty_levels['Base Case (50%)'][2]:.0f}"
+        ],
+        'Bear Case (25%)': [
+            f"{scenarios_data['Bear Case (25%)']['probability']*100:.0f}%",
+            f"₹{scenarios_data['Bear Case (25%)']['fy25_earnings']:.1f}",
+            f"₹{scenarios_data['Bear Case (25%)']['fy26_earnings']:.1f}",
+            f"₹{scenarios_data['Bear Case (25%)']['fy27_earnings']:.1f}",
+            f"{scenarios_data['Bear Case (25%)']['fy25_pe']:.1f}x",
+            f"{scenarios_data['Bear Case (25%)']['fy26_pe']:.1f}x",
+            f"{scenarios_data['Bear Case (25%)']['fy27_pe']:.1f}x",
+            f"{nifty_levels['Bear Case (25%)'][0]:.0f}",
+            f"{nifty_levels['Bear Case (25%)'][1]:.0f}",
+            f"{nifty_levels['Bear Case (25%)'][2]:.0f}"
+        ],
+        'Bull Case (25%)': [
+            f"{scenarios_data['Bull Case (25%)']['probability']*100:.0f}%",
+            f"₹{scenarios_data['Bull Case (25%)']['fy25_earnings']:.1f}",
+            f"₹{scenarios_data['Bull Case (25%)']['fy26_earnings']:.1f}",
+            f"₹{scenarios_data['Bull Case (25%)']['fy27_earnings']:.1f}",
+            f"{scenarios_data['Bull Case (25%)']['fy25_pe']:.1f}x",
+            f"{scenarios_data['Bull Case (25%)']['fy26_pe']:.1f}x",
+            f"{scenarios_data['Bull Case (25%)']['fy27_pe']:.1f}x",
+            f"{nifty_levels['Bull Case (25%)'][0]:.0f}",
+            f"{nifty_levels['Bull Case (25%)'][1]:.0f}",
+            f"{nifty_levels['Bull Case (25%)'][2]:.0f}"
+        ]
+    })
+    
+    display_styled_dataframe(
+        comparison_df,
+        width='stretch',
+        hide_index=True
+    )
+    
+    render_divider()
+    
+    # Investment Perspective
+    if selected_scenario == 'Base Case (50%)':
+        render_success_box(
+            "**Base Case (Most Likely - 50% Probability)**\n\n"
+            "Margin resilience with slow revenue growth. Earnings grow from ₹5.5 (FY25) to ₹12.5 (FY27). "
+            "P/E multiple compresses from 25x to 24x, limiting re-rating. Nifty target ranges from 56,700 to 67,900. "
+            "This is the consensus scenario with moderate upside."
+        )
+    elif selected_scenario == 'Bear Case (25%)':
+        render_warning_box(
+            "**Bear Case (Stress - 25% Probability)**\n\n"
+            "Margin compression due to input cost spike. Earnings growth severely impacted: ₹2.0 → ₹7.5. "
+            "P/E multiple contracts from 23x to 21.5x. Nifty downside risk to 50,400-53,200. "
+            "Triggered by commodities rally or demand shock."
+        )
+    else:
+        render_info_box(
+            "**Bull Case (Optimistic - 25% Probability)**\n\n"
+            "Revenue recovery accelerates with margin stability. Strong earnings growth: ₹9.0 → ₹15.5. "
+            "P/E multiple expands from 25.5x to 26.5x as confidence returns. Nifty upside to 59,700-81,700. "
+            "Requires revenue inflection + operational efficiency."
+        )
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PAGE 6: DATA EXPLORER
+# ═══════════════════════════════════════════════════════════════════════════
+
+elif page_index == 7:
+    render_section_header("📋 Data Explorer")
+    
+    st.markdown("""
+    **All Datasets - Interactive View**
+    
+    Access complete datasets for all analysis sections. Each tab contains detailed performance metrics and calculations.
+    """)
+    
+    render_divider()
+    
+    # Custom CSS for tab styling - Simplified approach
     st.markdown("""
     <style>
-    /* Tab styling with contrast background */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 20px;
-        background-color: #F5F5F5;
-        padding: 10px;
-        border-radius: 10px;
+    .stTabs [data-baseweb="tab-list"] button {
+        background-color: #E8EDEF !important;
+        border: 2px solid #003366 !important;
+        border-radius: 6px !important;
+        padding: 12px 20px !important;
+        margin-right: 10px !important;
+        font-weight: 600 !important;
+        color: #003366 !important;
+        font-size: 14px !important;
     }
     
-    .stTabs [data-baseweb="tab"] {
-        background-color: #E8E8E8;
-        border-radius: 8px;
-        padding: 12px 20px;
-        color: #003366;
-        font-weight: 600;
-        border: 2px solid #CCCCCC;
-        transition: all 0.3s ease;
+    .stTabs [data-baseweb="tab-list"] button:hover {
+        background-color: #D0D8E8 !important;
+        border-color: #005599 !important;
     }
     
-    .stTabs [aria-selected="true"] {
+    .stTabs [data-baseweb="tab-list"] [aria-selected="true"] {
         background-color: #003366 !important;
         color: #FFFFFF !important;
-        border: 2px solid #FFD700 !important;
-        box-shadow: 0 4px 8px rgba(0, 51, 102, 0.3);
+        border-color: #003366 !important;
     }
     
-    .stTabs [aria-selected="false"]:hover {
-        background-color: #D0D0D0;
-        color: #003366;
-    }
-    
-    /* Tab content container */
     .stTabs [data-baseweb="tab-panel"] {
-        background-color: #FFFFFF;
-        border: 2px solid #003366;
-        border-radius: 10px;
-        padding: 25px;
-        margin-top: 10px;
-        box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+        padding: 20px !important;
+        background-color: #F8FAFB !important;
+        border-radius: 8px !important;
+        border-left: 5px solid #003366 !important;
+        margin-top: 20px !important;
     }
     </style>
     """, unsafe_allow_html=True)
     
-    # Create tabs for different sections
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 Bank Data", "📥 Download", "📚 Data Sources", "ℹ️ Data Dictionary"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["📈 5-Year", "📊 Quarterly", "🏢 Sectors", "📉 Downgrades", "📝 Data Notes", "📥 Downloads"])
     
     with tab1:
-        render_subsection_header("📊 Complete Bank Data")
+        render_subsection_header("📈 5-Year Performance Data")
+        st.markdown("""
+        **Coverage:** FY2021 to FY2025 YTD
         
-        # Display all bank data
-        st.dataframe(
-            data["banks"],
-            use_container_width=True,
-            hide_index=True
-        )
+        **Metrics Included:**
+        - Revenue Growth (%) - Year-on-year revenue growth rate
+        - EBITDA Growth (%) - Year-on-year EBITDA growth rate
+        - PAT Growth (%) - Year-on-year Profit After Tax growth rate
+        - EBITDA Margin (%) - EBITDA as percentage of revenue
+        - PAT Margin (%) - PAT as percentage of revenue
+        
+        **Use Case:** Analyze 5-year trends, identify inflection points, assess margin evolution
+        """)
+        display_styled_dataframe(data['five_year'], width='stretch', hide_index=True)
     
     with tab2:
-        render_subsection_header("📥 Download Data")
+        render_subsection_header("📊 Quarterly Performance Data")
+        st.markdown("""
+        **Coverage:** Q1 FY2025 to Q3 FY2025
         
-        # CSV download
-        csv = data["banks"].to_csv(index=False)
-        st.download_button(
-            label="📥 Download as CSV",
-            data=csv,
-            file_name="indian_banks_cd_ratio.csv",
-            mime="text/csv"
-        )
+        **Metrics Included:**
+        - Quarter - Quarter designation (Q1FY25, Q2FY25, Q3FY25)
+        - Revenue Growth (%) - Quarterly revenue growth
+        - EBITDA Growth (%) - Quarterly EBITDA growth
+        - PAT Growth (%) - Quarterly profit after tax growth
         
-        st.markdown("**Format:** CSV (Comma-Separated Values)")
-        st.markdown("**Records:** " + str(len(data["banks"])) + " banks")
-        st.markdown("**Columns:** " + str(len(data["banks"].columns)) + " data fields")
+        **Use Case:** Analyze intra-year deceleration trends, identify seasonal patterns, assess quarterly momentum
+        """)
+        display_styled_dataframe(data['quarterly'], width='stretch', hide_index=True)
     
     with tab3:
-        render_subsection_header("📚 Data Sources")
-        
+        render_subsection_header("🏢 Sector Performance Data")
         st.markdown("""
-### Primary Data Sources
-
-**Reserve Bank of India (RBI)**
-- Fortnightly monetary policy statements
-- Balance sheet data from bank returns
-- Credit and deposit statistics
-- Regulatory reporting frameworks
-- Website: www.rbi.org.in
-
-**Stock Exchange Data**
-- NSE (National Stock Exchange): Real-time price data
-- BSE (Bombay Stock Exchange): Historical financial data
-- Quarterly financial disclosures
-- Corporate announcements
-- Website: www.nseindia.com, www.bseindia.com
-
-**Bank Investor Relations**
-- Quarterly financial statements (Q1-Q3 FY2024, Q1-Q3 FY2025)
-- Annual reports and investor presentations
-- Management guidance and conference calls
-- Regulatory filings and disclosures
-- Direct corporate sources
-
-### Secondary Data Sources
-
-**Credit Rating Agencies**
-- ICRA (Investment Information and Credit Rating Agency)
-  - Banking sector analysis reports
-  - Risk assessment and ratings
-  - Website: www.icra.in
-
-- CRISIL (Credit Rating Information Services of India Limited)
-  - Banking trends and outlooks
-  - Peer benchmarking analysis
-  - Website: www.crisil.com
-
-**Financial Media & Research**
-- Economic Times
-- Moneycontrol
-- LiveMint
-- Bloomberg
-- Reuters
-
-### Data Validation & Accuracy
-
-- Data sourced from official regulatory filings
-- Cross-verified with multiple sources
-- Calculations based on standard banking formulas
-- CD Ratio = (Advances / Deposits) × 100
-
-### Data Update Frequency
-
-- Latest Data: Q3 FY2025 (December 2024)
-- Historical Period: Q1 FY2024 to Q3 FY2025
-- Update Frequency: Quarterly
-- Last Updated: January 18, 2025
-
-### Data Methodology
-
-**CD Ratio Calculation:**
-- Advances: Include all loans and advances provided by banks
-- Deposits: Include all customer deposits and liabilities
-- Formula: CD Ratio = (Total Advances / Total Deposits) × 100
-
-**Bank Classification:**
-- PSB (Public Sector Banks): Government-owned banks
-- Private Banks: Privately held banking institutions
-- SFB (Small Finance Banks): Banks focused on underserved segments
-
-**Benchmarks Used:**
-- Healthy Range: 70-80%
-- Aggressive Range: 80-90%
-- High Risk Range: >90%
-""")
+        **Coverage:** Top 10 sectors in Nifty 50
+        
+        **Metrics Included:**
+        - Sector - Sector name within Nifty 50 index
+        - Revenue Growth FY25 (%) - FY2025 revenue growth by sector
+        - Profit Growth FY25 (%) - FY2025 profit growth by sector
+        - Weight in Nifty (%) - Sector's contribution to index
+        - Status - Performance status indicator (Strong, Stabilizing, Slowing, Crisis, Mixed)
+        
+        **Use Case:** Identify sector-specific trends, assess diversification, spot sector strength/weakness
+        """)
+        display_styled_dataframe(data['sector'], width='stretch', hide_index=True)
     
     with tab4:
-        render_subsection_header("ℹ️ Data Dictionary")
-        
-        # Create data dictionary table
-        dict_data = {
-            "Column Name": [
-                "bank_name",
-                "type",
-                "headquarters",
-                "nse_ticker",
-                "bse_ticker",
-                "q1_fy24_cd",
-                "q2_fy24_cd",
-                "q3_fy24_cd",
-                "q4_fy24_cd",
-                "q1_fy25_cd",
-                "q2_fy25_cd",
-                "q3_fy25_cd",
-                "latest_cd",
-                "avg_cd",
-                "deposits_cr",
-                "advances_cr"
-            ],
-            "Description": [
-                "Official name of the bank",
-                "Bank category (PSB/Private/SFB)",
-                "Bank headquarters location",
-                "National Stock Exchange ticker symbol",
-                "Bombay Stock Exchange ticker symbol",
-                "CD Ratio for Q1 FY2024 (Apr-Jun 2023)",
-                "CD Ratio for Q2 FY2024 (Jul-Sep 2023)",
-                "CD Ratio for Q3 FY2024 (Oct-Dec 2023)",
-                "CD Ratio for Q4 FY2024 (Jan-Mar 2024)",
-                "CD Ratio for Q1 FY2025 (Apr-Jun 2024)",
-                "CD Ratio for Q2 FY2025 (Jul-Sep 2024)",
-                "CD Ratio for Q3 FY2025 (Oct-Dec 2024)",
-                "Most recent CD Ratio (Q3 FY2025)",
-                "Average CD Ratio across all quarters",
-                "Total Deposits in Crores (Q3 FY2025)",
-                "Total Advances in Crores (Q3 FY2025)"
-            ],
-            "Data Type": [
-                "Text",
-                "Text",
-                "Text",
-                "Text",
-                "Text",
-                "Percentage",
-                "Percentage",
-                "Percentage",
-                "Percentage",
-                "Percentage",
-                "Percentage",
-                "Percentage",
-                "Percentage",
-                "Percentage",
-                "Numeric (Crores)",
-                "Numeric (Crores)"
-            ],
-            "Source": [
-                "RBI, Stock Exchange",
-                "RBI Classification",
-                "Bank Official Website",
-                "NSE",
-                "BSE",
-                "Bank Financial Statements",
-                "Bank Financial Statements",
-                "Bank Financial Statements",
-                "Bank Financial Statements",
-                "Bank Financial Statements",
-                "Bank Financial Statements",
-                "Bank Financial Statements",
-                "Calculated",
-                "Calculated",
-                "Bank Balance Sheet",
-                "Bank Balance Sheet"
-            ]
-        }
-        
-        dict_df = pd.DataFrame(dict_data)
-        st.dataframe(dict_df, use_container_width=True, hide_index=True)
-        
-        st.markdown("**Note:** All monetary values (deposits and advances) are in Indian Rupees (Crores). 1 Crore = 10 Million")
-
-elif page_index == 10:
-    render_section_header("🎓 CD Ratio Education & RBI Guidelines")
-    
-    # Create sub-tabs for education content
-    edu_tab1, edu_tab2, edu_tab3, edu_tab4, edu_tab5 = st.tabs(["📘 CD Ratio Basics", "🏛️ RBI Regulations", "❓ FAQ & Questions", "📈 Investment Signals", "🎯 CD Drivers"])
-    
-    with edu_tab1:
-            st.markdown("""
-### What is Credit-to-Deposit (CD) Ratio?
-
-The CD Ratio is a critical banking metric that measures the percentage of a bank's customer deposits that are deployed as loans and advances to borrowers.
-
-**Formula:**
-```
-CD Ratio = (Total Advances / Total Deposits) × 100
-```
-
-**Example:**
-- Total Advances: ₹100 Crores
-- Total Deposits: ₹125 Crores
-- CD Ratio = (100/125) × 100 = 80%
-
-This means the bank has deployed 80% of its deposits as loans, keeping 20% as reserves.
-
----
-
-### Optimal CD Ratio for Indian Banks
-
-According to **SBI Research**, the optimal Credit-to-Deposit (CD) ratio for Indian banks is **76-80%**.
-
-**Key Findings:**
-
-#### 🎯 Public Sector Banks (PSBs)
-- **Optimal Range:** 76-80%
-- **Current Average:** ~75-80%
-- **Examples:** State Bank of India, Bank of Baroda
-- **Characteristic:** Better liquidity management
-
-#### 🎯 Private Sector Banks
-- **Optimal Range:** 76-80%
-- **Current Average:** 92-94% (above optimal)
-- **Challenge:** Higher funding costs and leverage risks
-- **Impact:** Greater strain on net interest margins
-
-#### 🎯 Small Finance Banks (SFBs)
-- **Current Average:** >100% (well above optimal)
-- **Risk Level:** High liquidity and profitability concerns
-- **Strategy:** Focused lending in underserved segments
-
-#### 🎯 Foreign Banks
-- **Optimal Range:** 65-70%
-- **Reason:** Different funding profiles and global deposit bases
-
----
-
-### Why 76-80% is Optimal?
-
-**1. Lending Efficiency** 
-   - Maximizes loan deployment
-   - Generates interest income
-   - Supports economic growth
-
-**2. Liquidity Safety**
-   - Maintains adequate buffers for withdrawals
-   - Ensures regulatory compliance
-   - Reduces rollover risks
-
-**3. Profitability Balance**
-   - Beyond 80%, incremental profitability declines sharply
-   - Higher funding costs outweigh interest income gains
-   - Net Interest Margin (NIM) compression occurs
-
-**4. Regulatory Alignment**
-   - Aligns with RBI liquidity requirements (LCR/NSFR)
-   - Accommodates statutory reserves (CRR 4.5%, SLR 18%)
-   - Natural alignment with deployable funds (~75-76%)
-
----
-
-### Risks Beyond 80%
-
-✅ **Liquidity Risks** - Reduced idle funds for emergencies
-✅ **Funding Pressures** - Reliance on costly wholesale borrowing
-✅ **Profitability Erosion** - NIM compression (20-25 basis points)
-✅ **Credit Risks** - Aggressive lending in high-CD regions
-✅ **Regulatory Scrutiny** - Enhanced RBI monitoring
-
----
-
-### CD Ratio by Bank Type in India
-
-| Bank Type | Average CD Ratio | Optimal | Status |
-|-----------|-----------------|---------|--------|
-| PSB (e.g., Indian Bank) | 80% | 76-80% | ✅ Balanced |
-| Private Banks | 92-94% | 76-80% | ⚠️ High |
-| Small Finance Banks | >100% | 76-80% | 🔴 Very High |
-| Foreign Banks | <60% | 65-70% | ✅ Conservative |
-
----
-
-### Impact of High CD Ratios (>80%)
-
-**Net Interest Margin (NIM) Compression:**
-- Banks must raise deposit rates to attract funds
-- Lending rates face downward pressure from competition
-- Typical compression: 20-25 basis points
-- Post-repo rate cuts, NIM erosion accelerates
-
-**Example from SBI Research:**
-- Banks with 92% CD ratio: Acute margin strain
-- Banks with 75% CD ratio: Healthy margins
-- Difference: ~50-100 basis points
-
----
-
-### Regional Variations in India
-
-#### High CD Regions (>80%)
-**Western States:**
-- Maharashtra: ~98% (some districts 125%)
-- Gujarat: 90-100%
-- Rajasthan: 90-100%
-
-**Southern States:**
-- Tamil Nadu: >100%
-- Andhra Pradesh: 90-95%
-
-**Reason:** Industrial hubs, urban credit demand, strong economies
-
-#### Low CD Regions (<50%)
-**Eastern & Northeastern States:**
-- Bihar, Odisha, Jharkhand: <52%
-- West Bengal: <52%
-- Uttar Pradesh Eastern: 33-46%
-
-**Reason:** Lower economic output, deposit surpluses, rural focus
-
-**National Distribution:**
-- 46% of districts: 50-100% range
-- 75 districts: >150% (prosperous regions)
-- Priority sector lending focus in <40% districts
-""")
-    
-    with edu_tab2:
-            st.markdown("""
-### RBI Guidelines on CD Ratio
-
-The RBI does not impose a **hard cap** on CD ratios but indirectly constrains banks through mandatory requirements and supervisory oversight.
-
----
-
-### 1. Reserve Requirements
-
-#### Statutory Liquidity Ratio (SLR)
-- **Requirement:** 18% of deposits
-- **Purpose:** Maintain liquid securities for stability
-- **Impact:** Only ~82% of deposits available for lending
-
-#### Cash Reserve Ratio (CRR)
-- **Requirement:** 4.5% of deposits
-- **Purpose:** Maintain emergency liquidity buffers
-- **Impact:** Reduces deployable funds further
-
-#### Deployable Funds Calculation
-```
-Total Deposits:     100%
-Less: SLR (18%)     -18%
-Less: CRR (4.5%)    -4.5%
-Deployable Funds:   ~75-76%
-```
-
-**This naturally aligns with the 76-80% optimal CD ratio!**
-
----
-
-### 2. Liquidity Coverage Ratio (LCR)
-
-- **Requirement:** Maintain 100% coverage
-- **Definition:** High-quality liquid assets ≥ Net outflows (30 days)
-- **Impact:** Tightens as CD ratio increases above 80%
-- **Risk:** High-CD banks have thinner buffers during stress
-
----
-
-### 3. Net Stable Funding Ratio (NSFR)
-
-- **Requirement:** Available stable funding ≥ Required stable funding
-- **Applies to:** Banks with assets >500 Crores (most Indian banks)
-- **Impact:** Encourages stable deposit mobilization
-- **Alternative:** Costlier wholesale funding if CD ratio too high
-
----
-
-### 4. Supervisory Actions & Monitoring
-
-#### Quarterly Reviews
-- **SLBC (State Level Bankers' Committee)** reviews credit-deposit gaps
-- **Action Plans** for low-CD districts (<40-60%)
-- **Focus:** Priority sector lending in underserved regions
-
-#### Enhanced Scrutiny
-- Banks with persistent CD >85% face closer monitoring
-- RBI assesses:
-  - Asset-Liability Management (ALM)
-  - NIM sustainability
-  - Rollover vulnerabilities
-  - Regional concentration risks
-
-#### Nudges & Constraints
-- RBI encourages credit growth aligned with deposit growth
-- May curb branch expansion in over-lent regions
-- Prioritize CASA (Current Account & Savings Account) mobilization
-- Lending curbs in sensitive sectors if ratios too high
-
----
-
-### 5. Priority Sector Lending Mandate
-
-- **Requirement:** 40% of net advances to priority sectors
-- **Sectors:** Agriculture, MSMEs, education, housing
-- **Regional Twist:** Higher allocations to low-CD districts
-- **Impact:** Influences CD ratio distribution across regions
-
----
-
-### 6. Financial Stability Report Guidance
-
-RBI's **Financial Stability Report** highlights:
-- Systemic risks from elevated CD ratios
-- NIM compression trends
-- Regional disparities and rollover risks
-- Guidance on optimal range (aligns with 76-80%)
-
----
-
-### 7. Capital Adequacy Requirements
-
-- **Minimum CAR:** 9% (+ buffers)
-- **Impact:** Banks with strong CAR can sustain higher CD ratios
-- **Example:** Indian Bank's 17.31% CAR provides flexibility
-- **Constraint:** Weak CAR banks must moderate lending
-
----
-
-### 8. Asset Quality Monitoring
-
-RBI monitors:
-- **Stressed Assets:** Rise sharply above 85% CD ratio
-- **Provisioning:** Higher in high-CD regions
-- **Unsecured Lending:** Capped at 20-24.5% of advances
-- **Sector Concentration:** Curbs exposure in stressed sectors
-
----
-
-### What RBI Does NOT Do
-
-❌ Does not impose hard CD ratio cap (unlike some countries)
-❌ Does not penalize banks directly for high ratios
-❌ Does not force immediate CD ratio reduction
-✅ Instead: Uses supervisory guidance and regulatory requirements
-
----
-
-### Key RBI Messages
-
-1. **"Align credit growth with deposit growth"** - Quarterly SLBC reviews
-2. **"Prioritize liquidity management"** - LCR/NSFR compliance
-3. **"Focus on low-CD regions"** - Priority sector lending mandates
-4. **"Monitor NIM sustainability"** - Financial Stability Reports
-5. **"Strengthen capital buffers"** - CAR & buffer requirements
-
----
-
-### Compliance Framework
-
-**Timeline:**
-- Quarterly: SLBC reviews and CD ratio monitoring
-- Semi-annual: Financial Stability Report guidance
-- Annual: Capital Adequacy assessment
-- Ongoing: Supervisory interactions and on-site inspections
-
-**Penalties for Non-Compliance:**
-- SLR/CRR shortfalls: Penalty rates (CRR rate +3%)
-- LCR/NSFR breaches: Escalated supervisory action
-- Priority sector lending miss: Fines + RBI directed lending
-""")
-    
-    with edu_tab3:
-            st.markdown("""
-### 🎓 CD Ratio - Frequently Asked Questions (FAQ)
-
----
-
-## Question 1: What is the minimum CD ratio a bank should maintain?
-
-**Answer:**
-There is no RBI-mandated minimum CD ratio. However, banks naturally maintain a CD ratio around **50-70%** to comply with SLR (18%), CRR (4.5%), and LCR requirements. Going below 50% indicates:
-- Excess deposits (good for liquidity, bad for profitability)
-- Under-deployment of funds
-- Lost lending opportunities
-- Lower net interest income
-
-**Practical Minimum:** 65-70% (after regulatory buffers)
-
----
-
-## Question 2: Is a CD ratio of 95% sustainable for private banks?
-
-**Answer:**
-**Not sustainably.** Private banks averaging 92-94% face:
-
-| Risk | Impact |
-|------|--------|
-| **Liquidity Risk** | Thin buffers, high rollover risk |
-| **Funding Cost** | 100+ bps higher than deposits |
-| **NIM Compression** | 20-50 basis points erosion |
-| **RBI Scrutiny** | Enhanced monitoring & action plans |
-| **Profitability** | Incremental ROA gains disappear |
-
-**SBI Research Finding:** Incremental ROA benefits vanish beyond 80%, making 95% unsustainable without higher deposit rates (which compress margins further).
-
----
-
-## Question 3: How does a high CD ratio affect bank stability?
-
-**Answer:**
-A high CD ratio (>85%) affects stability through:
-
-**1. Liquidity Vulnerability**
-   - Minimal idle funds for unexpected withdrawals
-   - Dependence on volatile wholesale funding (CDs, borrowings)
-   - Maturity mismatch risk (short-term liabilities, long-term loans)
-
-**2. Profitability Pressure**
-   - Higher deposit rates needed to attract funds
-   - Lending rates face competition-driven downward pressure
-   - Net Interest Margin (NIM) compressed 20-25 bps
-
-**3. Credit Risk Amplification**
-   - Aggressive lending in high-CD regions (>90%)
-   - Higher delinquency rates post-credit cycles
-   - Provisioning requirements increase
-
-**4. Regulatory Scrutiny**
-   - Enhanced RBI monitoring via SLBC reviews
-   - Potential lending curbs in over-lent sectors
-   - Supervisory pressure on capital adequacy
-
-**Conclusion:** Sustainable only with strong capital buffers, disciplined lending, and proactive ALM.
-
----
-
-## Question 4: Why can foreign banks operate with CD ratios of 60-70%?
-
-**Answer:**
-Foreign banks have different business models:
-
-| Factor | Reason |
-|--------|--------|
-| **Global Funding** | Access to parent bank support, overseas deposits |
-| **Selective Lending** | Focus on high-margin corporate clients (lower volume) |
-| **Fee Income** | Greater reliance on investment banking, forex services |
-| **Regulatory Choice** | Conservative funding strategy preferred |
-| **Liquidity Position** | Parent bank provides liquidity buffers |
-
-**Example:** ICICI Bank (domestic presence) operates higher CD (~75-80%) than pure foreign banks (<60%).
-
----
-
-## Question 5: How do regional disparities in CD ratios create systemic risk?
-
-**Answer:**
-Regional disparities create systemic risks:
-
-**High-CD Regions (Western/Southern states >90%):**
-- **Credit Boom Risk** - Rapid lending growth unsustainable
-- **Bubble Formation** - Asset price inflation in real estate, autos
-- **Concurrent Defaults** - Downturns hit all sectors simultaneously
-- **System-wide Impact** - Concentrated losses across lenders
-
-**Low-CD Regions (Eastern states <50%):**
-- **Credit Deficit** - Under-served economies lack development capital
-- **Fund Hoarding** - Excess deposits idle, transferred to high-CD regions
-- **Inequality** - Prosperous regions grow faster than lagging regions
-- **RBI Intervention** - Mandated priority sector lending shifts capital
-
-**National Impact:** 46% of districts in 50-100% range, 75 districts >150%, creating systemic imbalances.
-
----
-
-## Question 6: What happens to a bank's stock price when CD ratio exceeds 85%?
-
-**Answer:**
-Market reaction is typically **negative** when CD ratio rises above 85%:
-
-**Short-term (0-3 months):**
-- Stock may dip 3-5% on profitability concerns
-- Analyst downgrades cite NIM compression
-- P/E multiple contraction expected
-
-**Medium-term (3-12 months):**
-- Recovery if deposits accelerate (shows discipline)
-- Stock remains depressed if CD stays >85%
-- Peers outperform on better NIM trends
-
-**Long-term (>1 year):**
-- Sustained high CD → Structural discount to market
-- Private banks with >90% CD trade at 0.8-1.2x book value vs. 1.5-2.0x for healthy banks
-
-**Example:** A private bank with 92% CD ratio likely trades at 30-40% discount vs. a peer with 76% CD ratio.
-
----
-
-## Question 7: Can a bank reduce its CD ratio quickly without harming credit growth?
-
-**Answer:**
-**No, not effectively.** Rapid CD ratio reduction requires:
-
-**Option 1: Aggressive Deposit Mobilization**
-- Raise deposit rates 75-100 bps (compresses NIM further)
-- Launch new products (CASA, digital savings)
-- Expand branch network (costly, slow)
-- **Time Required:** 18-24 months to reduce CD by 5-10%
-
-**Option 2: Slow Credit Growth**
-- Tighten lending standards (harks growth)
-- Exit high-risk sectors (reduces market share)
-- Redirect to low-risk lending (lower margins)
-- **Impact:** Revenue & profit decline
-
-**Option 3: Asset Liquidation**
-- Sell securities portfolio (triggers losses)
-- Reduce exposure in certain sectors (regulatory issues)
-- **Impact:** Losses, no sustainable benefit
-
-**Practical Reality:** Banks typically target 5-10 bps CD ratio reduction over 3-5 years through balanced deposit mobilization and disciplined lending.
-
----
-
-## Question 8: How does the RBI's Liquidity Coverage Ratio (LCR) requirement interact with optimal CD ratio?
-
-**Answer:**
-LCR directly constrains CD ratios:
-
-**LCR Formula:**
-```
-LCR = High-Quality Liquid Assets / Total Net Cash Outflows (30 days) ≥ 100%
-```
-
-**Impact on CD Ratios:**
-
-| CD Ratio | LCR Stress | Liquidity Buffer |
-|----------|-----------|------------------|
-| 65% | Comfortable | Wide buffer for stress |
-| 76-80% | Tight | Adequate, monitored |
-| 85% | Strained | Minimal buffer |
-| >90% | Critical | Nearly exhausted |
-
-**Mechanism:**
-- High CD ratio → Fewer idle deposits → Weaker LCR
-- During 30-day outflow stress, LCR breaches trigger:
-  - Forced asset sales at unfavorable terms
-  - Emergency borrowing at penalty rates
-  - RBI intervention & supervisory action
-
-**Conclusion:** Optimal 76-80% CD ratio is the natural balance point where LCR requirements are comfortably met.
-
----
-
-## Question 9: What are the main differences between CD ratio and Loan-to-Deposit (LTD) ratio?
-
-**Answer:**
-CD Ratio vs. LTD Ratio:
-
-| Aspect | CD Ratio | LTD Ratio |
-|--------|----------|-----------|
-| **Definition** | (Advances / Deposits) × 100 | (Loans / Deposits) × 100 |
-| **Numerator** | Advances (loans + exposures) | Only loans |
-| **Denominator** | Customer deposits | Customer deposits |
-| **Regulatory Use** | Liquidity & deployment metric | Lending intensity measure |
-| **RBI Focus** | LCR/NSFR alignment | Regional lending targets |
-| **Typical Range** | 60-95% | 55-90% |
-
-**Key Difference:**
-- CD Ratio broader (includes non-loan advances, bill discounts)
-- LTD Ratio narrower (pure loan focus)
-- Both track similar trends but LTD more volatile
-
-**In India:**
-- RBI uses CD ratio for overall liquidity assessment
-- SLBC uses LTD ratio for regional lending evaluation
-- Optimal LTD: 65-75% (higher than CD due to narrow definition)
-
----
-
-## Question 10: How would increasing repo rate by 200 bps impact optimal CD ratio for banks?
-
-**Answer:**
-A 200 bps repo rate increase would shift the optimal CD ratio:
-
-**Immediate Effects (0-3 months):**
-- **Deposit Costs Rise:** Term deposits jump from 6.5% to 8.5%
-- **Lending Rates Rise:** New loans priced at 9.5-10.5% (vs. 8.5-9.5%)
-- **Margin Expansion:** NIM improves by 30-50 bps initially
-
-**Shift in Optimal CD Ratio:**
-| Scenario | Optimal CD Ratio | Reasoning |
-|----------|-----------------|-----------|
-| 200 bps Rate Cut | 76-80% | Current state |
-| 200 bps Rate Hike | 78-85% | Higher margins justify more lending |
-| Return to 300 bps | 80-90% | Sufficient margin buffer |
-
-**Why Optimal Rises?**
-- Higher margin (spread) offsets funding cost pressure
-- Banks can sustain higher CD without NIM compression
-- Leverage becomes more profitable at higher rates
-
-**Long-term Adjustment (6-18 months):**
-- Deposit mobilization accelerates (attractive rates)
-- Credit demand declines (higher loan costs)
-- CD ratio naturally moderates back to 76-85% through market forces
-
-**Conclusion:** Higher rates shift optimal CD upward by 5-10%, but behavioral factors bring it back toward long-term range.
-
----
-
-## Question 11: Can a CD ratio below 60% indicate a problem for a bank?
-
-**Answer:**
-**Yes, below 60% often signals problems:**
-
-**Liquidity Excess:**
-- More than needed regulatory buffers
-- Excessive idle deposits (earning 0-1%)
-- Opportunity cost of ~5-6% on excess deposits
-
-**Profitability Issues:**
-- Net Interest Income (NII) lower than peers
-- Cannot maximize deposit base potential
-- ROA/ROE compressed vs. optimal-ratio peers
-
-**Market Interpretation:**
-- Stock underperforms (lower earnings)
-- Analysts question management execution
-- Investors question capital deployment strategy
-
-**Exceptions (when <60% is okay):**
-- Foreign banks (different business model)
-- Newly licensed banks (building deposit base)
-- Banks in high-savings regions (natural low CD)
-- Strategic period (preparing for growth phase)
-
-**Rule of Thumb:**
-- <50% = Problem (needs remedial action)
-- 50-65% = Below optimal (could do better)
-- 65-80% = Optimal range ✅
-- 80-95% = High but manageable
-- >95% = Problem (stress signals)
-
----
-
-## Question 12: How do unsecured advances affect a bank's optimal CD ratio?
-
-**Answer:**
-Unsecured advances (personal loans, credit cards) significantly impact optimal CD:
-
-**Regulatory Constraint:**
-- **Cap:** Unsecured advances ≤ 20-24.5% of total advances
-- **Rationale:** Higher default risk needs higher provisioning
-- **Current Status:** Many banks at 20-24% of advances cap
-
-**Impact on CD Ratio:**
-
-| Scenario | Unsecured % | Optimal CD | Reasoning |
-|----------|------------|-----------|-----------|
-| Conservative | 10% | 78-82% | Lower risk, more aggressive |
-| Standard | 20% | 76-80% | Balanced approach |
-| Aggressive | 24.5% | 72-76% | Higher risk needs moderation |
-
-**Why It Matters:**
-- High unsecured advances → Higher delinquencies in downturns
-- Stress scenario requires larger provisions
-- Banks with high unsecured% need lower CD ratio for stability
-
-**Example:**
-- Bank A: 10% unsecured advances → Can sustain 80% CD ratio
-- Bank B: 24% unsecured advances → Should target 74% CD ratio
-- Difference: ~6 percentage points
-
-**Current Trend:**
-- NBFC competition pushing banks to unsecured lending
-- RBI cautious (provisioning increased from 20% to 24.5%)
-- Optimal CD ratios compressing across sector
-
-**Conclusion:** Higher unsecured mix → Lower optimal CD ratio.
-""")
-    
-    with edu_tab4:
+        render_subsection_header("📉 Earnings Revision Data")
         st.markdown("""
-### 📈 CD Ratio as Investment Signal
-
-The Credit-to-Deposit ratio is a critical indicator for bank investors. It reveals how aggressively a bank deploys deposits, its growth trajectory, and potential profitability trends.
-
----
-
-### 🎯 CD Ratio Zones & Investment Signals
-""")
+        **Coverage:** 6-month earnings revision history (Sep 2024 - Feb 2025)
         
-        # Create investment signal heatmap
-        import pandas as pd
-        import plotly.figure_factory as ff
+        **Metrics Included:**
+        - Date - Revision date
+        - Period - Month designation
+        - FY25 Profit Growth (%) - Current analyst estimate for FY25 profit growth
         
-        # Investment signal data
-        signal_data = {
-            'CD Ratio Range': ['<50%', '50-65%', '65-72%', '72-78%', '78-85%', '85-95%', '>95%'],
-            'Signal': ['⚠️ RED', '🟡 YELLOW', '🟢 GREEN', '🟢 OPTIMAL', '🟡 CAUTION', '🔴 HIGH RISK', '🔴 CRITICAL'],
-            'Growth': ['Low', 'Moderate', 'Good', 'Optimal', 'Strong', 'Aggressive', 'Unsustainable'],
-            'Profitability': ['Poor', 'Moderate', 'Good', 'Excellent', 'High NIM', 'Declining', 'Stressed'],
-            'Liquidity': ['Excess', 'Adequate', 'Good', 'Healthy', 'Tight', 'Strained', 'Critical'],
-            'Risk Level': ['Low', 'Low', 'Low', 'Low-Med', 'Medium', 'High', 'Very High'],
-            'Investment Action': ['AVOID', 'HOLD', 'BUY', '✅ BUY', 'MONITOR', 'SELL', 'AVOID']
-        }
+        **Use Case:** Track analyst sentiment shifts, identify consensus changes, assess earnings risk
+        """)
+        display_styled_dataframe(data['downgrades'], width='stretch', hide_index=True)
+    
+    with tab5:
+        render_subsection_header("📝 Data Documentation & Sources")
         
-        signal_df = pd.DataFrame(signal_data)
+        st.markdown("**Data Collection & Methodology**")
+        st.markdown("""
+        All data presented in this dashboard is compiled from official and verified sources. 
+        Below is comprehensive documentation of data collection methodology and sources.
+        """)
         
-        # Create color mapping for heatmap
-        st.markdown("**Investment Signal Matrix (CD Ratio Zones):**")
+        render_divider()
         
-        # Display with styling
-        st.dataframe(
-            signal_df,
-            use_container_width=True,
-            hide_index=True,
-            column_config={
-                "CD Ratio Range": st.column_config.TextColumn("CD Ratio", width=100),
-                "Signal": st.column_config.TextColumn("Signal", width=100),
-                "Growth": st.column_config.TextColumn("Growth", width=80),
-                "Profitability": st.column_config.TextColumn("Profitability", width=100),
-                "Liquidity": st.column_config.TextColumn("Liquidity", width=90),
-                "Risk Level": st.column_config.TextColumn("Risk", width=90),
-                "Investment Action": st.column_config.TextColumn("Action", width=90),
-            }
-        )
+        st.markdown("**1. NIFTY 50 PERFORMANCE DATA**")
+        st.markdown("""
+        Source: National Stock Exchange (NSE), Reserve Bank of India (RBI)
+        
+        Collection Method:
+        - Annual performance data (FY2021-2025) extracted from NSE official database
+        - Revenue and profit figures sourced from consolidated financial statements
+        - Growth rates calculated as year-on-year percentage changes
+        - Margin data calculated from audited financial statements
+        
+        Frequency: Annual (with YTD for current fiscal year)
+        Reliability: High - Official stock exchange and RBI data
+        """)
+        
+        render_divider()
+        
+        st.markdown("**2. QUARTERLY PERFORMANCE DATA**")
+        st.markdown("""
+        Source: NSE, Stock Exchange Filings, Company Reports
+        
+        Collection Method:
+        - Quarterly results compiled from official NSE filings
+        - Extracted from Nifty 50 constituent quarterly reports
+        - Growth rates calculated on quarter-on-quarter basis
+        - Data represents FY2025 performance (Q1-Q3)
+        
+        Frequency: Quarterly
+        Reliability: High - Official quarterly reports and filings
+        """)
+        
+        render_divider()
+        
+        st.markdown("**3. SECTOR ANALYSIS DATA**")
+        st.markdown("""
+        Source: BSE (Bombay Stock Exchange), Sectoral Index Reports
+        
+        Collection Method:
+        - Sector-wise breakdown derived from Nifty 50 constituents
+        - Weight percentages calculated from market capitalization
+        - Growth rates aggregated from sector index performance
+        - Status indicators based on comparative performance analysis
+        
+        Frequency: Monthly review
+        Reliability: High - Official BSE data and index calculation methodology
+        """)
+        
+        render_divider()
+        
+        st.markdown("**4. EARNINGS REVISION DATA**")
+        st.markdown("""
+        Source: SEBI (Securities and Exchange Board of India), Brokerage Research Aggregates
+        
+        Collection Method:
+        - Earnings revision history compiled from analyst consensus estimates
+        - Data spans 6-month rolling average of forecasts
+        - Profit growth estimates for FY25 tracked from Sep 2024 onwards
+        - Sources include major brokerages and institutional research teams
+        
+        Frequency: Monthly tracking
+        Reliability: Medium-High - Aggregated analyst estimates subject to volatility
+        """)
+        
+        render_divider()
+        
+        st.markdown("**5. RESEARCH SOURCES**")
+        st.markdown("""
+        Analysis Framework Based On:
+        - Business Standard - Daily market analysis and corporate reporting
+        - Economic Times - Macro trends and business news
+        - Brokerage Research - Institutional equity research and forecasts
+        - SEBI Filings - Official regulatory disclosures
+        
+        Secondary Sources:
+        - MCA (Ministry of Corporate Affairs) - Company regulatory filings
+        - RBI Publications - Macroeconomic data and policy indicators
+        - NSE Research - Technical analysis and trading data
+        """)
+        
+        render_divider()
+        
+        st.markdown("**6. DATA QUALITY & LIMITATIONS**")
+        st.markdown("""
+        Data Quality Assurance:
+        - All data sourced from official government and exchange databases
+        - Cross-verified against multiple sources where applicable
+        - Annual figures audited and officially published
+        - Quarterly data from official stock exchange filings
+        
+        Known Limitations:
+        - FY2025 is year-to-date; final annual figures may differ
+        - Quarterly data represents 9-month snapshot (Q1-Q3)
+        - Sector classifications based on NSE standard definitions
+        - Analyst estimates subject to revision and consensus changes
+        - Margin calculations based on consolidated financial statements
+        
+        Data Currency:
+        - Last Updated: February 2025
+        - Update Frequency: Monthly during fiscal year
+        - Historical data: FY2021 onwards
+        """)
+        
+        render_divider()
+        
+        st.markdown("**7. METRIC DEFINITIONS**")
+        st.markdown("""
+        Growth Rates (Year-on-Year):
+        - Revenue Growth % = (Current Year Revenue - Prior Year Revenue) / Prior Year Revenue * 100
+        - Profit Growth % = (Current Year PAT - Prior Year PAT) / Prior Year PAT * 100
+        - EBITDA Growth % = (Current Year EBITDA - Prior Year EBITDA) / Prior Year EBITDA * 100
+        
+        Margins (Percentage of Revenue):
+        - EBITDA Margin % = (EBITDA / Revenue) * 100
+        - PAT Margin % = (PAT / Revenue) * 100
+        
+        Index Weight:
+        - Weight in Nifty % = (Sector Market Cap / Total Nifty 50 Market Cap) * 100
+        
+        Earnings Estimates:
+        - FY25 Profit Growth % = Consensus analyst estimate for FY25 PAT growth rate
+        """)
+        
+        render_divider()
+        
+        st.markdown("**8. DISCLAIMERS & IMPORTANT NOTES**")
+        st.markdown("""
+        - This dashboard presents historical and current data for informational purposes only
+        - Projections and estimates are subject to market volatility and unforeseen events
+        - Past performance does not guarantee future results
+        - Data is compiled from publicly available sources; accuracy not guaranteed
+        - For investment decisions, consult with qualified financial advisors
+        - All data presented as of February 2025; check sources for latest updates
+        - Quarterly estimates are preliminary; subject to revision with final results
+        """)
+    
+    with tab6:
+        render_subsection_header("📥 Download All Datasets")
         
         st.markdown("""
----
-
-### 📊 CD Ratio Heatmap - Visual Investment Guide
-""")
+        **Download all analysis datasets in CSV format for external analysis, modeling, or integration with your tools.**
+        """)
         
-        # Create heatmap data for visualization
-        heatmap_data = [
-            ['<50%', '50-65%', '65-72%', '72-78%', '78-85%', '85-95%', '>95%'],
-            [2, 3, 6, 9, 7, 4, 1],  # Growth Score (1-10)
-            [2, 4, 6, 9, 8, 5, 2],  # Profitability Score (1-10)
-            [9, 7, 6, 7, 5, 3, 1],  # Liquidity Score (1-10)
-            [9, 8, 6, 5, 6, 8, 10], # Risk Score (1-10)
-            [2, 4, 6, 9, 7, 3, 1],  # Investment Score (1-10)
-        ]
+        render_divider()
         
-        labels = ['CD Ratio Zone', 'Growth Potential', 'Profitability', 'Liquidity Health', 'Risk Level', 'Investment Appeal']
+        # Create downloadable datasets
+        five_year_df = data['five_year']
+        quarterly_df = data['quarterly']
+        sectors_df = data['sector']
+        downgrades_df = data['downgrades']
         
-        # Create heatmap using plotly
-        import plotly.graph_objects as go
+        # Convert to CSV
+        five_year_csv = five_year_df.to_csv(index=False)
+        quarterly_csv = quarterly_df.to_csv(index=False)
+        sectors_csv = sectors_df.to_csv(index=False)
+        downgrades_csv = downgrades_df.to_csv(index=False)
         
-        fig = go.Figure(data=go.Heatmap(
-            z=heatmap_data[1:],
-            x=heatmap_data[0],
-            y=labels[1:],
-            colorscale='RdYlGn',
-            text=[['2', '3', '6', '9', '7', '4', '1'],
-                  ['2', '4', '6', '9', '8', '5', '2'],
-                  ['9', '7', '6', '7', '5', '3', '1'],
-                  ['9', '8', '6', '5', '6', '8', '10'],
-                  ['2', '4', '6', '9', '7', '3', '1']],
-            texttemplate='%{text}',
-            textfont={"size": 14},
-            colorbar=dict(title="Score (1-10)", thickness=20, len=0.7),
-            hovertemplate='<b>%{y}</b><br>CD Ratio: %{x}<br>Score: %{z}<extra></extra>',
-        ))
-        
-        fig.update_layout(
-            title='Investment Signal Heatmap - CD Ratio Analysis',
-            xaxis_title='CD Ratio Range',
-            yaxis_title='Investment Metrics',
-            height=500,
-            width=1000,
-            font=dict(size=12),
-            coloraxis_colorbar=dict(thickness=20, len=0.7)
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
-        
-        st.markdown("""
----
-
-### 🔷 CD Ratio Investment Zones Explained
-
-#### **Zone 1: <50% - UNDERUTILIZED (🔴 RED FLAG)**
-**Signal:** Bank has excess liquidity
-- ✅ **Positive:** Very safe, low liquidity risk, strong capital position
-- ❌ **Negative:** Wasting deposits, poor profitability, low ROA/ROE
-- **Investor View:** Underperforming asset, opportunity cost on deposits
-- **Action:** AVOID or investigate why underutilized
-
-#### **Zone 2: 50-65% - CONSERVATIVE (🟡 YELLOW)**
-**Signal:** Conservative approach, prioritizing safety
-- ✅ **Positive:** Safe, adequate buffers, low default risk
-- ❌ **Negative:** Not maximizing deposit potential, moderate profitability
-- **Investor View:** Defensive play, lower returns but stable
-- **Action:** HOLD - suitable for conservative portfolios
-
-#### **Zone 3: 65-72% - APPROACHING OPTIMAL (🟢 GREEN)**
-**Signal:** Moving towards efficient deployment
-- ✅ **Positive:** Better profitability, growing loan book
-- ⚠️ **Caution:** Entering higher growth phase
-- **Investor View:** Early growth story, monitor for sustainability
-- **Action:** BUY - good risk-reward balance
-
-#### **Zone 4: 72-78% - OPTIMAL (✅ BEST)**
-**Signal:** Perfectly balanced - THE SWEET SPOT
-- ✅ **Positive:** Maximized profitability, healthy liquidity
-- ✅ **Positive:** Sustainable growth, strong NIM
-- ✅ **Positive:** Regulatory aligned, optimal deployment
-- **Investor View:** Ideal situation - growth + safety
-- **Action:** **BUY** - this is the target zone
-
-#### **Zone 5: 78-85% - AGGRESSIVE (🟡 CAUTION)**
-**Signal:** Growing but monitor closely
-- ✅ **Positive:** Strong growth story, expanding loan portfolio
-- ⚠️ **Caution:** Liquidity tightening, NIM compression risk
-- ⚠️ **Caution:** Rising deposit costs, funding pressure
-- **Investor View:** Good growth but watch for stress signals
-- **Action:** MONITOR - buy only if confident in management
-
-#### **Zone 6: 85-95% - HIGH RISK (🔴 RED)**
-**Signal:** Over-lending, liquidity stressed
-- ❌ **Negative:** Significant liquidity pressure, thin buffers
-- ❌ **Negative:** Heavy reliance on wholesale funding
-- ❌ **Negative:** NIM compression, profitability declining
-- **Investor View:** High risk, limited margin for error
-- **Action:** SELL or AVOID - wait for CD ratio to normalize
-
-#### **Zone 7: >95% - CRITICAL (🔴 CRITICAL)**
-**Signal:** Unsustainable, systemic risk
-- ❌ **Negative:** Severe liquidity stress, critical buffers
-- ❌ **Negative:** Default risk elevated, stress scenario critical
-- ❌ **Negative:** Profitability severely impacted
-- **Investor View:** Red flag - avoid or exit position
-- **Action:** AVOID - high default/restructuring risk
-
----
-
-### 📈 CD Ratio Trends & Signals
-
-#### **Rising CD Ratio 📊 (Good Signal)**
-What it means: Bank is growing loans faster than deposits
-- ✅ **Positive:** Credit demand recovery, market share gains
-- ✅ **Positive:** Growth story emerging, business expansion
-- ⚠️ **Monitor:** Watch if rising beyond 85%
-
-**Investor Action:** 
-- Positive if rising from 70% to 75%
-- Neutral if rising from 75% to 78%
-- Caution if rising from 80% to 90%
-
-#### **Falling CD Ratio 📉 (Mixed Signal)**
-What it means: Deposits growing faster than loans OR loans shrinking
-- **Scenario A:** Deposits accelerating (Positive) ✅
-  - Bank capturing market share in deposits
-  - Investor Action: POSITIVE - strong franchise
-
-- **Scenario B:** Loans declining (Negative) ❌
-  - Credit stress, risk aversion, deleveraging
-  - Investor Action: NEGATIVE - watch for asset quality issues
-
-- **Scenario C:** Deposits building (Neutral) ⚠️
-  - Preparing for growth or stressed
-  - Investor Action: INVESTIGATE - clarify management intent
-
----
-
-### 💼 CD Ratio by Bank Type - Investment Implications
-
-#### **Public Sector Banks (PSBs)**
-- **Average CD:** 75-80%
-- **Optimal:** 76-80%
-- **Signal:** ✅ Generally optimal, well-managed
-- **Investment:** Buy when around 76-80%
-
-#### **Private Sector Banks**
-- **Average CD:** 92-94%
-- **Optimal:** 76-80%
-- **Signal:** ⚠️ Above optimal, aggressive growth
-- **Investment:** Monitor closely, buy only if deposit growth accelerating
-
-#### **Small Finance Banks (SFBs)**
-- **Average CD:** >100%
-- **Optimal:** 76-80%
-- **Signal:** 🔴 Critical zone, high stress
-- **Investment:** Avoid - too risky for most investors
-
-#### **Foreign Banks**
-- **Average CD:** <60%
-- **Optimal:** 65-70%
-- **Signal:** ✅ Conservative, within optimal
-- **Investment:** Stable but lower growth profile
-
----
-
-### 🎯 Quick Reference - Investment Decision Table
-
-| CD Ratio | Bank Type | Signal | Action | Expected Return |
-|----------|-----------|--------|--------|-----------------|
-| 72-78% | PSB | ✅ Optimal | **BUY** | Balanced (8-10%) |
-| 76-82% | Private | ✅ Healthy | **BUY** | Higher (12-15%) |
-| 50-65% | PSB | 🟡 Conservative | HOLD | Lower (6-8%) |
-| 85-90% | Private | 🔴 High | SELL | Risk (5-15% volatile) |
-| 65-72% | SFB | 🟡 Monitor | HOLD | Variable |
-| >95% | Any | 🔴 Critical | AVOID | Very High Risk |
-| <50% | Any | ⚠️ Idle | AVOID | Opportunity Cost |
-
----
-
-### 📊 Case Studies - Real Bank Analysis
-
-#### **Case 1: Bank with Rising CD from 70% → 76% Over 2 Years**
-- **Signal:** Positive growth trajectory
-- **Analysis:** Bank growing loans faster than deposits
-- **Investor View:** ✅ Growth story emerging
-- **Action:** BUY - growth at reasonable CD
-
-#### **Case 2: Bank with Falling CD from 92% → 75% Over 1 Year**
-- **Signal:** Major deposit acceleration
-- **Analysis:** Market share gains in deposits
-- **Investor View:** ✅ Strong franchise strength
-- **Action:** BUY - deposit momentum very positive
-
-#### **Case 3: Bank with Rising CD from 75% → 88% Over 6 Months**
-- **Signal:** Rapid lending growth
-- **Analysis:** Deposits lagging, liquidity pressure building
-- **Investor View:** ⚠️ Unsustainable pace
-- **Action:** SELL or HOLD - wait for moderation
-
-#### **Case 4: Bank Stuck at 95%+ CD for 2+ Years**
-- **Signal:** Chronic liquidity stress
-- **Analysis:** Unable to grow deposits, over-leveraged
-- **Investor View:** 🔴 Systemic concern
-- **Action:** AVOID - elevated default risk
-
----
-
-### 💡 Investment Strategy Using CD Ratio
-
-#### **Growth Investor Strategy**
-- Target banks with CD 75-82%
-- Monitor those rising from 70% to 78%
-- Avoid those >85% or <65%
-- Entry: When CD optimizing upward
-- Exit: When CD exceeds 85% sustainably
-
-#### **Value Investor Strategy**
-- Target banks with CD falling toward 70%
-- Look for deposit franchise strength
-- Avoid high CD (>85%) banks
-- Entry: CD >80% showing deposit acceleration
-- Exit: When CD normalizes to 75%
-
-#### **Conservative Investor Strategy**
-- Stick to 72-78% CD zone
-- Avoid CD >85% or <60%
-- Monitor quarterly trends
-- Entry: Stable 76% CD with good ROA
-- Exit: CD rising above 82%
-
----
-
-### ⚠️ Warning Signs - When to Exit
-
-🔴 **SELL Signals:**
-1. CD ratio rising above 85% consistently
-2. CD rising >2% per quarter for 2+ quarters
-3. NIM compressing while CD rising
-4. Deposit growth turning negative
-5. Unsecured advances rising alongside CD
-6. Stock underperforming peers despite growth
-
----
-
-### ✅ Positive Signs - When to Buy
-
-🟢 **BUY Signals:**
-1. CD ratio in 72-78% range
-2. CD stabilizing after being volatile
-3. Rising CD (70%→75%) with deposits accelerating
-4. Strong ROA/ROE maintained in 75-80% zone
-5. Deposit growth >15% YoY
-6. Stock outperforming peers on growth
-7. Management guiding for CD moderation
-
----
-
-### 🎓 Key Takeaways for Investors
-
-1. **Optimal Zone:** 72-78% CD is the investment sweet spot
-2. **Growth Signal:** Rising CD from 70% → 78% is positive
-3. **Risk Signal:** CD >85% demands closer scrutiny
-4. **Safety Signal:** CD <60% indicates excess liquidity
-5. **Trend Matters:** Direction of CD change is as important as level
-6. **Bank Type:** Different banks have different optimal zones
-7. **Monitor Quarterly:** CD changes reveal critical business trends
-
----
-""")
-
-    with edu_tab5:
-        st.markdown("""
-### 🎯 What Drives CD Ratios? Key Factors & Interpretation Guide
-
-Understanding what moves CD ratios helps investors anticipate bank performance, identify risks, and time investment decisions. This comprehensive guide breaks down the key drivers and how to interpret changes.
-
----
-
-## 📊 Key Drivers of CD Ratio - Overview
-
-CD ratios are driven by **supply-demand dynamics** of loans vs deposits:
-
-**High Supply of Loans + Low Supply of Deposits = High CD Ratio**
-**Low Supply of Loans + High Supply of Deposits = Low CD Ratio**
-
----
-
-### 🟢 FACTORS THAT INCREASE CD RATIO
-
-#### **1. Strong Loan Demand 📈**
-**What it means:** Customers actively seeking loans, businesses expanding
-
-**Drivers:**
-- Economic growth & business confidence ✅
-- Low interest rates encouraging borrowing
-- Strong industrial/real estate activity
-- MSME sector expansion
-- Retail credit (auto, home, personal loans)
-
-**Impact:** Banks deploy more deposits → CD rises
-**Example:** During economic boom, CD 70% → 78%
-
-**Investor Signal:**
-- ✅ **Positive** if deposits also growing (balanced growth)
-- ⚠️ **Caution** if deposits stagnant (liquidity pressure)
-
----
-
-#### **2. Expanding Credit Business 💼**
-**What it means:** Bank actively growing its loan portfolio
-
-**Drivers:**
-- Aggressive market share gains
-- New product launches (retail, SME, agri loans)
-- Geographic expansion (rural/tier-2 cities)
-- Customer acquisition campaigns
-- Competitive pricing to gain market share
-
-**Impact:** Loan portfolio grows faster than deposits
-**Example:** Bank targets MSME lending, loan book grows 20% YoY
-
-**Investor Signal:**
-- ✅ **Positive** for growth story
-- ⚠️ **Monitor** asset quality as portfolio grows
-
----
-
-#### **3. Competitive Pricing Pressure 💰**
-**What it means:** Bank cutting loan rates to compete for business
-
-**Drivers:**
-- Intense competition in lending market
-- Excess liquidity in banking system
-- RBI repo rate cuts
-- Market share wars
-
-**Impact:** Lower rates attract more loan demand
-**Example:** New private banks entering market, forcing price competition
-
-**Investor Signal:**
-- ⚠️ **Watch NIM:** Lower rates compress margins
-- ⚠️ **Monitor profitability:** Growth at what cost?
-
----
-
-#### **4. Growing Customer Base 👥**
-**What it means:** Bank successfully acquiring new customers
-
-**Drivers:**
-- Successful digital banking adoption
-- Branch expansion strategy
-- Marketing campaigns
-- Partnerships with fintech/distributors
-- Improved service quality
-
-**Impact:** More customers = more loans + deposits, but loans grow faster initially
-**Example:** Digital bank growing customers 30% annually
-
-**Investor Signal:**
-- ✅ **Positive** long-term growth indicator
-- ⚠️ **Monitor cost-to-income:** Expansion is expensive
-
----
-
-#### **5. Retail & MSME Focus 🏪**
-**What it means:** Bank emphasizing high-growth segments
-
-**Drivers:**
-- Shift from wholesale/corporate lending
-- Retail credit boom (housing, auto, personal)
-- MSME lending push (government incentives)
-- Low-ticket high-volume strategy
-- Emerging middle class demand
-
-**Impact:** Retail loans grow faster, CD rises
-**Example:** Bank's retail advances grow 25% while corporate loans grow 5%
-
-**Investor Signal:**
-- ✅ **Positive** for sustainability (diversified portfolio)
-- ⚠️ **Monitor delinquencies:** Retail has higher defaults
-
----
-
-### 🔴 FACTORS THAT DECREASE CD RATIO
-
-#### **1. High Loan Delinquencies ⚠️**
-**What it means:** Many customers unable/unwilling to repay loans
-
-**Drivers:**
-- Economic slowdown, unemployment rises
-- Sectoral stress (real estate, MSMEs)
-- Corporate defaults (IL&FS, Jet Airways)
-- Natural disasters, pandemics
-- Rising interest rates making EMIs unaffordable
-
-**Impact:** Banks tighten lending to reduce risk
-**Example:** COVID-19 triggers bank pause on auto loans
-
-**Investor Signal:**
-- 🔴 **Negative** - Credit stress ahead
-- ❌ **Expect:** Asset quality deterioration, provisioning rise
-- **Action:** Reduce position or avoid
-
----
-
-#### **2. Weak Credit Demand 📉**
-**What it means:** Customers & businesses reluctant to borrow
-
-**Drivers:**
-- Economic slowdown/recession
-- High interest rates (borrowing expensive)
-- Business uncertainty
-- Debt aversion (households deleveraging)
-- Weak capex spending by corporates
-
-**Impact:** Loan growth stalls, CD falls
-**Example:** Post-2008 financial crisis, credit demand fell sharply
-
-**Investor Signal:**
-- ⚠️ **Caution** - Growth story at risk
-- ❌ **Expect:** Lower earnings, NIM pressure
-- **Action:** Reduce exposure until demand recovers
-
----
-
-#### **3. Rising Interest Rates 📊**
-**What it means:** RBI hiking repo rate or market rates rising
-
-**Drivers:**
-- RBI monetary tightening (inflation control)
-- Global rate hikes (impact on Indian rates)
-- FX pressure (rupee depreciation)
-- Fiscal concerns
-
-**Impact:** Higher borrowing costs discourage loans
-**Example:** 2022-2023, RBI raised rates 225 bps → credit demand slowed
-
-**Investor Signal:**
-- ⚠️ **Mixed impact:**
-  - **Short-term:** CD may fall (lower demand)
-  - **Medium-term:** NIM expands (higher spreads)
-- **Opportunity:** Buy quality banks at lower CD ratios
-
----
-
-#### **4. Liquidity Management & Deposit Accumulation 💧**
-**What it means:** Bank deliberately keeping high deposits, not lending aggressively
-
-**Drivers:**
-- Liquidity coverage ratio (LCR) compliance
-- Conservative asset-liability management
-- Regulatory pressure
-- Defensive posture (uncertain times)
-- Build-up for future lending
-
-**Impact:** Deposits grow faster than loans
-**Example:** Bank raises CASA deposits aggressively → CD falls from 80% to 75%
-
-**Investor Signal:**
-- ⚠️ **Neutral to Positive:**
-  - Indicates strong deposit franchise
-  - Preparing for future growth
-  - Lower immediate risk
-- **Action:** Monitor for eventual lending acceleration
-
----
-
-#### **5. Regulatory Constraints ⚙️**
-**What it means:** RBI or regulators impose lending restrictions
-
-**Drivers:**
-- Sectoral lending curbs (over-exposed sectors)
-- Loan classification changes (stricter norms)
-- Concentration limits (no >10% in one sector)
-- Unsecured lending caps (20-24.5%)
-- Priority sector lending mandates
-
-**Impact:** Bank forced to reduce lending or redirect to constrained sectors
-**Example:** RBI caps exposure to real estate at 15% → bank reduces RE lending
-
-**Investor Signal:**
-- ⚠️ **Watch business model impact:**
-  - May reduce profitability if forced away from high-margin lending
-  - Could improve asset quality if constraint is prudent
-- **Action:** Understand bank's exposure to constrained sectors
-
----
-
-## 📈 Visual: Drivers Comparison
-
-Let me create visualizations for better understanding:
-""")
-        
-        # Create side-by-side comparison
+        # Download buttons in columns
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("### 🟢 Factors INCREASING CD Ratio")
-            
-            import plotly.graph_objects as go
-            
-            increase_factors = {
-                'Loan Demand': 9,
-                'Credit Expansion': 8,
-                'Price Competition': 7,
-                'Customer Growth': 8,
-                'Retail/MSME Focus': 8,
-                'Economic Growth': 9,
-                'Market Share Gains': 7
-            }
-            
-            fig1 = go.Figure(data=[
-                go.Bar(
-                    x=list(increase_factors.values()),
-                    y=list(increase_factors.keys()),
-                    orientation='h',
-                    marker=dict(color='#27AE60', opacity=0.8),
-                    text=list(increase_factors.values()),
-                    textposition='outside',
-                )
-            ])
-            
-            fig1.update_layout(
-                title='Impact on CD Ratio (Higher = Stronger Impact)',
-                xaxis_title='Impact Strength (1-10)',
-                yaxis_title='',
-                height=400,
-                showlegend=False,
-                margin=dict(l=150, r=50, t=50, b=50),
-                font=dict(size=11),
-                xaxis=dict(range=[0, 10])
+            st.markdown("**📈 5-Year Performance Data**")
+            st.markdown(f"*Records: {len(five_year_df)} | Metrics: {len(five_year_df.columns)}*")
+            st.download_button(
+                label="📥 Download 5-Year Data (CSV)",
+                data=five_year_csv,
+                file_name="nifty50_5year_performance.csv",
+                mime="text/csv",
+                key="download_5year"
             )
-            
-            st.plotly_chart(fig1, use_container_width=True)
         
         with col2:
-            st.markdown("### 🔴 Factors DECREASING CD Ratio")
-            
-            decrease_factors = {
-                'Loan Delinquencies': 9,
-                'Weak Demand': 8,
-                'Rising Rates': 6,
-                'Liquidity Build-up': 7,
-                'Regulatory Limits': 7,
-                'Recession': 8,
-                'Deleveraging': 6
-            }
-            
-            fig2 = go.Figure(data=[
-                go.Bar(
-                    x=list(decrease_factors.values()),
-                    y=list(decrease_factors.keys()),
-                    orientation='h',
-                    marker=dict(color='#E74C3C', opacity=0.8),
-                    text=list(decrease_factors.values()),
-                    textposition='outside',
-                )
-            ])
-            
-            fig2.update_layout(
-                title='Impact on CD Ratio (Higher = Stronger Impact)',
-                xaxis_title='Impact Strength (1-10)',
-                yaxis_title='',
-                height=400,
-                showlegend=False,
-                margin=dict(l=150, r=50, t=50, b=50),
-                font=dict(size=11),
-                xaxis=dict(range=[0, 10])
+            st.markdown("**📊 Quarterly Performance Data**")
+            st.markdown(f"*Records: {len(quarterly_df)} | Metrics: {len(quarterly_df.columns)}*")
+            st.download_button(
+                label="📥 Download Quarterly Data (CSV)",
+                data=quarterly_csv,
+                file_name="nifty50_quarterly_performance.csv",
+                mime="text/csv",
+                key="download_quarterly"
             )
-            
-            st.plotly_chart(fig2, use_container_width=True)
+        
+        st.markdown("---")
+        
+        col3, col4 = st.columns(2)
+        
+        with col3:
+            st.markdown("**🏢 Sector Analysis Data**")
+            st.markdown(f"*Records: {len(sectors_df)} | Metrics: {len(sectors_df.columns)}*")
+            st.download_button(
+                label="📥 Download Sector Data (CSV)",
+                data=sectors_csv,
+                file_name="nifty50_sector_analysis.csv",
+                mime="text/csv",
+                key="download_sectors"
+            )
+        
+        with col4:
+            st.markdown("**📉 Earnings Revisions Data**")
+            st.markdown(f"*Records: {len(downgrades_df)} | Metrics: {len(downgrades_df.columns)}*")
+            st.download_button(
+                label="📥 Download Earnings Revisions (CSV)",
+                data=downgrades_csv,
+                file_name="nifty50_earnings_revisions.csv",
+                mime="text/csv",
+                key="download_downgrades"
+            )
+        
+        st.markdown("---")
+        
+        render_subsection_header("📦 Combined Download")
         
         st.markdown("""
----
-
-## 🔍 How to Interpret CD Ratio Changes
-
-### **Scenario 1: CD Rising from 72% → 78% Over 1 Year**
-
-**Analysis:**
-- ✅ Loan demand is strong (positive economic signal)
-- ✅ Bank gaining market share or growing business
-- ⚠️ Monitor: Are deposits keeping pace?
-
-**Interpretation Table:**
-
-| Scenario | Deposit Growth | Loan Growth | Signal | Action |
-|----------|----------------|------------|--------|--------|
-| A | 12% | 18% | ✅ Healthy growth | BUY - balanced |
-| B | 5% | 18% | ⚠️ Liquidity pressure | MONITOR - risky |
-| C | 0% | 18% | 🔴 Stress | SELL - unsustainable |
-
-**Investor Take:** 
-- Scenario A: Best case - profitable growth
-- Scenario B: Watch for NIM compression
-- Scenario C: Red flag - forced deleveraging coming
-
----
-
-### **Scenario 2: CD Falling from 82% → 75% Over 6 Months**
-
-**Analysis:**
-- Could be POSITIVE or NEGATIVE depending on why
-
-**Sub-Scenarios:**
-
-| Cause | Signal | Action |
-|-------|--------|--------|
-| **Strong deposit inflow** | ✅ Positive | BUY - franchise strength |
-| **Loan portfolio shrinking** | 🔴 Negative | SELL - credit stress |
-| **Deliberate deleveraging** | ⚠️ Neutral | HOLD - wait for clarity |
-| **Prepayments surge** | ✅ Positive | BUY - customer strength |
-
-**How to Tell:**
-- Check quarterly results for:
-  - Deposits: Growing or flat?
-  - Advances: Growing or declining?
-  - Loan repayments: Normal or surge?
-  - Delinquencies: Rising or stable?
-
----
-
-### **Scenario 3: CD Volatile (80% → 75% → 82% → 78%)**
-
-**What it means:** Bank's loan/deposit balance is unstable
-
-**Causes:**
-- Lumpy deposit inflows/outflows
-- Seasonal lending patterns
-- Ad-hoc policy changes
-- External shocks
-- Poor ALM (Asset-Liability Management)
-
-**Investor Signal:**
-- 🔴 **Negative** - Lack of predictability
-- ⚠️ **Red flag** - Potential ALM issues
-- **Action:** Avoid until management improves ALM
-
----
-
-### **Scenario 4: CD Stuck at High Levels (90%+ for 2+ Years)**
-
-**What it means:** Structural problem - not temporary
-
-**Causes:**
-- Insufficient deposit franchise
-- Over-competitive in lending
-- Regulatory constraints on deposits
-- Market position issues
-- Business model mismatch
-
-**Investor Signal:**
-- 🔴 **Very Negative**
-- **Red Flags:** Liquidity stress, higher costs, vulnerable
-- **Action:** AVOID - systemic risk
-
----
-
-## 📋 CD Ratio Change Interpretation Matrix
-
-Create a mental model:
-
-```
-                DEPOSIT GROWTH
-                     ↓
-            Weak ← ← → Strong
-           ↑
-      LOAN
-    GROWTH
-           ↓
-    Strong │ STRESS │ POSITIVE
-           │ (loan  │ (healthy
-           │ growth │ growth)
-           │ risky) │
-        ───┼─────────┼───
-           │ 
-    Weak   │ CAUTION │ POSITIVE
-           │ (both   │ (deposit
-           │ slow)   │ franchise)
-           │ 
-```
-
-**Quadrants:**
-- **Top-Left (Strong loans, weak deposits):** STRESS - unsustainable
-- **Top-Right (Strong loans, strong deposits):** POSITIVE - healthy growth
-- **Bottom-Left (Weak loans, weak deposits):** CAUTION - slow period
-- **Bottom-Right (Weak loans, strong deposits):** POSITIVE - franchise strength
-
----
-
-## 🎯 Macro Drivers - Understanding the Big Picture
-
-### **Economic Cycle Impact on CD Ratio**
-
-**📈 EXPANSION PHASE**
-- Strong demand for credit
-- Businesses expanding, households borrowing
-- CD ratio: Rising (70% → 80%)
-- Bank view: Profitable growth
-- Risk: Overleveraging, delinquencies build
-
-**📊 PEAK PHASE**
-- Credit demand slows
-- Delinquencies may start rising
-- CD ratio: Stable or falling (80% → 75%)
-- Bank view: Risk management
-- Risk: Credit losses materialize
-
-**📉 CONTRACTION PHASE**
-- Weak credit demand
-- High delinquencies
-- CD ratio: Falling (75% → 60%)
-- Bank view: Survival mode
-- Risk: Asset quality crisis
-
-**🔄 RECOVERY PHASE**
-- Demand returns
-- Delinquencies stabilize/fall
-- CD ratio: Rising (60% → 70%)
-- Bank view: Renewed profitability
-- Risk: Taking excessive risks again
-
----
-
-## 💡 Investor Decision Framework
-
-### **When CD Ratio Changes, Ask:**
-
-**1. Why is it changing?**
-   - Check quarterly announcements
-   - Analyze loan/deposit breakup
-   - Read management commentary
-
-**2. Is it sustainable?**
-   - Compare with deposit growth
-   - Check NIM trends
-   - Assess liquidity ratios (LCR, SLR)
-
-**3. What's the implication?**
-   - Growth story intact?
-   - Risk profile improving/worsening?
-   - Profitability under pressure?
-
-**4. What's the competitor doing?**
-   - Is it industry-wide trend?
-   - Or bank-specific issue?
-   - Relative positioning?
-
-**5. What's management saying?**
-   - Guidance on CD ratio target?
-   - Strategic priorities changing?
-   - Capital allocation plans?
-
----
-
-## 📊 Real-World Examples - CD Driver Analysis
-
-### **Example 1: Private Bank COVID Shock (2020)**
-
-**What happened:**
-- CD ratio fell from 92% → 78% (March → Sept 2020)
-
-**Drivers:**
-- ⚠️ Credit demand collapsed (lockdown)
-- ✅ Deposits surged (uncertainty, safety)
-- ⚠️ Loan growth went negative
-
-**Interpretation:**
-- Initial: Negative (economy in shock)
-- After: Positive (deposits strong, positioned for growth)
-
-**Result:** Bank recovered post-COVID, CD normalized to 88%
-
-### **Example 2: PSB Expansion Phase (2014-2018)**
-
-**What happened:**
-- CD ratio rose from 68% → 78% (steady over 4 years)
-
-**Drivers:**
-- ✅ Economic growth driving loan demand
-- ✅ Strong deposit mobilization
-- ✅ Market share gains
-
-**Interpretation:**
-- Positive growth story
-- Balanced expansion
-- No liquidity stress
-
-**Result:** Bank profitability expanded, ROA improved
-
-### **Example 3: Small Finance Bank Stress (2021-2023)**
-
-**What happened:**
-- CD ratio stuck at 105%+ for 2+ years
-
-**Drivers:**
-- ⚠️ Weak deposit franchise (growth-stage bank)
-- ⚠️ Aggressive lending to gain market share
-- ⚠️ High wholesale funding costs
-- ⚠️ Rising delinquencies
-
-**Interpretation:**
-- Structural problem, not temporary
-- Unsustainable business model
-- High risk profile
-
-**Result:** Stock underperformed, valuations compressed
-
----
-
-## ✅ Quick Decision Guide
-
-| CD Change | Quick Signal | Action | Risk |
-|-----------|-------------|--------|------|
-| 70%→75% (deposit growth) | ✅ Strong franchise | BUY | Low |
-| 70%→75% (loan decline) | 🔴 Credit stress | SELL | High |
-| 75%→82% (both growing) | ✅ Healthy growth | BUY | Low-Med |
-| 75%→82% (deposits weak) | ⚠️ Liquidity pressure | MONITOR | Medium |
-| 80%→90% rapidly | 🔴 Unsustainable | SELL | High |
-| 90%→85% (deposit surge) | ✅ Positive | BUY | Low |
-| 90%→85% (loan shrinking) | 🔴 Stress | SELL | High |
-| Volatile (±5% quarterly) | ⚠️ ALM issues | AVOID | Medium |
-
----
-
-## 🎓 Key Takeaways
-
-1. **CD drivers are balance sheet-driven** - understand loan vs deposit dynamics
-2. **Context matters** - why CD changed is more important than level
-3. **Macro cycle matters** - economic phase shapes CD trends
-4. **Competitor positioning** - is it industry trend or bank-specific?
-5. **Management guidance** - what does management plan?
-6. **Sustainability check** - can bank maintain this CD ratio?
-7. **NIM/profitability** - what's impact on earnings?
-8. **Liquidity health** - is LCR comfortable?
-
----
-
-### 🎯 Remember:
-
-**Rising CD can be positive (growth) or negative (stress)**
-**Falling CD can be positive (deposits) or negative (stress)**
-
-**The context and breakdown matter far more than the direction!**
-
----
-""")
+        **Download all datasets combined into a single CSV file**
+        """)
+        
+        # Create combined dataset
+        combined_data = {
+            'Dataset Type': [],
+            'Data': []
+        }
+        
+        all_datasets = {
+            '5-Year Performance': five_year_df,
+            'Quarterly Performance': quarterly_df,
+            'Sector Analysis': sectors_df,
+            'Earnings Revisions': downgrades_df
+        }
+        
+        combined_text = "=== NIFTY 50 ANALYSIS DASHBOARD - COMPLETE DATA EXPORT ===\n"
+        combined_text += f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+        combined_text += "=" * 70 + "\n\n"
+        
+        for dataset_name, df in all_datasets.items():
+            combined_text += f"\n{'='*70}\n"
+            combined_text += f"{dataset_name.upper()}\n"
+            combined_text += f"{'='*70}\n"
+            combined_text += df.to_csv(index=False)
+            combined_text += "\n"
+        
+        st.download_button(
+            label="📥 Download All Data Combined (TXT)",
+            data=combined_text,
+            file_name="nifty50_complete_analysis_export.txt",
+            mime="text/plain",
+            key="download_combined"
+        )
+        
+        st.markdown("---")
+        
+        render_subsection_header("ℹ️ Download Information")
+        
+        st.markdown("""
+        **Available Formats:**
+        - Individual datasets: CSV format (recommended for data analysis tools)
+        - Combined export: TXT format (for quick reference)
+        
+        **Files Include:**
+        - All historical performance data
+        - Quarterly analysis metrics
+        - Sector-wise breakdown
+        - Analyst earnings revisions
+        
+        **Usage:**
+        - Import into Excel, Python, R, Power BI, Tableau
+        - Conduct custom analysis
+        - Build predictive models
+        - Create custom visualizations
+        - Integration with data pipelines
+        
+        **File Naming Convention:**
+        - `nifty50_5year_performance.csv` - 5-year historical data
+        - `nifty50_quarterly_performance.csv` - Quarterly FY2025 data
+        - `nifty50_sector_analysis.csv` - Top 10 sector contribution
+        - `nifty50_earnings_revisions.csv` - 6-month analyst revisions
+        - `nifty50_complete_analysis_export.txt` - All data combined
+        """)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # FOOTER
 # ═══════════════════════════════════════════════════════════════════════════
 
-render_footer(
-    AUTHOR, 
-    BRAND_NAME, 
-    "RBI, BSE, NSE, Bank Investor Relations | Research: ICRA, CRISIL, Financial Media"
-)
+st.markdown("---")
+render_footer(AUTHOR, BRAND_NAME, "NSE, RBI, BSE, MCA, SEBI | Research: Business Standard, Economic Times, Brokerages")
