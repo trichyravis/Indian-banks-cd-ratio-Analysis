@@ -1408,10 +1408,7 @@ Unsecured advances (personal loans, credit cards) significantly impact optimal C
 - Optimal CD ratios compressing across sector
 
 **Conclusion:** Higher unsecured mix → Lower optimal CD ratio.
-
-EOF
-cat /mnt/user-data/outputs/indian_banks_app/streamlit_app.py
-
+""")
 
 # ═══════════════════════════════════════════════════════════════════════════
 # FOOTER
