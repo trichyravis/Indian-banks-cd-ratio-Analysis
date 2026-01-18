@@ -1,3 +1,4 @@
+
 """
 Indian Banks Credit-to-Deposit Ratio Analysis Dashboard
 Configuration File - Colors, Constants, and Settings
@@ -83,7 +84,9 @@ PSB_BANKS = [
     "Union Bank of India",
     "Canara Bank",
     "Syndicate Bank",
-    "Corporation Bank"
+    "Corporation Bank",
+    "Indian Overseas Bank",
+    "Bank of Maharashtra"
 ]
 
 # Major Private Sector Banks
@@ -112,7 +115,28 @@ SFB_BANKS = [
     "North East Small Finance Bank"
 ]
 
-ALL_MAJOR_BANKS = PSB_BANKS + PRIVATE_BANKS + SFB_BANKS
+# Foreign Banks
+FOREIGN_BANKS = [
+    "DBS Bank India",
+    "Standard Chartered Bank",
+    "HSBC India",
+    "Citibank India",
+    "Bank of America",
+    "JPMorgan Chase Bank",
+    "Deutsche Bank",
+    "ICICI Prudential Wealth"
+]
+
+# Historical/Merged Banks (for trend analysis)
+HISTORICAL_PSB_BANKS = [
+    "Allahabad Bank",
+    "Dena Bank",
+    "Vijaya Bank",
+    "Andhra Bank",
+    "UCO Bank"
+]
+
+ALL_MAJOR_BANKS = PSB_BANKS + PRIVATE_BANKS + SFB_BANKS + FOREIGN_BANKS + HISTORICAL_PSB_BANKS
 
 # ═══════════════════════════════════════════════════════════════════════════
 # CD RATIO BENCHMARKS & HEALTH INDICATORS
