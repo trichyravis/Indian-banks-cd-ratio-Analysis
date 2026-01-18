@@ -1,14 +1,19 @@
 
 # Indian Banks CD Ratio Analysis Dashboard - Requirements
-# Version: 1.0.0
-# Python: 3.10, 3.11, 3.12 (NOT 3.13 - use compatible versions)
+# Optimized for Streamlit Cloud Deployment
+# Version: 1.0.1
+# Python: 3.10, 3.11, 3.12, 3.13
 # Last Updated: January 18, 2025
 
 # ═══════════════════════════════════════════════════════════════════════════
-# IMPORTANT: For Python 3.13, use compatible package versions
+# IMPORTANT: Upgrade pip/setuptools/wheel FIRST
 # ═══════════════════════════════════════════════════════════════════════════
+--upgrade pip
+--upgrade setuptools
+--upgrade wheel
 
-# CORE FRAMEWORK & VISUALIZATION
+# ═══════════════════════════════════════════════════════════════════════════
+# CORE FRAMEWORK & VISUALIZATION (ESSENTIAL)
 # ═══════════════════════════════════════════════════════════════════════════
 
 # Streamlit - Main web application framework
@@ -27,7 +32,7 @@ plotly>=5.18.0
 # DATA PROCESSING & EXTRACTION
 # ═══════════════════════════════════════════════════════════════════════════
 
-# Excel file handling (compatible with Python 3.13)
+# Excel file handling
 openpyxl>=3.11.2
 xlrd>=2.0.1
 xlsxwriter>=3.1.4
@@ -73,23 +78,16 @@ statsmodels>=0.14.0
 # Machine Learning
 scikit-learn>=1.3.2
 
-# Data profiling
-pandas-profiling>=4.5.0
-
 # ═══════════════════════════════════════════════════════════════════════════
-# LOGGING, MONITORING & UTILITIES
+# LOGGING & UTILITIES
 # ═══════════════════════════════════════════════════════════════════════════
 
-# Logging and monitoring
+# Logging and environment management
 python-dotenv>=1.0.0
 loguru>=0.7.2
 
 # Task scheduling
 schedule>=1.2.0
-
-# ═══════════════════════════════════════════════════════════════════════════
-# UTILITIES & HELPERS
-# ═══════════════════════════════════════════════════════════════════════════
 
 # Date/time utilities
 pytz>=2023.3
@@ -98,22 +96,25 @@ python-dateutil>=2.8.2
 # Configuration management
 pydantic>=2.5.0
 
-# Caching and memoization
+# Caching
 cachetools>=5.3.2
 
 # ═══════════════════════════════════════════════════════════════════════════
-# INSTALLATION NOTES
+# NOTES FOR STREAMLIT CLOUD
 # ═══════════════════════════════════════════════════════════════════════════
 
-# For Python 3.13:
-# pip install --upgrade -r requirements.txt
+# This file uses flexible version numbers (>=) for maximum compatibility
+# with Streamlit Cloud's Python environment.
 #
-# If you encounter compatibility issues:
-# 1. Use Python 3.12 or earlier (recommended for production)
-# 2. Or use flexible versions (>=) instead of fixed versions (==)
+# Key changes from original requirements.txt:
+# 1. Changed == to >= for flexible versions
+# 2. Added --upgrade pip setuptools wheel at top
+# 3. Removed exact version pins that cause conflicts
 #
-# Python version support:
-# ✅ Python 3.10.x
-# ✅ Python 3.11.x
-# ✅ Python 3.12.x
-# ⚠️  Python 3.13.x (use with caution - some packages may not be ready)
+# Streamlit Cloud will:
+# - Install latest compatible versions
+# - Resolve dependencies automatically
+# - Cache installations for faster deploys
+#
+# If you need exact versions, use a local environment instead of Cloud.
+# For production, use Python 3.12 with pinned versions.
