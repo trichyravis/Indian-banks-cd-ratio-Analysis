@@ -599,7 +599,7 @@ elif page_index == 9:
     
     .stTabs [aria-selected="true"] {
         background-color: #003366 !important;
-        color: #FFD700 !important;
+        color: #FFFFFF !important;
         border: 2px solid #FFD700 !important;
         box-shadow: 0 4px 8px rgba(0, 51, 102, 0.3);
     }
