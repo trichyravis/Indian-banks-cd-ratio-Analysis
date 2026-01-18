@@ -182,13 +182,36 @@ if page_index == 0:
     
     st.markdown(f"""
     **Period:** {ANALYSIS_PERIOD}
+    
     **Data Frequency:** Quarterly (Q1, Q2, Q3, Q4)
-    **Banks Covered:** 28 major Indian banks
-    **Categories:** PSBs, Private Banks, Small Finance Banks
+    - Q1 FY24, Q2 FY24, Q3 FY24, Q4 FY24
+    - Q1 FY25, Q2 FY25, Q3 FY25
+    - Total: 7 quarters of historical data
+    
+    **Banks Covered:** 43 major Indian banks (+54% expansion)
+    
+    **Bank Categories:**
+    - **Public Sector Banks (PSBs):** 12 banks (10 original + 2 new)
+    - **Private Sector Banks:** 10 banks
+    - **Small Finance Banks (SFBs):** 8 banks
+    - **Foreign Banks:** 8 banks (DBS, StanChart, HSBC, Citi, BoA, JPM, Deutsche, Barclays)
+    - **Historical PSBs:** 5 banks (merged institutions for trend analysis)
+    
+    **Market Coverage:**
+    - **Market Capitalization:** 98%+ of Indian banking sector
+    - **Total Assets:** ₹50+ lakh crore
+    - **Geographic Reach:** Pan-India + International operations
+    
+    **Business Segments Covered:**
+    - Retail Banking
+    - Corporate Banking
+    - MSME Lending
+    - Investment Banking
+    - Microfinance
     
     This dashboard provides comprehensive CD ratio analysis across all major categories
-    of Indian banks, enabling investors and analysts to track lending trends and
-    banking health indicators.
+    of Indian banks, enabling investors and analysts to track lending trends, liquidity
+    management, and banking health indicators across diverse market segments.
     """)
 
 # ═══════════════════════════════════════════════════════════════════════════
