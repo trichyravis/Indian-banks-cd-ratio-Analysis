@@ -1,0 +1,306 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# PYTHON AND VIRTUAL ENVIRONMENTS
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+*.venv
+.venv
+
+# Python bytecode and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.unittest/
+test_results/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ENVIRONMENT AND CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Environment variables (NEVER commit sensitive data)
+.env
+.env.local
+.env.*.local
+.env.production.local
+
+# Streamlit secrets (DO NOT COMMIT)
+.streamlit/secrets.toml
+.streamlit/cache/
+
+# Configuration files with credentials
+config_local.py
+settings_local.py
+
+# ═══════════════════════════════════════════════════════════════════════════
+# DATABASES AND DATA
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.dbm
+*.ldb
+
+# Data files (except repository data)
+data/rbi_monthly/*.xlsx
+data/rbi_monthly/*.csv
+data/bse_filings/**/*.pdf
+data/bank_reports/**/*.pdf
+historical_data_*.csv
+
+# Cache and temporary data
+.cache/
+*.cache
+data/cache/
+data/temp/
+temp/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# IDE AND EDITOR
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+.vs/
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.vim
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Eclipse
+.project
+.pydevproject
+.settings/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# ═══════════════════════════════════════════════════════════════════════════
+# OPERATING SYSTEM
+# ═══════════════════════════════════════════════════════════════════════════
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+# ═══════════════════════════════════════════════════════════════════════════
+# LOGS AND DEBUGGING
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Log files
+*.log
+*.logs
+logs/
+debug/
+*.out
+*.err
+
+# Streamlit logs
+.streamlit/*.log
+
+# ═══════════════════════════════════════════════════════════════════════════
+# BUILD AND DISTRIBUTION
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Setuptools
+setup.cfg
+setup.py.bak
+
+# Pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Wheel
+*.whl
+
+# ═══════════════════════════════════════════════════════════════════════════
+# DOCUMENTATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Sphinx documentation
+docs/_build/
+site/
+
+# MkDocs documentation
+/site
+
+# ═══════════════════════════════════════════════════════════════════════════
+# OS AND BACKUP FILES
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Backup files
+*.bak
+*.backup
+*~
+*.swp
+*.tmp
+
+# OS temporary files
+.~lock.*
+.*~
+
+# ═══════════════════════════════════════════════════════════════════════════
+# PROJECT SPECIFIC
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Downloaded data files
+data/downloads/
+data/raw/
+*.tar.gz
+*.zip
+
+# Generated reports
+reports/
+output/
+results/
+
+# Experiment tracking
+mlruns/
+.wandb/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# DOCKER
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Docker volumes
+docker-volumes/
+.dockerignore.local
+
+# ═══════════════════════════════════════════════════════════════════════════
+# GIT
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Git patches
+*.patch
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TESTING
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Test databases
+test_*.db
+test_*.sqlite
+test_cache/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SECURITY - NEVER COMMIT THESE
+# ═══════════════════════════════════════════════════════════════════════════
+
+# API keys and tokens (CRITICAL)
+*.key
+*.pem
+*.p8
+*.pfx
+
+# Database credentials
+db_credentials.txt
+password*.txt
+
+# AWS credentials
+.aws/
+aws_credentials/
+
+# GCP credentials
+.gcp/
+gcp-key.json
+
+# SSH keys
+.ssh/
+*.pem
+id_rsa*
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MISCELLANEOUS
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Placeholder files (but keep .env.example)
+!.env.example
+!.gitkeep
+
+# Large files
+*.tar
+*.tar.gz
+*.zip
+*.rar
+
+# Poetry
+poetry.lock
