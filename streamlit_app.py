@@ -413,7 +413,12 @@ elif page_index == 3:
     comparison_df["Status"] = comparison_df["latest_cd"].apply(render_cd_ratio_status)
     
     st.dataframe(
-        comparison_df[["bank", "type", "latest_cd", "fy24_avg_cd", "change", "Status"]],
+        comparison_df[["bank_name", "bank_type", "latest_cd", "cd_change"]].rename(columns={
+            "bank_name": "Bank Name",
+            "bank_type": "Type",
+            "latest_cd": "Latest CD %",
+            "cd_change": "Change from Q2 %"
+        }),
         use_container_width=True,
         hide_index=True
     )
