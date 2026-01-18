@@ -818,7 +818,7 @@ elif page_index == 10:
     render_section_header("🎓 CD Ratio Education & RBI Guidelines")
     
     # Create sub-tabs for education content
-    edu_tab1, edu_tab2, edu_tab3, edu_tab4 = st.tabs(["📘 CD Ratio Basics", "🏛️ RBI Regulations", "❓ FAQ & Questions", "📈 Investment Signals"])
+    edu_tab1, edu_tab2, edu_tab3, edu_tab4, edu_tab5 = st.tabs(["📘 CD Ratio Basics", "🏛️ RBI Regulations", "❓ FAQ & Questions", "📈 Investment Signals", "🎯 CD Drivers"])
     
     with edu_tab1:
             st.markdown("""
@@ -1725,6 +1725,584 @@ What it means: Deposits growing faster than loans OR loans shrinking
 5. **Trend Matters:** Direction of CD change is as important as level
 6. **Bank Type:** Different banks have different optimal zones
 7. **Monitor Quarterly:** CD changes reveal critical business trends
+
+---
+""")
+
+    with edu_tab5:
+        st.markdown("""
+### 🎯 What Drives CD Ratios? Key Factors & Interpretation Guide
+
+Understanding what moves CD ratios helps investors anticipate bank performance, identify risks, and time investment decisions. This comprehensive guide breaks down the key drivers and how to interpret changes.
+
+---
+
+## 📊 Key Drivers of CD Ratio - Overview
+
+CD ratios are driven by **supply-demand dynamics** of loans vs deposits:
+
+**High Supply of Loans + Low Supply of Deposits = High CD Ratio**
+**Low Supply of Loans + High Supply of Deposits = Low CD Ratio**
+
+---
+
+### 🟢 FACTORS THAT INCREASE CD RATIO
+
+#### **1. Strong Loan Demand 📈**
+**What it means:** Customers actively seeking loans, businesses expanding
+
+**Drivers:**
+- Economic growth & business confidence ✅
+- Low interest rates encouraging borrowing
+- Strong industrial/real estate activity
+- MSME sector expansion
+- Retail credit (auto, home, personal loans)
+
+**Impact:** Banks deploy more deposits → CD rises
+**Example:** During economic boom, CD 70% → 78%
+
+**Investor Signal:**
+- ✅ **Positive** if deposits also growing (balanced growth)
+- ⚠️ **Caution** if deposits stagnant (liquidity pressure)
+
+---
+
+#### **2. Expanding Credit Business 💼**
+**What it means:** Bank actively growing its loan portfolio
+
+**Drivers:**
+- Aggressive market share gains
+- New product launches (retail, SME, agri loans)
+- Geographic expansion (rural/tier-2 cities)
+- Customer acquisition campaigns
+- Competitive pricing to gain market share
+
+**Impact:** Loan portfolio grows faster than deposits
+**Example:** Bank targets MSME lending, loan book grows 20% YoY
+
+**Investor Signal:**
+- ✅ **Positive** for growth story
+- ⚠️ **Monitor** asset quality as portfolio grows
+
+---
+
+#### **3. Competitive Pricing Pressure 💰**
+**What it means:** Bank cutting loan rates to compete for business
+
+**Drivers:**
+- Intense competition in lending market
+- Excess liquidity in banking system
+- RBI repo rate cuts
+- Market share wars
+
+**Impact:** Lower rates attract more loan demand
+**Example:** New private banks entering market, forcing price competition
+
+**Investor Signal:**
+- ⚠️ **Watch NIM:** Lower rates compress margins
+- ⚠️ **Monitor profitability:** Growth at what cost?
+
+---
+
+#### **4. Growing Customer Base 👥**
+**What it means:** Bank successfully acquiring new customers
+
+**Drivers:**
+- Successful digital banking adoption
+- Branch expansion strategy
+- Marketing campaigns
+- Partnerships with fintech/distributors
+- Improved service quality
+
+**Impact:** More customers = more loans + deposits, but loans grow faster initially
+**Example:** Digital bank growing customers 30% annually
+
+**Investor Signal:**
+- ✅ **Positive** long-term growth indicator
+- ⚠️ **Monitor cost-to-income:** Expansion is expensive
+
+---
+
+#### **5. Retail & MSME Focus 🏪**
+**What it means:** Bank emphasizing high-growth segments
+
+**Drivers:**
+- Shift from wholesale/corporate lending
+- Retail credit boom (housing, auto, personal)
+- MSME lending push (government incentives)
+- Low-ticket high-volume strategy
+- Emerging middle class demand
+
+**Impact:** Retail loans grow faster, CD rises
+**Example:** Bank's retail advances grow 25% while corporate loans grow 5%
+
+**Investor Signal:**
+- ✅ **Positive** for sustainability (diversified portfolio)
+- ⚠️ **Monitor delinquencies:** Retail has higher defaults
+
+---
+
+### 🔴 FACTORS THAT DECREASE CD RATIO
+
+#### **1. High Loan Delinquencies ⚠️**
+**What it means:** Many customers unable/unwilling to repay loans
+
+**Drivers:**
+- Economic slowdown, unemployment rises
+- Sectoral stress (real estate, MSMEs)
+- Corporate defaults (IL&FS, Jet Airways)
+- Natural disasters, pandemics
+- Rising interest rates making EMIs unaffordable
+
+**Impact:** Banks tighten lending to reduce risk
+**Example:** COVID-19 triggers bank pause on auto loans
+
+**Investor Signal:**
+- 🔴 **Negative** - Credit stress ahead
+- ❌ **Expect:** Asset quality deterioration, provisioning rise
+- **Action:** Reduce position or avoid
+
+---
+
+#### **2. Weak Credit Demand 📉**
+**What it means:** Customers & businesses reluctant to borrow
+
+**Drivers:**
+- Economic slowdown/recession
+- High interest rates (borrowing expensive)
+- Business uncertainty
+- Debt aversion (households deleveraging)
+- Weak capex spending by corporates
+
+**Impact:** Loan growth stalls, CD falls
+**Example:** Post-2008 financial crisis, credit demand fell sharply
+
+**Investor Signal:**
+- ⚠️ **Caution** - Growth story at risk
+- ❌ **Expect:** Lower earnings, NIM pressure
+- **Action:** Reduce exposure until demand recovers
+
+---
+
+#### **3. Rising Interest Rates 📊**
+**What it means:** RBI hiking repo rate or market rates rising
+
+**Drivers:**
+- RBI monetary tightening (inflation control)
+- Global rate hikes (impact on Indian rates)
+- FX pressure (rupee depreciation)
+- Fiscal concerns
+
+**Impact:** Higher borrowing costs discourage loans
+**Example:** 2022-2023, RBI raised rates 225 bps → credit demand slowed
+
+**Investor Signal:**
+- ⚠️ **Mixed impact:**
+  - **Short-term:** CD may fall (lower demand)
+  - **Medium-term:** NIM expands (higher spreads)
+- **Opportunity:** Buy quality banks at lower CD ratios
+
+---
+
+#### **4. Liquidity Management & Deposit Accumulation 💧**
+**What it means:** Bank deliberately keeping high deposits, not lending aggressively
+
+**Drivers:**
+- Liquidity coverage ratio (LCR) compliance
+- Conservative asset-liability management
+- Regulatory pressure
+- Defensive posture (uncertain times)
+- Build-up for future lending
+
+**Impact:** Deposits grow faster than loans
+**Example:** Bank raises CASA deposits aggressively → CD falls from 80% to 75%
+
+**Investor Signal:**
+- ⚠️ **Neutral to Positive:**
+  - Indicates strong deposit franchise
+  - Preparing for future growth
+  - Lower immediate risk
+- **Action:** Monitor for eventual lending acceleration
+
+---
+
+#### **5. Regulatory Constraints ⚙️**
+**What it means:** RBI or regulators impose lending restrictions
+
+**Drivers:**
+- Sectoral lending curbs (over-exposed sectors)
+- Loan classification changes (stricter norms)
+- Concentration limits (no >10% in one sector)
+- Unsecured lending caps (20-24.5%)
+- Priority sector lending mandates
+
+**Impact:** Bank forced to reduce lending or redirect to constrained sectors
+**Example:** RBI caps exposure to real estate at 15% → bank reduces RE lending
+
+**Investor Signal:**
+- ⚠️ **Watch business model impact:**
+  - May reduce profitability if forced away from high-margin lending
+  - Could improve asset quality if constraint is prudent
+- **Action:** Understand bank's exposure to constrained sectors
+
+---
+
+## 📈 Visual: Drivers Comparison
+
+Let me create visualizations for better understanding:
+""")
+        
+        # Create side-by-side comparison
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("### 🟢 Factors INCREASING CD Ratio")
+            
+            import plotly.graph_objects as go
+            
+            increase_factors = {
+                'Loan Demand': 9,
+                'Credit Expansion': 8,
+                'Price Competition': 7,
+                'Customer Growth': 8,
+                'Retail/MSME Focus': 8,
+                'Economic Growth': 9,
+                'Market Share Gains': 7
+            }
+            
+            fig1 = go.Figure(data=[
+                go.Bar(
+                    x=list(increase_factors.values()),
+                    y=list(increase_factors.keys()),
+                    orientation='h',
+                    marker=dict(color='#27AE60', opacity=0.8),
+                    text=list(increase_factors.values()),
+                    textposition='outside',
+                )
+            ])
+            
+            fig1.update_layout(
+                title='Impact on CD Ratio (Higher = Stronger Impact)',
+                xaxis_title='Impact Strength (1-10)',
+                yaxis_title='',
+                height=400,
+                showlegend=False,
+                margin=dict(l=150, r=50, t=50, b=50),
+                font=dict(size=11),
+                xaxis=dict(range=[0, 10])
+            )
+            
+            st.plotly_chart(fig1, use_container_width=True)
+        
+        with col2:
+            st.markdown("### 🔴 Factors DECREASING CD Ratio")
+            
+            decrease_factors = {
+                'Loan Delinquencies': 9,
+                'Weak Demand': 8,
+                'Rising Rates': 6,
+                'Liquidity Build-up': 7,
+                'Regulatory Limits': 7,
+                'Recession': 8,
+                'Deleveraging': 6
+            }
+            
+            fig2 = go.Figure(data=[
+                go.Bar(
+                    x=list(decrease_factors.values()),
+                    y=list(decrease_factors.keys()),
+                    orientation='h',
+                    marker=dict(color='#E74C3C', opacity=0.8),
+                    text=list(decrease_factors.values()),
+                    textposition='outside',
+                )
+            ])
+            
+            fig2.update_layout(
+                title='Impact on CD Ratio (Higher = Stronger Impact)',
+                xaxis_title='Impact Strength (1-10)',
+                yaxis_title='',
+                height=400,
+                showlegend=False,
+                margin=dict(l=150, r=50, t=50, b=50),
+                font=dict(size=11),
+                xaxis=dict(range=[0, 10])
+            )
+            
+            st.plotly_chart(fig2, use_container_width=True)
+        
+        st.markdown("""
+---
+
+## 🔍 How to Interpret CD Ratio Changes
+
+### **Scenario 1: CD Rising from 72% → 78% Over 1 Year**
+
+**Analysis:**
+- ✅ Loan demand is strong (positive economic signal)
+- ✅ Bank gaining market share or growing business
+- ⚠️ Monitor: Are deposits keeping pace?
+
+**Interpretation Table:**
+
+| Scenario | Deposit Growth | Loan Growth | Signal | Action |
+|----------|----------------|------------|--------|--------|
+| A | 12% | 18% | ✅ Healthy growth | BUY - balanced |
+| B | 5% | 18% | ⚠️ Liquidity pressure | MONITOR - risky |
+| C | 0% | 18% | 🔴 Stress | SELL - unsustainable |
+
+**Investor Take:** 
+- Scenario A: Best case - profitable growth
+- Scenario B: Watch for NIM compression
+- Scenario C: Red flag - forced deleveraging coming
+
+---
+
+### **Scenario 2: CD Falling from 82% → 75% Over 6 Months**
+
+**Analysis:**
+- Could be POSITIVE or NEGATIVE depending on why
+
+**Sub-Scenarios:**
+
+| Cause | Signal | Action |
+|-------|--------|--------|
+| **Strong deposit inflow** | ✅ Positive | BUY - franchise strength |
+| **Loan portfolio shrinking** | 🔴 Negative | SELL - credit stress |
+| **Deliberate deleveraging** | ⚠️ Neutral | HOLD - wait for clarity |
+| **Prepayments surge** | ✅ Positive | BUY - customer strength |
+
+**How to Tell:**
+- Check quarterly results for:
+  - Deposits: Growing or flat?
+  - Advances: Growing or declining?
+  - Loan repayments: Normal or surge?
+  - Delinquencies: Rising or stable?
+
+---
+
+### **Scenario 3: CD Volatile (80% → 75% → 82% → 78%)**
+
+**What it means:** Bank's loan/deposit balance is unstable
+
+**Causes:**
+- Lumpy deposit inflows/outflows
+- Seasonal lending patterns
+- Ad-hoc policy changes
+- External shocks
+- Poor ALM (Asset-Liability Management)
+
+**Investor Signal:**
+- 🔴 **Negative** - Lack of predictability
+- ⚠️ **Red flag** - Potential ALM issues
+- **Action:** Avoid until management improves ALM
+
+---
+
+### **Scenario 4: CD Stuck at High Levels (90%+ for 2+ Years)**
+
+**What it means:** Structural problem - not temporary
+
+**Causes:**
+- Insufficient deposit franchise
+- Over-competitive in lending
+- Regulatory constraints on deposits
+- Market position issues
+- Business model mismatch
+
+**Investor Signal:**
+- 🔴 **Very Negative**
+- **Red Flags:** Liquidity stress, higher costs, vulnerable
+- **Action:** AVOID - systemic risk
+
+---
+
+## 📋 CD Ratio Change Interpretation Matrix
+
+Create a mental model:
+
+```
+                DEPOSIT GROWTH
+                     ↓
+            Weak ← ← → Strong
+           ↑
+      LOAN
+    GROWTH
+           ↓
+    Strong │ STRESS │ POSITIVE
+           │ (loan  │ (healthy
+           │ growth │ growth)
+           │ risky) │
+        ───┼─────────┼───
+           │ 
+    Weak   │ CAUTION │ POSITIVE
+           │ (both   │ (deposit
+           │ slow)   │ franchise)
+           │ 
+```
+
+**Quadrants:**
+- **Top-Left (Strong loans, weak deposits):** STRESS - unsustainable
+- **Top-Right (Strong loans, strong deposits):** POSITIVE - healthy growth
+- **Bottom-Left (Weak loans, weak deposits):** CAUTION - slow period
+- **Bottom-Right (Weak loans, strong deposits):** POSITIVE - franchise strength
+
+---
+
+## 🎯 Macro Drivers - Understanding the Big Picture
+
+### **Economic Cycle Impact on CD Ratio**
+
+**📈 EXPANSION PHASE**
+- Strong demand for credit
+- Businesses expanding, households borrowing
+- CD ratio: Rising (70% → 80%)
+- Bank view: Profitable growth
+- Risk: Overleveraging, delinquencies build
+
+**📊 PEAK PHASE**
+- Credit demand slows
+- Delinquencies may start rising
+- CD ratio: Stable or falling (80% → 75%)
+- Bank view: Risk management
+- Risk: Credit losses materialize
+
+**📉 CONTRACTION PHASE**
+- Weak credit demand
+- High delinquencies
+- CD ratio: Falling (75% → 60%)
+- Bank view: Survival mode
+- Risk: Asset quality crisis
+
+**🔄 RECOVERY PHASE**
+- Demand returns
+- Delinquencies stabilize/fall
+- CD ratio: Rising (60% → 70%)
+- Bank view: Renewed profitability
+- Risk: Taking excessive risks again
+
+---
+
+## 💡 Investor Decision Framework
+
+### **When CD Ratio Changes, Ask:**
+
+**1. Why is it changing?**
+   - Check quarterly announcements
+   - Analyze loan/deposit breakup
+   - Read management commentary
+
+**2. Is it sustainable?**
+   - Compare with deposit growth
+   - Check NIM trends
+   - Assess liquidity ratios (LCR, SLR)
+
+**3. What's the implication?**
+   - Growth story intact?
+   - Risk profile improving/worsening?
+   - Profitability under pressure?
+
+**4. What's the competitor doing?**
+   - Is it industry-wide trend?
+   - Or bank-specific issue?
+   - Relative positioning?
+
+**5. What's management saying?**
+   - Guidance on CD ratio target?
+   - Strategic priorities changing?
+   - Capital allocation plans?
+
+---
+
+## 📊 Real-World Examples - CD Driver Analysis
+
+### **Example 1: Private Bank COVID Shock (2020)**
+
+**What happened:**
+- CD ratio fell from 92% → 78% (March → Sept 2020)
+
+**Drivers:**
+- ⚠️ Credit demand collapsed (lockdown)
+- ✅ Deposits surged (uncertainty, safety)
+- ⚠️ Loan growth went negative
+
+**Interpretation:**
+- Initial: Negative (economy in shock)
+- After: Positive (deposits strong, positioned for growth)
+
+**Result:** Bank recovered post-COVID, CD normalized to 88%
+
+### **Example 2: PSB Expansion Phase (2014-2018)**
+
+**What happened:**
+- CD ratio rose from 68% → 78% (steady over 4 years)
+
+**Drivers:**
+- ✅ Economic growth driving loan demand
+- ✅ Strong deposit mobilization
+- ✅ Market share gains
+
+**Interpretation:**
+- Positive growth story
+- Balanced expansion
+- No liquidity stress
+
+**Result:** Bank profitability expanded, ROA improved
+
+### **Example 3: Small Finance Bank Stress (2021-2023)**
+
+**What happened:**
+- CD ratio stuck at 105%+ for 2+ years
+
+**Drivers:**
+- ⚠️ Weak deposit franchise (growth-stage bank)
+- ⚠️ Aggressive lending to gain market share
+- ⚠️ High wholesale funding costs
+- ⚠️ Rising delinquencies
+
+**Interpretation:**
+- Structural problem, not temporary
+- Unsustainable business model
+- High risk profile
+
+**Result:** Stock underperformed, valuations compressed
+
+---
+
+## ✅ Quick Decision Guide
+
+| CD Change | Quick Signal | Action | Risk |
+|-----------|-------------|--------|------|
+| 70%→75% (deposit growth) | ✅ Strong franchise | BUY | Low |
+| 70%→75% (loan decline) | 🔴 Credit stress | SELL | High |
+| 75%→82% (both growing) | ✅ Healthy growth | BUY | Low-Med |
+| 75%→82% (deposits weak) | ⚠️ Liquidity pressure | MONITOR | Medium |
+| 80%→90% rapidly | 🔴 Unsustainable | SELL | High |
+| 90%→85% (deposit surge) | ✅ Positive | BUY | Low |
+| 90%→85% (loan shrinking) | 🔴 Stress | SELL | High |
+| Volatile (±5% quarterly) | ⚠️ ALM issues | AVOID | Medium |
+
+---
+
+## 🎓 Key Takeaways
+
+1. **CD drivers are balance sheet-driven** - understand loan vs deposit dynamics
+2. **Context matters** - why CD changed is more important than level
+3. **Macro cycle matters** - economic phase shapes CD trends
+4. **Competitor positioning** - is it industry trend or bank-specific?
+5. **Management guidance** - what does management plan?
+6. **Sustainability check** - can bank maintain this CD ratio?
+7. **NIM/profitability** - what's impact on earnings?
+8. **Liquidity health** - is LCR comfortable?
+
+---
+
+### 🎯 Remember:
+
+**Rising CD can be positive (growth) or negative (stress)**
+**Falling CD can be positive (deposits) or negative (stress)**
+
+**The context and breakdown matter far more than the direction!**
 
 ---
 """)
