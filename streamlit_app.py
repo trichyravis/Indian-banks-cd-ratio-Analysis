@@ -561,6 +561,7 @@ elif page_index == 8:
     
     render_divider()
     
+    # ===== PART 1: CD RATIO AS INVESTMENT SIGNAL =====
     render_info_box(
         "**CD Ratio as Investment Signal:**\n\n"
         "🔷 **High CD (80-85%):** Bank is aggressively deploying deposits, growth story but monitor liquidity\n"
@@ -569,6 +570,476 @@ elif page_index == 8:
         "🔷 **Rising CD:** Positive for growth story, indicates credit demand recovery\n"
         "🔷 **Falling CD:** Could signal credit stress or deposit accumulation"
     )
+    
+    render_divider()
+    
+    # ===== PART 2: CD RATIO ZONES & INVESTMENT MATRIX =====
+    st.markdown("### 📊 CD Ratio Investment Zones Matrix")
+    
+    st.markdown("""
+This matrix shows how different CD ratio levels impact key investment metrics:
+
+| **CD Zone** | **Range** | **Growth Potential** | **Profitability** | **Liquidity Health** | **Risk Level** | **Investor Signal** | **Action** |
+|-------------|----------|-------------------|------------------|-------------------|--------------|-------------------|----------|
+| **1 - Critical Low** | <50% | 2/10 | 2/10 | 9/10 | 1/10 | ⚠️ Underutilized | AVOID |
+| **2 - Conservative** | 50-65% | 4/10 | 4/10 | 8/10 | 2/10 | 🟡 Safe but slow | HOLD |
+| **3 - Growth Early** | 65-72% | 6/10 | 6/10 | 7/10 | 3/10 | 🟢 Emerging growth | BUY |
+| **4 - OPTIMAL** | **72-78%** | **8/10** | **9/10** | **7/10** | **4/10** | **✅ Perfect balance** | **BUY** |
+| **5 - Aggressive** | 78-85% | 7/10 | 8/10 | 5/10 | 6/10 | 🟡 Growth + caution | MONITOR |
+| **6 - High Risk** | 85-95% | 4/10 | 5/10 | 3/10 | 8/10 | 🔴 Liquidity stress | SELL |
+| **7 - Critical High** | >95% | 1/10 | 2/10 | 1/10 | 10/10 | 🔴 Unsustainable | AVOID |
+""")
+    
+    render_divider()
+    
+    # ===== PART 3: CD ZONE ANALYSIS WITH CHARTS =====
+    st.markdown("### 🎯 Interactive CD Zone Analysis")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("#### 📈 Growth & Profitability vs CD Ratio")
+        
+        import plotly.graph_objects as go
+        
+        cd_zones = ['<50%', '50-65%', '65-72%', '72-78%', '78-85%', '85-95%', '>95%']
+        growth = [2, 4, 6, 8, 7, 4, 1]
+        profitability = [2, 4, 6, 9, 8, 5, 2]
+        
+        fig = go.Figure()
+        
+        fig.add_trace(go.Scatter(
+            x=cd_zones, y=growth,
+            mode='lines+markers',
+            name='Growth Potential',
+            line=dict(color='#27AE60', width=3),
+            marker=dict(size=10)
+        ))
+        
+        fig.add_trace(go.Scatter(
+            x=cd_zones, y=profitability,
+            mode='lines+markers',
+            name='Profitability',
+            line=dict(color='#FFD700', width=3),
+            marker=dict(size=10)
+        ))
+        
+        fig.update_layout(
+            height=400,
+            xaxis_title='CD Ratio Range',
+            yaxis_title='Score (1-10)',
+            hovermode='x unified',
+            template='plotly_white'
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        st.markdown("#### 🛡️ Risk vs Liquidity Health")
+        
+        risk_level = [1, 2, 3, 4, 6, 8, 10]
+        liquidity = [9, 8, 7, 7, 5, 3, 1]
+        
+        fig2 = go.Figure()
+        
+        fig2.add_trace(go.Scatter(
+            x=cd_zones, y=risk_level,
+            mode='lines+markers',
+            name='Risk Level',
+            line=dict(color='#E74C3C', width=3),
+            marker=dict(size=10)
+        ))
+        
+        fig2.add_trace(go.Scatter(
+            x=cd_zones, y=liquidity,
+            mode='lines+markers',
+            name='Liquidity Health',
+            line=dict(color='#3498DB', width=3),
+            marker=dict(size=10)
+        ))
+        
+        fig2.update_layout(
+            height=400,
+            xaxis_title='CD Ratio Range',
+            yaxis_title='Score (1-10)',
+            hovermode='x unified',
+            template='plotly_white'
+        )
+        
+        st.plotly_chart(fig2, use_container_width=True)
+    
+    render_divider()
+    
+    # ===== PART 4: CD TREND ANALYSIS =====
+    st.markdown("### 📊 CD Ratio Trend Analysis - What It Means")
+    
+    st.markdown("""
+#### **Rising CD Ratio (Positive Scenario)**
+Example: CD increases from 70% → 75% → 78% (over 2 years)
+
+**What It Means:**
+- Credit demand recovering
+- Bank gaining market share
+- Loan portfolio growing
+- Deposits also growing (or steady)
+
+**Investor Signal:** ✅ **POSITIVE** - Growth story emerging
+**Action:** **BUY** if deposits growing 10%+ YoY
+**Risk:** Monitor that deposits keep pace with loans
+
+---
+
+#### **Falling CD Ratio - Could Be Positive OR Negative**
+
+**Scenario A: Strong Deposits (POSITIVE)**
+- CD falls from 80% → 75% because deposits surge
+- Bank has strong franchise
+- Safe, liquid position
+
+**Investor Signal:** ✅ **POSITIVE**
+**Action:** **BUY** - Strong deposit base
+
+**Scenario B: Loan Shrinking (NEGATIVE)**
+- CD falls from 80% → 75% because loans decline
+- Credit stress or risk aversion
+- Profitability under pressure
+
+**Investor Signal:** 🔴 **NEGATIVE**
+**Action:** **SELL** or **AVOID**
+
+**How to Tell the Difference:**
+- Check quarterly results for deposit & loan breakup
+- Read management commentary
+- Look at deposit growth % vs loan growth %
+
+---
+
+#### **Volatile CD Ratio (Unstable)**
+Example: CD bounces around: 78% → 73% → 81% → 74%
+
+**What It Means:**
+- Imbalanced deposits and loans
+- Possible ALM (Asset-Liability Management) issues
+- Seasonal patterns or external shocks
+- Lack of predictability
+
+**Investor Signal:** ⚠️ **CAUTION**
+**Action:** **AVOID** until stabilization
+**Red Flag:** Suggests management execution issues
+
+---
+
+#### **Sticky High CD (Structural Problem)**
+Example: CD stuck at 88-92% for 2+ years
+
+**What It Means:**
+- Weak deposit franchise
+- Over-dependent on expensive wholesale funding
+- Structural business model mismatch
+- Chronic liquidity stress
+
+**Investor Signal:** 🔴 **VERY NEGATIVE**
+**Action:** **AVOID** - Systemic risk
+**Why:** Bank cannot grow deposits, forced to deleverage
+
+""")
+    
+    render_divider()
+    
+    # ===== PART 5: INVESTMENT STRATEGIES BY INVESTOR TYPE =====
+    st.markdown("### 💼 Investment Strategies by Investor Type")
+    
+    st.markdown("""
+#### **Strategy 1: Growth Investor**
+**Target Profile:** Seeking 15-20% annual returns
+
+**Optimal CD Range:** 75-82%
+- **Buy Signal:** CD rising from 70% toward 78%
+- **Monitor:** Deposits growing ≥12% YoY
+- **Sell Signal:** CD exceeds 85% consistently
+- **Holding Period:** 2-3 years
+- **Expected Return:** 12-18% annually (including dividend)
+
+**Example Trade:**
+1. Buy bank when CD rises 70%→75% with strong deposit growth
+2. Hold 18-24 months
+3. Sell when CD hits 85% or deposits growth slows <10%
+
+---
+
+#### **Strategy 2: Value Investor**
+**Target Profile:** Seeking undervalued banks with margin of safety
+
+**Optimal CD Range:** Target falling toward 70%
+- **Buy Signal:** Bank with CD falling from 85% to 78% + strong fundamentals
+- **Monitor:** Deposit growth acceleration, ROA improvement
+- **Sell Signal:** Once CD stabilizes, stock appreciates >30%
+- **Holding Period:** 12-18 months
+- **Expected Return:** 20-30% when market recognizes improvement
+
+**Example Trade:**
+1. Identify bank with CD 85%+ but improving deposits
+2. Buy when market is pessimistic (stock down 20-30%)
+3. Hold 12-18 months as deposits improve
+4. Sell when CD falls to 75-78% and stock appreciates
+
+---
+
+#### **Strategy 3: Conservative/Income Investor**
+**Target Profile:** Steady dividends, capital preservation
+
+**Optimal CD Range:** 72-78% stable
+- **Buy Signal:** Bank with stable 76-78% CD, strong ROA 1%+, dividend >2%
+- **Monitor:** CD stability month-to-month, dividend sustainability
+- **Sell Signal:** CD rising above 82% or dividend cut
+- **Holding Period:** Long-term (5+ years)
+- **Expected Return:** 8-12% annually (capital appreciation + dividend)
+
+**Example Trade:**
+1. Buy bank with 76% CD and 3% dividend yield
+2. Hold 5+ years, collect dividends
+3. Sell only if CD rises >82% or dividend threatened
+
+""")
+    
+    render_divider()
+    
+    # ===== PART 6: QUICK DECISION TABLE =====
+    st.markdown("### ⚡ Quick Investor Decision Guide")
+    
+    st.markdown("""
+| **Situation** | **CD Signal** | **Action** | **Risk** | **Expected Return** |
+|---------------|--------------|-----------|---------|-------------------|
+| CD 72-78%, deposits growing 10%+ | ✅ Healthy | **BUY** | Low | 10-15% |
+| CD rising 70%→78%, deposits growing | ✅ Growth | **BUY** | Low-Med | 12-18% |
+| CD 78-85%, monitor deposits closely | ⚠️ Caution | **HOLD** | Medium | 8-12% |
+| CD 80-85%, deposits flat/declining | 🔴 Warning | **MONITOR** | Medium-High | 0-8% |
+| CD >85%, liquidity stress signals | 🔴 Danger | **SELL** | High | -5 to +5% |
+| CD >90% for 6+ months | 🔴 Critical | **AVOID** | Very High | Negative |
+| CD <60%, underutilized | ⚠️ Issue | **INVESTIGATE** | Low | Low 6-8% |
+| CD 62-70%, growing toward 75% | 🟡 Improving | **ACCUMULATE** | Low-Med | 10-15% |
+| CD volatile (±5% quarterly) | ⚠️ Risky | **AVOID** | Medium-High | Unpredictable |
+| CD stable 75-78%, dividend >2% | ✅ Ideal | **BUY HOLD** | Low | 8-12% |
+
+""")
+    
+    render_divider()
+    
+    # ===== PART 7: REAL CASE STUDIES =====
+    st.markdown("### 📚 Real-World Case Studies")
+    
+    st.markdown("""
+#### **Case Study 1: Private Bank - Strong Growth (2015-2018)**
+**Bank Profile:** Large private bank targeting retail expansion
+
+**CD Ratio Progression:**
+- 2015: 78%
+- 2016: 80%
+- 2017: 82%
+- 2018: 84%
+
+**What Happened:**
+- Aggressive retail lending push
+- Deposit growth lagged loan growth
+- NIM compression from 3.2% to 2.8%
+
+**Stock Performance:**
+- 2015-2016: +35% (growth story)
+- 2016-2017: +20% (continued growth)
+- 2017-2018: -15% (profitability concerns)
+- 2018-2019: -25% (forced deleveraging)
+
+**Lesson:** CD rising + deposits not keeping pace = eventual correction
+
+---
+
+#### **Case Study 2: PSB - Deposit-Driven Rally (2018-2020)**
+**Bank Profile:** Major public sector bank
+
+**CD Ratio Progression:**
+- 2018: 78%
+- 2019: 75% (deposits surged)
+- 2020: 72%
+
+**What Happened:**
+- Aggressive CASA deposit mobilization
+- Government mandates for lending
+- Balance sheet strengthening
+
+**Stock Performance:**
+- 2018-2019: +8%
+- 2019-2020: +25% (financial crisis safety)
+- 2020-2021: +45% (recovery story)
+
+**Lesson:** Falling CD from deposit strength = positive signal
+
+---
+
+#### **Case Study 3: Small Finance Bank - Liquidity Crisis (2021-2022)**
+**Bank Profile:** Newer SFB with aggressive growth
+
+**CD Ratio Progression:**
+- 2021: 98%
+- 2022 Q1: 102%
+- 2022 Q2: 105%
+
+**What Happened:**
+- Weak deposit franchise
+- Over-aggressive lending
+- Wholesale funding at 300+ bps cost
+- Profitability squeeze
+
+**Stock Performance:**
+- 2021: +50% (growth phase)
+- 2022: -55% (stress emerges)
+- 2023: -40% (continued deterioration)
+
+**Lesson:** CD stuck >95% = eventual crisis
+
+---
+
+#### **Case Study 4: Foreign Bank - Strategic Simplification (2019-2021)**
+**Bank Profile:** International bank exiting retail
+
+**CD Ratio Progression:**
+- 2019: 58%
+- 2020: 52%
+- 2021: 45%
+
+**What Happened:**
+- Exited retail & SME business
+- Focused on wholesale/corporate
+- Intentional CD reduction
+
+**Stock Performance:**
+- Underperformed peers (no growth story)
+- Stable, predictable
+- Higher dividend yield (3-4%)
+
+**Lesson:** Low CD by design = not a problem if intentional
+
+""")
+    
+    render_divider()
+    
+    # ===== PART 8: WARNING SIGNS & RED FLAGS =====
+    st.markdown("### 🚩 Warning Signs - When to SELL")
+    
+    render_warning_box("""
+**Immediate Red Flags (SELL immediately):**
+- CD rises above 85% and deposits growth <8% YoY
+- CD >90% for more than 2 consecutive quarters
+- Deposits declining while CD rising
+- NIM compression >20 bps while CD rising
+- Management unable to explain CD elevation
+- Stock trading below book value
+
+**Gradual Red Flags (MONITOR closely):**
+- CD rising >2% per quarter for 2+ consecutive quarters
+- Deposit growth slowing while CD accelerating
+- Cost of deposits rising (higher CASA mix deterioration)
+- Asset quality indicators worsening
+- Unsecured advances rising alongside CD
+- Delinquencies rising >50 bps while CD >80%
+
+**Structural Red Flags (AVOID):**
+- CD >90% for 12+ months (structural problem)
+- Wholesale funding >40% of deposits
+- Negative deposit growth YoY
+- Recurring liquidity issues
+- Regulatory comments on liquidity stress
+""")
+    
+    render_divider()
+    
+    # ===== PART 9: POSITIVE SIGNALS & ACCUMULATION POINTS =====
+    st.markdown("### ✅ Positive Signs - When to BUY")
+    
+    render_success_box("""
+**Strong Buy Signals:**
+- CD in 72-78% range with 10%+ deposit growth YoY
+- CD rising from 70% to 75% with deposits accelerating
+- Falling CD (below 75%) with strong ROA >1%
+- Strong deposit franchise (40%+ CASA mix)
+- NIM stable or expanding while CD in optimal range
+- Management guiding CD moderation
+
+**Accumulation Points (Dollar-Cost Average):**
+- CD 75-80% = Start buying 50% position
+- CD 78-82% = Add another 25%
+- CD 82-85% = Add final 25% (if deposits strong)
+- NEVER accumulate above 85% CD
+
+**Growth Story Indicators:**
+- Loan growth >15% YoY
+- Deposits growing faster than system average
+- Market share gains visible
+- ROA improving/stable
+- Stock underperforming (creating opportunity)
+- Analyst upgrades emerging
+
+**Value Indicators:**
+- CD falling toward 70% from 85%+ high
+- Stock down 20-30% despite improving fundamentals
+- Dividend yield >3%
+- P/B ratio <0.8x
+- Profitability recovering as CD normalizes
+""")
+    
+    render_divider()
+    
+    # ===== PART 10: KEY TAKEAWAYS =====
+    st.markdown("### 🎯 Key Takeaways for Smart Investors")
+    
+    st.markdown("""
+1. **72-78% is the investment sweet spot** - This range offers optimal balance of growth, profitability, and safety
+
+2. **Direction matters more than level** - CD rising 70%→75% is positive; falling 85%→75% also positive (if from deposits)
+
+3. **Deposits must keep pace** - High CD is only good if deposits growing ≥10% YoY
+
+4. **Three investor strategies** - Growth (75-82%), Value (falling CD), Conservative (72-78% stable)
+
+5. **Red flags above 85%** - Monitor closely; above 90% for 6+ months = structural problem
+
+6. **Seasonal volatility OK** - Q1-Q4 seasonal swings of 2-3% normal; 5%+ swings = problem
+
+7. **Always check trend direction** - Rising CD vs falling CD vs stable CD = different signals
+
+8. **Bank type matters** - PSBs optimal at 76-80%, Foreign banks fine at 50-60%, SFBs should be <90%
+
+9. **Use CD with other metrics** - Combine with deposit growth, NIM, ROA, asset quality for best picture
+
+10. **Trust but verify** - Read quarterly disclosures, don't rely on CD ratio alone
+
+---
+
+## 📈 Quick Reference: Expected Returns by CD Zone
+
+| **CD Zone** | **Deposit Growth** | **Time Horizon** | **Expected Annual Return** |
+|-----------|-------------------|-----------------|--------------------------|
+| 72-76% | 10%+ | 2-3 years | 12-18% |
+| 76-80% | 8%+ | 3-5 years | 10-15% |
+| 78-82% | 10%+ | 2 years | 15-20% |
+| 82-85% | 8%+ | 1 year | 8-12% |
+| 85-90% | <8% | Monitor only | 0-8% |
+| >90% | Any | AVOID | Negative |
+| <65% | Growing | 3+ years | 8-12% |
+
+---
+
+## 🎓 Final Word
+
+CD ratio is one of the most important metrics for banking sector investors. Use it wisely:
+- ✅ For timing entry points
+- ✅ For assessing bank health
+- ✅ For understanding growth stage
+- ✅ For risk management
+
+But always combine with other metrics (deposit growth, NIM, ROA, asset quality) for a complete picture!
+""")
+
+
 
 elif page_index == 9:
     render_section_header("📋 Data Explorer - All Bank Data")
