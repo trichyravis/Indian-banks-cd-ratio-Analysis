@@ -576,6 +576,51 @@ elif page_index == 9:
     
     render_divider()
     
+    # Add custom CSS for styled tabs
+    st.markdown("""
+    <style>
+    /* Tab styling with contrast background */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 20px;
+        background-color: #F5F5F5;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background-color: #E8E8E8;
+        border-radius: 8px;
+        padding: 12px 20px;
+        color: #003366;
+        font-weight: 600;
+        border: 2px solid #CCCCCC;
+        transition: all 0.3s ease;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #003366 !important;
+        color: #FFD700 !important;
+        border: 2px solid #FFD700 !important;
+        box-shadow: 0 4px 8px rgba(0, 51, 102, 0.3);
+    }
+    
+    .stTabs [aria-selected="false"]:hover {
+        background-color: #D0D0D0;
+        color: #003366;
+    }
+    
+    /* Tab content container */
+    .stTabs [data-baseweb="tab-panel"] {
+        background-color: #FFFFFF;
+        border: 2px solid #003366;
+        border-radius: 10px;
+        padding: 25px;
+        margin-top: 10px;
+        box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Create tabs for different sections
     tab1, tab2, tab3, tab4 = st.tabs(["📊 Bank Data", "📥 Download", "📚 Data Sources", "ℹ️ Data Dictionary"])
     
