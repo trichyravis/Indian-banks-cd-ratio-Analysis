@@ -1,51 +1,41 @@
+
 [theme]
-# Color scheme for the Streamlit app
-primaryColor = "#003366"           # Dark blue (primary)
+# Indian Banking Insights Theme
+primaryColor = "#003366"           # Dark blue (Mountain Path brand)
 backgroundColor = "#FFFFFF"        # White background
-secondaryBackgroundColor = "#F5F5F5" # Light gray for sidebars
+secondaryBackgroundColor = "#F5F5F5" # Light gray for sidebars/cards
 textColor = "#2C3E50"              # Dark gray text
 font = "sans serif"                # Font family
 
 [client]
-# Client-side configuration
-showErrorDetails = true            # Show detailed error messages
-toolbarMode = "developer"          # Show developer tools in toolbar
-showSidebarNavigation = true       # Show sidebar navigation
+# Client-side settings
+showErrorDetails = false           # Don't show detailed error messages (hides pip warnings)
+toolbarMode = "viewer"             # Show simplified toolbar
+showSidebarNavigation = true       # Show sidebar
 gatherUsageStats = false           # Don't collect analytics
 
 [logger]
-# Logging configuration
+# Logging settings
 level = "info"                     # Log level: debug, info, warning, error, critical
-messageFormat = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+message_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 [server]
 # Server configuration
-maxUploadSize = 200                # Max upload size in MB
-runOnSave = true                   # Rerun on file save
-headless = true                    # Run in headless mode
+headless = true                    # Run in headless mode (for servers)
 port = 8501                        # Port number
-enableXsrfProtection = true        # Enable XSRF protection
-enableCORS = false                 # Disable CORS for security
+enableXsrfProtection = true        # Enable XSRF protection (security)
+enableCORS = false                 # Disable CORS (security)
+maxUploadSize = 200                # Max upload size in MB
 
 [browser]
-# Browser configuration
+# Browser settings
 gatherUsageStats = false           # Disable usage statistics
-serverAddress = "localhost"        # Server address
-serverPort = 8501                  # Server port
 
 [runner]
 # Runner configuration
 magicEnabled = true                # Enable magic commands
 fastReruns = true                  # Fast reruns with caching
 
-[deprecation]
-# Deprecation settings
-showPyplotGlobalUse = false       # Show warnings for pyplot
-showfileUploaderEncoding = false   # File uploader encoding warnings
-
-# Custom configurations for your app
-[custom]
-app_name = "Indian Banking Insights - CD Ratio Analysis"
-app_version = "1.0.0"
-environment = "development"        # development, staging, production
-debug_mode = false                 # Set to true for debugging
+[deployment]
+# Deployment settings
+maxUploadSize = 200                # Max upload size
