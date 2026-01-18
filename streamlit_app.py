@@ -51,6 +51,9 @@ st.markdown("""
     <p style="margin: 0; font-size: 24px; font-weight: 700; color: #FFD700; letter-spacing: 0.5px;">
         Understanding Bank Lending Capacity & Deposit Utilization
     </p>
+    <p style="margin: 10px 0 0 0; font-size: 14px; color: #B0B0B0;">
+        [Data Period: Q1 FY24 - Q3 FY25 (7 Quarters) | 43 Major Indian Banks]
+    </p>
 </div>
 """, unsafe_allow_html=True)
 
