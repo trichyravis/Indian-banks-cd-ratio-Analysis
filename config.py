@@ -108,7 +108,7 @@ SFB_BANKS = [
     "AU Small Finance Bank",
     "Ujjivan Small Finance Bank",
     "RBL Bank",
-    "ICICI Bank Small Finance",
+    "Equitas Small Finance Bank",
     "TMB (Tamil Nadu Mercantile) Bank",
     "Suryoday Small Finance Bank",
     "Shivalik Small Finance Bank",
@@ -124,7 +124,7 @@ FOREIGN_BANKS = [
     "Bank of America",
     "JPMorgan Chase Bank",
     "Deutsche Bank",
-    "ICICI Prudential Wealth"
+    "Barclays Bank"
 ]
 
 # Historical/Merged Banks (for trend analysis)
