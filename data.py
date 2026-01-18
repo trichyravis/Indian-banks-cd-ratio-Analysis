@@ -533,11 +533,11 @@ def get_bank_cd_ratio_data():
             "q3_fy25_deposits": 113000,
             "q3_fy25_advances": 96050,
         },
-        "ICICI Bank Small Finance": {
+        "Equitas Small Finance Bank": {
             "type": "SFB",
-            "headquarters": "Mumbai",
-            "nse_ticker": "ICICIBANK",
-            "bse_ticker": "532174",
+            "headquarters": "Chennai",
+            "nse_ticker": "EQUITASSFB",
+            "bse_ticker": "541284",
             "q1_fy24_deposits": 110000,
             "q1_fy24_advances": 93500,
             "q2_fy24_deposits": 113000,
@@ -780,11 +780,11 @@ def get_bank_cd_ratio_data():
             "q3_fy25_deposits": 38000,
             "q3_fy25_advances": 27000,
         },
-        "ICICI Prudential Wealth": {
+        "Barclays Bank": {
             "type": "Foreign",
             "headquarters": "Mumbai",
-            "nse_ticker": "IPRUIDL",
-            "bse_ticker": "533538",
+            "nse_ticker": "BARCLAYS",
+            "bse_ticker": "533539",
             "q1_fy24_deposits": 28000,
             "q1_fy24_advances": 18000,
             "q2_fy24_deposits": 29000,
