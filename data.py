@@ -1,3 +1,4 @@
+
 """
 Indian Banks CD Ratio Analysis Dashboard
 Data Generation & Processing
@@ -328,6 +329,8 @@ def process_bank_data(bank_data):
             "latest_cd": round(q3_fy25_cd, 2),
             "avg_cd": round(np.mean([q1_fy24_cd, q2_fy24_cd, q3_fy24_cd, q4_fy24_cd, 
                                      q1_fy25_cd, q2_fy25_cd, q3_fy25_cd]), 2),
+            "deposits_cr": data.get("q3_fy25_deposits", 0),
+            "advances_cr": data.get("q3_fy25_advances", 0),
         })
     
     return pd.DataFrame(processed)
