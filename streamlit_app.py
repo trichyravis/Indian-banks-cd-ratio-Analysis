@@ -818,7 +818,7 @@ elif page_index == 10:
     render_section_header("🎓 CD Ratio Education & RBI Guidelines")
     
     # Create sub-tabs for education content
-    edu_tab1, edu_tab2, edu_tab3 = st.tabs(["📘 CD Ratio Basics", "🏛️ RBI Regulations", "❓ FAQ & Questions"])
+    edu_tab1, edu_tab2, edu_tab3, edu_tab4 = st.tabs(["📘 CD Ratio Basics", "🏛️ RBI Regulations", "❓ FAQ & Questions", "📈 Investment Signals"])
     
     with edu_tab1:
             st.markdown("""
@@ -1409,6 +1409,324 @@ Unsecured advances (personal loans, credit cards) significantly impact optimal C
 - Optimal CD ratios compressing across sector
 
 **Conclusion:** Higher unsecured mix → Lower optimal CD ratio.
+""")
+    
+    with edu_tab4:
+        st.markdown("""
+### 📈 CD Ratio as Investment Signal
+
+The Credit-to-Deposit ratio is a critical indicator for bank investors. It reveals how aggressively a bank deploys deposits, its growth trajectory, and potential profitability trends.
+
+---
+
+### 🎯 CD Ratio Zones & Investment Signals
+""")
+        
+        # Create investment signal heatmap
+        import pandas as pd
+        import plotly.figure_factory as ff
+        
+        # Investment signal data
+        signal_data = {
+            'CD Ratio Range': ['<50%', '50-65%', '65-72%', '72-78%', '78-85%', '85-95%', '>95%'],
+            'Signal': ['⚠️ RED', '🟡 YELLOW', '🟢 GREEN', '🟢 OPTIMAL', '🟡 CAUTION', '🔴 HIGH RISK', '🔴 CRITICAL'],
+            'Growth': ['Low', 'Moderate', 'Good', 'Optimal', 'Strong', 'Aggressive', 'Unsustainable'],
+            'Profitability': ['Poor', 'Moderate', 'Good', 'Excellent', 'High NIM', 'Declining', 'Stressed'],
+            'Liquidity': ['Excess', 'Adequate', 'Good', 'Healthy', 'Tight', 'Strained', 'Critical'],
+            'Risk Level': ['Low', 'Low', 'Low', 'Low-Med', 'Medium', 'High', 'Very High'],
+            'Investment Action': ['AVOID', 'HOLD', 'BUY', '✅ BUY', 'MONITOR', 'SELL', 'AVOID']
+        }
+        
+        signal_df = pd.DataFrame(signal_data)
+        
+        # Create color mapping for heatmap
+        st.markdown("**Investment Signal Matrix (CD Ratio Zones):**")
+        
+        # Display with styling
+        st.dataframe(
+            signal_df,
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "CD Ratio Range": st.column_config.TextColumn("CD Ratio", width=100),
+                "Signal": st.column_config.TextColumn("Signal", width=100),
+                "Growth": st.column_config.TextColumn("Growth", width=80),
+                "Profitability": st.column_config.TextColumn("Profitability", width=100),
+                "Liquidity": st.column_config.TextColumn("Liquidity", width=90),
+                "Risk Level": st.column_config.TextColumn("Risk", width=90),
+                "Investment Action": st.column_config.TextColumn("Action", width=90),
+            }
+        )
+        
+        st.markdown("""
+---
+
+### 📊 CD Ratio Heatmap - Visual Investment Guide
+""")
+        
+        # Create heatmap data for visualization
+        heatmap_data = [
+            ['<50%', '50-65%', '65-72%', '72-78%', '78-85%', '85-95%', '>95%'],
+            [2, 3, 6, 9, 7, 4, 1],  # Growth Score (1-10)
+            [2, 4, 6, 9, 8, 5, 2],  # Profitability Score (1-10)
+            [9, 7, 6, 7, 5, 3, 1],  # Liquidity Score (1-10)
+            [9, 8, 6, 5, 6, 8, 10], # Risk Score (1-10)
+            [2, 4, 6, 9, 7, 3, 1],  # Investment Score (1-10)
+        ]
+        
+        labels = ['CD Ratio Zone', 'Growth Potential', 'Profitability', 'Liquidity Health', 'Risk Level', 'Investment Appeal']
+        
+        # Create heatmap using plotly
+        import plotly.graph_objects as go
+        
+        fig = go.Figure(data=go.Heatmap(
+            z=heatmap_data[1:],
+            x=heatmap_data[0],
+            y=labels[1:],
+            colorscale='RdYlGn',
+            text=[['2', '3', '6', '9', '7', '4', '1'],
+                  ['2', '4', '6', '9', '8', '5', '2'],
+                  ['9', '7', '6', '7', '5', '3', '1'],
+                  ['9', '8', '6', '5', '6', '8', '10'],
+                  ['2', '4', '6', '9', '7', '3', '1']],
+            texttemplate='%{text}',
+            textfont={"size": 14},
+            colorbar=dict(title="Score (1-10)", thickness=20, len=0.7),
+            hovertemplate='<b>%{y}</b><br>CD Ratio: %{x}<br>Score: %{z}<extra></extra>',
+        ))
+        
+        fig.update_layout(
+            title='Investment Signal Heatmap - CD Ratio Analysis',
+            xaxis_title='CD Ratio Range',
+            yaxis_title='Investment Metrics',
+            height=500,
+            width=1000,
+            font=dict(size=12),
+            coloraxis_colorbar=dict(thickness=20, len=0.7)
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
+        st.markdown("""
+---
+
+### 🔷 CD Ratio Investment Zones Explained
+
+#### **Zone 1: <50% - UNDERUTILIZED (🔴 RED FLAG)**
+**Signal:** Bank has excess liquidity
+- ✅ **Positive:** Very safe, low liquidity risk, strong capital position
+- ❌ **Negative:** Wasting deposits, poor profitability, low ROA/ROE
+- **Investor View:** Underperforming asset, opportunity cost on deposits
+- **Action:** AVOID or investigate why underutilized
+
+#### **Zone 2: 50-65% - CONSERVATIVE (🟡 YELLOW)**
+**Signal:** Conservative approach, prioritizing safety
+- ✅ **Positive:** Safe, adequate buffers, low default risk
+- ❌ **Negative:** Not maximizing deposit potential, moderate profitability
+- **Investor View:** Defensive play, lower returns but stable
+- **Action:** HOLD - suitable for conservative portfolios
+
+#### **Zone 3: 65-72% - APPROACHING OPTIMAL (🟢 GREEN)**
+**Signal:** Moving towards efficient deployment
+- ✅ **Positive:** Better profitability, growing loan book
+- ⚠️ **Caution:** Entering higher growth phase
+- **Investor View:** Early growth story, monitor for sustainability
+- **Action:** BUY - good risk-reward balance
+
+#### **Zone 4: 72-78% - OPTIMAL (✅ BEST)**
+**Signal:** Perfectly balanced - THE SWEET SPOT
+- ✅ **Positive:** Maximized profitability, healthy liquidity
+- ✅ **Positive:** Sustainable growth, strong NIM
+- ✅ **Positive:** Regulatory aligned, optimal deployment
+- **Investor View:** Ideal situation - growth + safety
+- **Action:** **BUY** - this is the target zone
+
+#### **Zone 5: 78-85% - AGGRESSIVE (🟡 CAUTION)**
+**Signal:** Growing but monitor closely
+- ✅ **Positive:** Strong growth story, expanding loan portfolio
+- ⚠️ **Caution:** Liquidity tightening, NIM compression risk
+- ⚠️ **Caution:** Rising deposit costs, funding pressure
+- **Investor View:** Good growth but watch for stress signals
+- **Action:** MONITOR - buy only if confident in management
+
+#### **Zone 6: 85-95% - HIGH RISK (🔴 RED)**
+**Signal:** Over-lending, liquidity stressed
+- ❌ **Negative:** Significant liquidity pressure, thin buffers
+- ❌ **Negative:** Heavy reliance on wholesale funding
+- ❌ **Negative:** NIM compression, profitability declining
+- **Investor View:** High risk, limited margin for error
+- **Action:** SELL or AVOID - wait for CD ratio to normalize
+
+#### **Zone 7: >95% - CRITICAL (🔴 CRITICAL)**
+**Signal:** Unsustainable, systemic risk
+- ❌ **Negative:** Severe liquidity stress, critical buffers
+- ❌ **Negative:** Default risk elevated, stress scenario critical
+- ❌ **Negative:** Profitability severely impacted
+- **Investor View:** Red flag - avoid or exit position
+- **Action:** AVOID - high default/restructuring risk
+
+---
+
+### 📈 CD Ratio Trends & Signals
+
+#### **Rising CD Ratio 📊 (Good Signal)**
+What it means: Bank is growing loans faster than deposits
+- ✅ **Positive:** Credit demand recovery, market share gains
+- ✅ **Positive:** Growth story emerging, business expansion
+- ⚠️ **Monitor:** Watch if rising beyond 85%
+
+**Investor Action:** 
+- Positive if rising from 70% to 75%
+- Neutral if rising from 75% to 78%
+- Caution if rising from 80% to 90%
+
+#### **Falling CD Ratio 📉 (Mixed Signal)**
+What it means: Deposits growing faster than loans OR loans shrinking
+- **Scenario A:** Deposits accelerating (Positive) ✅
+  - Bank capturing market share in deposits
+  - Investor Action: POSITIVE - strong franchise
+
+- **Scenario B:** Loans declining (Negative) ❌
+  - Credit stress, risk aversion, deleveraging
+  - Investor Action: NEGATIVE - watch for asset quality issues
+
+- **Scenario C:** Deposits building (Neutral) ⚠️
+  - Preparing for growth or stressed
+  - Investor Action: INVESTIGATE - clarify management intent
+
+---
+
+### 💼 CD Ratio by Bank Type - Investment Implications
+
+#### **Public Sector Banks (PSBs)**
+- **Average CD:** 75-80%
+- **Optimal:** 76-80%
+- **Signal:** ✅ Generally optimal, well-managed
+- **Investment:** Buy when around 76-80%
+
+#### **Private Sector Banks**
+- **Average CD:** 92-94%
+- **Optimal:** 76-80%
+- **Signal:** ⚠️ Above optimal, aggressive growth
+- **Investment:** Monitor closely, buy only if deposit growth accelerating
+
+#### **Small Finance Banks (SFBs)**
+- **Average CD:** >100%
+- **Optimal:** 76-80%
+- **Signal:** 🔴 Critical zone, high stress
+- **Investment:** Avoid - too risky for most investors
+
+#### **Foreign Banks**
+- **Average CD:** <60%
+- **Optimal:** 65-70%
+- **Signal:** ✅ Conservative, within optimal
+- **Investment:** Stable but lower growth profile
+
+---
+
+### 🎯 Quick Reference - Investment Decision Table
+
+| CD Ratio | Bank Type | Signal | Action | Expected Return |
+|----------|-----------|--------|--------|-----------------|
+| 72-78% | PSB | ✅ Optimal | **BUY** | Balanced (8-10%) |
+| 76-82% | Private | ✅ Healthy | **BUY** | Higher (12-15%) |
+| 50-65% | PSB | 🟡 Conservative | HOLD | Lower (6-8%) |
+| 85-90% | Private | 🔴 High | SELL | Risk (5-15% volatile) |
+| 65-72% | SFB | 🟡 Monitor | HOLD | Variable |
+| >95% | Any | 🔴 Critical | AVOID | Very High Risk |
+| <50% | Any | ⚠️ Idle | AVOID | Opportunity Cost |
+
+---
+
+### 📊 Case Studies - Real Bank Analysis
+
+#### **Case 1: Bank with Rising CD from 70% → 76% Over 2 Years**
+- **Signal:** Positive growth trajectory
+- **Analysis:** Bank growing loans faster than deposits
+- **Investor View:** ✅ Growth story emerging
+- **Action:** BUY - growth at reasonable CD
+
+#### **Case 2: Bank with Falling CD from 92% → 75% Over 1 Year**
+- **Signal:** Major deposit acceleration
+- **Analysis:** Market share gains in deposits
+- **Investor View:** ✅ Strong franchise strength
+- **Action:** BUY - deposit momentum very positive
+
+#### **Case 3: Bank with Rising CD from 75% → 88% Over 6 Months**
+- **Signal:** Rapid lending growth
+- **Analysis:** Deposits lagging, liquidity pressure building
+- **Investor View:** ⚠️ Unsustainable pace
+- **Action:** SELL or HOLD - wait for moderation
+
+#### **Case 4: Bank Stuck at 95%+ CD for 2+ Years**
+- **Signal:** Chronic liquidity stress
+- **Analysis:** Unable to grow deposits, over-leveraged
+- **Investor View:** 🔴 Systemic concern
+- **Action:** AVOID - elevated default risk
+
+---
+
+### 💡 Investment Strategy Using CD Ratio
+
+#### **Growth Investor Strategy**
+- Target banks with CD 75-82%
+- Monitor those rising from 70% to 78%
+- Avoid those >85% or <65%
+- Entry: When CD optimizing upward
+- Exit: When CD exceeds 85% sustainably
+
+#### **Value Investor Strategy**
+- Target banks with CD falling toward 70%
+- Look for deposit franchise strength
+- Avoid high CD (>85%) banks
+- Entry: CD >80% showing deposit acceleration
+- Exit: When CD normalizes to 75%
+
+#### **Conservative Investor Strategy**
+- Stick to 72-78% CD zone
+- Avoid CD >85% or <60%
+- Monitor quarterly trends
+- Entry: Stable 76% CD with good ROA
+- Exit: CD rising above 82%
+
+---
+
+### ⚠️ Warning Signs - When to Exit
+
+🔴 **SELL Signals:**
+1. CD ratio rising above 85% consistently
+2. CD rising >2% per quarter for 2+ quarters
+3. NIM compressing while CD rising
+4. Deposit growth turning negative
+5. Unsecured advances rising alongside CD
+6. Stock underperforming peers despite growth
+
+---
+
+### ✅ Positive Signs - When to Buy
+
+🟢 **BUY Signals:**
+1. CD ratio in 72-78% range
+2. CD stabilizing after being volatile
+3. Rising CD (70%→75%) with deposits accelerating
+4. Strong ROA/ROE maintained in 75-80% zone
+5. Deposit growth >15% YoY
+6. Stock outperforming peers on growth
+7. Management guiding for CD moderation
+
+---
+
+### 🎓 Key Takeaways for Investors
+
+1. **Optimal Zone:** 72-78% CD is the investment sweet spot
+2. **Growth Signal:** Rising CD from 70% → 78% is positive
+3. **Risk Signal:** CD >85% demands closer scrutiny
+4. **Safety Signal:** CD <60% indicates excess liquidity
+5. **Trend Matters:** Direction of CD change is as important as level
+6. **Bank Type:** Different banks have different optimal zones
+7. **Monitor Quarterly:** CD changes reveal critical business trends
+
+---
 """)
 
 # ═══════════════════════════════════════════════════════════════════════════
